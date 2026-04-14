@@ -1,0 +1,7 @@
+interface:
+  display_name: "AI Generate Videos"
+  short_description: "把已确认静帧真正提交到视频生成平台"
+  default_prompt: "Use $ai-video-generate-videos to choose a video provider and run the approved image-to-video batch."
+
+policy:
+  allow_implicit_invocation: true

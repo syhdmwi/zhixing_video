@@ -1,0 +1,7 @@
+interface:
+  display_name: "AI Video Edit Assembly"
+  short_description: "把 avatar 轨和画面轨整合成最终成片"
+  default_prompt: "Use $ai-video-edit-assembly to combine my avatar track and b-roll track into a final short-video edit plan."
+
+policy:
+  allow_implicit_invocation: true

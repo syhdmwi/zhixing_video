@@ -1,0 +1,165 @@
+---
+name: ai-video-motion-prompts
+description: 当用户已经有静帧图片，接下来要为图生视频生成运动提示词时使用这个 skill。它适用于 doubao-seedance-1.0-pro-fast，并强调基于已确认的静帧生成低风险、易执行的镜头运动描述。
+---
+
+# AI Video Motion Prompts
+
+## Overview
+
+这个 skill 只负责“静帧到视频”的动作设计，不负责静帧生图，也不负责数字人视频轨。输入应当是已经通过一致性检查的静帧。
+
+默认目标不是给每张图写复杂动作脚本，而是优先使用少量固定镜头运动模板，先把线路跑通。
+
+这个 skill 的职责是：
+
+1. 读取已经生成成功的静帧
+2. 为每张图从固定镜头运动模板里选一个
+3. 为 `doubao-seedance-1.0-pro-fast` 输出极简可执行的动作提示词
+4. 先让用户确认测试批次，再进入图生视频阶段
+
+默认不要把数字人视频轨混进来。数字人视频轨仍然由 `ai-video-avatar-track` 单独处理。
+
+## When To Use
+
+- 用户已经有图片
+- 用户要把图片转成短视频镜头
+- 用户使用 `doubao-seedance-1.0-pro-fast`
+
+## Required Inputs
+
+- 已生成成功并通过确认的静帧图片
+- `shot_id` 顺序
+- 每张图对应的文案含义或 `visual_goal`
+- 目标平台和画幅
+- 单镜头时长偏好
+- 整体运动风格
+- 是否先做测试批次
+
+## Core Rules
+
+- 先确认静帧可用，再写运动提示词
+- 人物一致性优先于复杂运动
+- 默认不写复杂动作编排
+- 默认只从 5 个固定镜头运动里选
+- 不要求夸张形变、瞬间换装或不现实的多段动作
+- 人物镜头尽量避免大幅转头、夸张嘴型、复杂肢体重构
+- 纯场景镜头也优先先用固定镜头运动模板
+- 正式全量生成前，默认优先先做 5 到 10 张测试批次
+
+## Default Motion Presets
+
+默认只使用这 5 个固定动作：
+
+1. 相机缓慢向左平移
+2. 相机缓慢向右平移
+3. 相机缓慢向下平移
+4. 相机缓慢向上平移
+5. 相机缓慢向后拉远
+
+如果用户没有特别要求，不要额外发挥出复杂动作。
+
+## Default Stability Preset
+
+默认固定稳定性模板为：
+
+- 保持人物/场景/主要角色不变形，主体保持原地静止，不要行走、不要跟拍人物，只有相机缓慢平移或拉远
+
+如果用户没有特别要求，每条图生视频提示词都应默认附带这句，不要遗漏。
+
+## Default Workflow
+
+### 1. Confirm The Source Images Are Approved
+
+只有当静帧已经生成并且用户认可后，才进入本 skill。
+
+如果图片还没确认，先回到 `ai-video-prompt-to-images`，不要跳过图片确认直接做动作提示词。
+
+### 2. Ask The Motion Intake Questions
+
+至少先确认：
+
+- 这批图是否先只做测试批次
+- 单镜头目标时长是几秒
+- 每张图要从哪一个固定镜头运动模板里选
+
+如果用户没特别说，默认：
+
+- 先做 `5` 到 `10` 张测试批次
+- 单镜头 `4` 到 `5` 秒
+- 人物镜头保守优先
+
+### 3. Assign One Preset To Each Image
+
+在写动作提示词前，先判断每张图更适合哪一个固定镜头运动：
+
+- 人物站立或人物互动图，优先左右移动或后拉远
+- 纯场景图，优先左右移动、上下移动或后拉远
+- 大场景信息图，优先后拉远
+- 竖向结构明显的图，优先向上或向下移动
+
+不要给一张图同时塞多个复杂运动方向。
+
+### 4. Keep Motion Prompts Minimal
+
+默认动作提示词应当尽量短，直接可执行，例如：
+
+- 相机缓慢向左平移，保持人物/场景/主要角色不变形，主体保持原地静止，不要行走、不要跟拍人物，只有相机缓慢平移
+- 相机缓慢向右平移，保持人物/场景/主要角色不变形，主体保持原地静止，不要行走、不要跟拍人物，只有相机缓慢平移
+- 相机缓慢向下平移，保持人物/场景/主要角色不变形，主体保持原地静止，不要行走、不要跟拍人物，只有相机缓慢平移
+- 相机缓慢向上平移，保持人物/场景/主要角色不变形，主体保持原地静止，不要行走、不要跟拍人物，只有相机缓慢平移
+- 相机缓慢向后拉远，保持人物/场景/主要角色不变形，主体保持原地静止，不要行走、不要跟拍人物，只有相机缓慢拉远
+
+不要在默认模板之外额外加长段说明，除非用户明确要求。
+
+### 5. Let The User Confirm The Motion Batch
+
+动作提示词写完后，不要直接默认进入图生视频执行。先让用户确认：
+
+- 哪些镜头方向合适
+- 哪些镜头方向想换
+- 是否需要先只跑测试批次
+
+### 6. Pass The Approved Motion Batch Forward
+
+只有当用户确认动作设计后，才进入图生视频执行阶段。
+
+如果后面要补图生视频 API 或执行脚本，应由本 skill 的后续脚本层承接，但不要在这里编造平台私有参数。
+
+## Prompt Structure
+
+每个镜头至少说明：
+
+- 镜头运动
+- 防止脸漂和肢体畸变的约束
+
+推荐结构：
+
+```text
+[Source image summary]
+[Camera motion preset]
+[Default stability preset]
+```
+
+## Output
+
+每个镜头至少产出：
+
+- `shot_id`
+- `source_image_requirement`
+- `camera_motion`
+- `default_stability_preset`
+- `motion_prompt`
+- `stability_note`
+- `risk_note`
+
+如果是批量输出，至少还应包含：
+
+- `recommended_duration_seconds`
+- `test_batch_priority`
+
+## References
+
+- 动作设计规则： [references/motion-design-rules.md](./references/motion-design-rules.md)
+- 输出模板： [references/output-template.md](./references/output-template.md)
+- openclaw 示例： [references/openclaw-motion-example.json](./references/openclaw-motion-example.json)

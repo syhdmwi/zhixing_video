@@ -1,0 +1,24 @@
+[
+  {
+    "shot_id": "shot-01",
+    "provider": "grok",
+    "model": "grok-imagine-1.0-video-super",
+    "source_image_url": "https://example.com/shot-01.png",
+    "motion_prompt": "A young woman holding a small mascot remains completely still like a frozen illustration in a bright scene. No walking, no body motion, no hand motion, no head turn, no blinking, no mouth movement, and no pose change. The camera slowly cranes upward while gradually pulling back from the subject. Keep the subject and composition stable. Preserve face, clothing, key object details, and background consistency. Avoid character animation and avoid subject drift.",
+    "size": "1920x1080",
+    "duration_seconds": 5,
+    "preset": "fun",
+    "resolution_name": "480p"
+  },
+  {
+    "shot_id": "shot-01",
+    "provider": "seedance",
+    "model": "doubao-seedance-1-0-pro-fast-251015",
+    "source_image_url": "https://example.com/shot-01.png",
+    "motion_prompt": "相机缓慢向后拉远，保持人物/场景/主要角色不变形，主体保持原地静止，不要行走、不要跟拍人物，只有相机缓慢拉远",
+    "size": "1920x1080",
+    "duration_seconds": 5,
+    "seed": 42,
+    "watermark": false
+  }
+]

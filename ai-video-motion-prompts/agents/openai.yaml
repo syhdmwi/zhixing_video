@@ -1,0 +1,7 @@
+interface:
+  display_name: "AI Video Motion Prompts"
+  short_description: "把静帧转成图生视频运动提示词"
+  default_prompt: "Use $ai-video-motion-prompts to write motion prompts for my approved still frames in doubao-seedance-1.0-pro-fast."
+
+policy:
+  allow_implicit_invocation: true

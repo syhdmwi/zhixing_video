@@ -1,0 +1,7 @@
+interface:
+  display_name: "AI Video Avatar Track"
+  short_description: "单独规划数字人口播视频轨"
+  default_prompt: "Use $ai-video-avatar-track to prepare an avatar-video generation brief for OmniHuman 1.5 or Chanjing."
+
+policy:
+  allow_implicit_invocation: true

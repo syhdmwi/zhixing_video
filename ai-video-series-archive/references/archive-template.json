@@ -1,0 +1,40 @@
+{
+  "series_name": "OpenClaw Cartoon Demo",
+  "series_slug": "openclaw-cartoon-demo",
+  "created_from_script": "/Users/lucarvi/Desktop/文案.txt",
+  "default_image_model": "nanobanana-2",
+  "default_aspect_ratio": "16:9",
+  "default_output_language": "中文",
+  "style_summary": "卡通二次元唯美风，柔和高光，通透配色，科技感办公场景，画面干净，无文字。",
+  "negative_constraints": [
+    "人物变脸",
+    "发型漂移",
+    "服装漂移",
+    "小龙虾跑形",
+    "文字",
+    "水印",
+    "logo",
+    "低清晰度"
+  ],
+  "subject_anchors": [
+    {
+      "subject_id": "host_girl",
+      "subject_type": "person",
+      "summary": "年轻女生，长发微卷，气质清纯，穿休闲米白色碎花连衣裙。",
+      "preview_images": [],
+      "three_view_images": []
+    },
+    {
+      "subject_id": "lobster_mascot",
+      "subject_type": "mascot",
+      "summary": "红色Q版小龙虾，头部前端尖尖的，两根明显触角，两只钳子，八条腿。",
+      "preview_images": [],
+      "three_view_images": []
+    }
+  ],
+  "style_reference_images": [],
+  "approved_preview_images": [],
+  "approved_three_view_images": [],
+  "approved_final_images": [],
+  "notes_for_future_scripts": "后续新文案默认直接复用这套人设与风格；只改剧情和镜头内容。"
+}

@@ -1,0 +1,7 @@
+interface:
+  display_name: "AI Video Pipeline"
+  short_description: "总控多 skill 的 AI 短视频生产调度器"
+  default_prompt: "Use $ai-short-video-pipeline to orchestrate storyboard, image prompts, avatar track, motion prompts, and final edit assembly for my short video."
+
+policy:
+  allow_implicit_invocation: true

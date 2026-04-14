@@ -1,0 +1,9 @@
+[
+  {
+    "segment_id": "avatar-01",
+    "video_name": "openclaw-avatar-main",
+    "audio_url": "https://example.com/avatar-audio.mp3",
+    "video_url": "https://example.com/avatar-source.mp4",
+    "notes": "正面人物视频，时长不低于10秒。"
+  }
+]

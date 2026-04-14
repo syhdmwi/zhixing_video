@@ -1,0 +1,7 @@
+interface:
+  display_name: "AI Prompt To Images"
+  short_description: "把确认后的提示词批次推进到正式生图阶段"
+  default_prompt: "Use $ai-video-prompt-to-images to take my approved image prompts and prepare or run the final image-generation batch."
+
+policy:
+  allow_implicit_invocation: true

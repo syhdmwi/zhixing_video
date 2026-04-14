@@ -1,0 +1,7 @@
+interface:
+  display_name: "AI Video Series Archive"
+  short_description: "保存或复用已确认的人设与风格档案"
+  default_prompt: "Use $ai-video-series-archive to save my approved character and style setup as a reusable series archive, or load one for a new script."
+
+policy:
+  allow_implicit_invocation: true

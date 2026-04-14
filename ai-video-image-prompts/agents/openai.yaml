@@ -1,0 +1,7 @@
+interface:
+  display_name: "AI Video Image Prompts"
+  short_description: "把文案直接拆成一批稳定的生图提示词"
+  default_prompt: "Use $ai-video-image-prompts to turn my script into 30 consistent image prompts based on the uploaded reference photo."
+
+policy:
+  allow_implicit_invocation: true
