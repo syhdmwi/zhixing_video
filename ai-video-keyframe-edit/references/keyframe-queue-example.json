@@ -1,0 +1,28 @@
+[
+  {
+    "shot_id": "shot-01",
+    "source_image": "/absolute/path/to/shot-01.png",
+    "duration_seconds": 8,
+    "motion_preset": "auto",
+    "output_name": "shot-01.mp4",
+    "resolution": "1920x1080",
+    "fps": 50,
+    "zoom_strength": 0.10,
+    "pan_strength": 0.10,
+    "motion_curve": "linear",
+    "oversample_factor": 1
+  },
+  {
+    "shot_id": "shot-02",
+    "source_image": "/absolute/path/to/shot-02.png",
+    "duration_seconds": 8,
+    "motion_preset": "auto",
+    "output_name": "shot-02.mp4",
+    "resolution": "1920x1080",
+    "fps": 50,
+    "zoom_strength": 0.10,
+    "pan_strength": 0.10,
+    "motion_curve": "linear",
+    "oversample_factor": 1
+  }
+]

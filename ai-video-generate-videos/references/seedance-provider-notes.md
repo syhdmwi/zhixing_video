@@ -1,6 +1,6 @@
 # Seedance Provider Notes
 
-当前已接入的 seedance 信息：
+当前已保留 seedance 的接入资料，但这条链路已暂时停用。
 
 - provider 名：`seedance`
 - 当前沿用火山方舟视频生成 API：
@@ -8,7 +8,7 @@
   - 查询任务：`GET https://ark.cn-beijing.volces.com/api/v3/contents/generations/tasks/{id}`
   - 数据面 Base URL：`https://ark.cn-beijing.volces.com/api/v3`
   - 鉴权：`Authorization: Bearer <API Key>`
-- 当前脚本支持从环境变量读取：
+- 当前脚本曾支持从环境变量读取：
   - `ARK_API_KEY`
   - `SEEDANCE_API_KEY`
   - 优先使用 `ARK_API_KEY`
@@ -32,6 +32,14 @@
   - `content.video_url`
   - `content.video_urls[0]`
   - 再回退到顶层 `video_url` / `video_urls[0]`
+
+当前状态：
+
+- 文档保留
+- 接口参数说明保留
+- 脚本逻辑暂时停用
+- 不参与自动路由
+- 不作为 grok 失败后的回退选项
 
 注意：
 

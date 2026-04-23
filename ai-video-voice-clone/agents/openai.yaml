@@ -1,0 +1,7 @@
+interface:
+  display_name: "AI Video Voice Clone"
+  short_description: "用参考音频克隆声音并朗读文案"
+  default_prompt: "Use $ai-video-voice-clone to clone my voice from a reference audio and read my script."
+
+policy:
+  allow_implicit_invocation: true

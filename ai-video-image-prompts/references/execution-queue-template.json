@@ -1,0 +1,18 @@
+[
+  {
+    "shot_id": "shot-01",
+    "frame_type": "character",
+    "image_prompt": "这里填写正式生图提示词",
+    "reference_urls": [
+      "https://example.com/character-anchor.png",
+      "https://example.com/object-anchor.png"
+    ],
+    "consistency_note": "Keep all recurring subjects identical to the approved reference images."
+  },
+  {
+    "shot_id": "shot-02",
+    "frame_type": "scene",
+    "image_prompt": "这里填写纯场景提示词",
+    "consistency_note": "Scene-only frame. Keep overall style aligned with the selected template."
+  }
+]

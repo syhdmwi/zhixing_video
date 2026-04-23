@@ -40,3 +40,35 @@
 - 再按当前镜头内容替换主体、场景和关键一致性描述
 - 保留“主体固定不动 + 镜头缓慢上移并后拉 + 保持构图稳定”的结构
 - 如果当前镜头不是人物图，而是纯场景图，只沿用“镜头运动 + 构图稳定 + 避免漂移”的结构，不强行保留人物约束句
+
+# Grok 视频模版套用01
+
+模板名称：
+
+- `grok视频模版套用01`
+
+适用场景：
+
+- `grok` provider
+- 单张静帧图生视频
+- 用户希望视频像关键帧一样只做轻微运镜
+- 人物、环境、道具都应基本静止
+- 不希望出现角色表演感
+
+变量槽位：
+
+- `{main_subject}`：当前镜头里的主主体
+- `{scene_summary}`：当前镜头所在场景
+- `{consistency_points}`：当前镜头必须锁定的识别特征
+
+默认提示词：
+
+```text
+{main_subject} remains completely still like a keyframe illustration in {scene_summary}. No walking, no body motion, no hand motion, no head turn, no blinking, no mouth movement, no pose change, and no environmental animation. Keep {consistency_points} and the full composition stable. Only allow a very slight camera move, like a subtle keyframe motion. Avoid subject drift, avoid deformation, and avoid turning this into a character animation.
+```
+
+推荐中文理解：
+
+- 画面整体像关键帧插画一样固定不动
+- 只允许非常轻微的镜头位移
+- 不要把它做成角色表演视频

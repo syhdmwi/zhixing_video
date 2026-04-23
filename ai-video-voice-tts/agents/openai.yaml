@@ -1,0 +1,7 @@
+interface:
+  display_name: "AI Video Voice TTS"
+  short_description: "把文案转成可用于数字人的音频"
+  default_prompt: "Use $ai-video-voice-tts to generate a TTS audio file from my script before avatar generation."
+
+policy:
+  allow_implicit_invocation: true

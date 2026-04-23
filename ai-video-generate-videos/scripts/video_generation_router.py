@@ -19,6 +19,7 @@ YIJIA_CREATE_PATH = "/v1/videos"
 YIJIA_CHAT_COMPLETIONS_PATH = "/v1/chat/completions"
 ARK_BASE_URL = "https://ark.cn-beijing.volces.com/api/v3"
 ARK_CONTENTS_GENERATION_PATH = "/contents/generations/tasks"
+GROK_DEFAULT_MODEL = "grok-imagine-1.0-video-super"
 
 
 def http_json(
@@ -86,10 +87,48 @@ def load_queue(path: Path) -> list[dict]:
     for index, item in enumerate(data, start=1):
         if not isinstance(item, dict):
             raise ValueError(f"Queue item #{index} must be a JSON object.")
-        for field in ("shot_id", "provider", "model", "source_image_url", "motion_prompt", "size"):
+        for field in ("shot_id", "source_image_url", "motion_prompt", "size"):
             if field not in item:
                 raise ValueError(f"Queue item #{index} must include '{field}'.")
     return data
+
+
+def provider_has_credentials(provider: str) -> bool:
+    if provider == "grok":
+        return bool(os.environ.get("YIJIA_API_KEY"))
+    if provider == "seedance":
+        return False
+    return False
+
+
+def default_model_for_provider(provider: str) -> str:
+    if provider == "grok":
+        return GROK_DEFAULT_MODEL
+    if provider == "seedance":
+        raise RuntimeError("seedance is temporarily disabled")
+    raise RuntimeError(f"Unsupported provider: {provider}")
+
+
+def choose_auto_provider(item: dict) -> tuple[str, str]:
+    has_grok = provider_has_credentials("grok")
+
+    if has_grok:
+        return "grok", "seedance_disabled_use_grok"
+    raise RuntimeError("No active video provider key found. Set YIJIA_API_KEY.")
+
+
+def resolve_provider_and_model(item: dict) -> tuple[dict, str]:
+    requested_provider = str(item.get("provider", "auto")).strip().lower() or "auto"
+    if requested_provider == "auto":
+        provider, decision = choose_auto_provider(item)
+    else:
+        provider = requested_provider
+        decision = "explicit_provider"
+
+    resolved = dict(item)
+    resolved["provider"] = provider
+    resolved["model"] = str(item.get("model") or default_model_for_provider(provider))
+    return resolved, decision
 
 
 def yijia_base_url_for_item(item: dict) -> str:
@@ -380,12 +419,7 @@ def submit_item(item: dict) -> tuple[dict, str | None]:
         video_id = response.get("id") or ((response.get("data") or {}).get("id") if isinstance(response.get("data"), dict) else None)
         return response, video_id
     if provider == "seedance":
-        api_key = os.environ.get("ARK_API_KEY") or os.environ.get("SEEDANCE_API_KEY")
-        if not api_key:
-            raise RuntimeError("ARK_API_KEY or SEEDANCE_API_KEY is not set")
-        response = submit_seedance(api_key, item)
-        task_id = response.get("id") or ((response.get("data") or {}).get("id") if isinstance(response.get("data"), dict) else None)
-        return response, task_id
+        raise RuntimeError("seedance is temporarily disabled")
     raise RuntimeError(f"Unsupported provider: {provider}")
 
 
@@ -399,10 +433,7 @@ def poll_item(item: dict, task_id: str) -> dict:
             raise RuntimeError("YIJIA_API_KEY is not set")
         return poll_veo(api_key, item, task_id)
     if provider == "seedance":
-        api_key = os.environ.get("ARK_API_KEY") or os.environ.get("SEEDANCE_API_KEY")
-        if not api_key:
-            raise RuntimeError("ARK_API_KEY or SEEDANCE_API_KEY is not set")
-        return poll_seedance(api_key, item, task_id)
+        raise RuntimeError("seedance is temporarily disabled")
     raise RuntimeError(f"Unsupported provider: {provider}")
 
 
@@ -453,30 +484,35 @@ def extract_render_url(provider: str, detail: dict) -> str | None:
 def run_queue(queue: list[dict], poll_interval: float, timeout: float) -> dict:
     submitted: list[dict] = []
     for item in queue:
+        resolved_item, provider_decision = resolve_provider_and_model(item)
         try:
-            submit_response, task_id = submit_item(item)
-            detail = submit_response if item["provider"] == "grok" else None
+            submit_response, task_id = submit_item(resolved_item)
+            detail = submit_response if resolved_item["provider"] == "grok" else None
             submitted.append(
                 {
-                    **item,
+                    **resolved_item,
                     "task_id": task_id,
                     "submit_response": submit_response,
                     "submit_error": None,
                     "detail": detail,
+                    "provider_decision": provider_decision,
+                    "fallback_from": None,
                 }
             )
-            print(json.dumps({"event": "submitted", "shot_id": item["shot_id"], "provider": item["provider"], "task_id": task_id}, ensure_ascii=False), flush=True)
+            print(json.dumps({"event": "submitted", "shot_id": resolved_item["shot_id"], "provider": resolved_item["provider"], "task_id": task_id, "provider_decision": provider_decision}, ensure_ascii=False), flush=True)
         except Exception as exc:  # noqa: BLE001
             submitted.append(
                 {
-                    **item,
+                    **resolved_item,
                     "task_id": None,
                     "submit_response": None,
                     "submit_error": str(exc),
                     "detail": None,
+                    "provider_decision": provider_decision,
+                    "fallback_from": None,
                 }
             )
-            print(json.dumps({"event": "submit_error", "shot_id": item["shot_id"], "provider": item["provider"], "error": str(exc)}, ensure_ascii=False), flush=True)
+            print(json.dumps({"event": "submit_error", "shot_id": resolved_item["shot_id"], "provider": resolved_item["provider"], "error": str(exc), "provider_decision": provider_decision}, ensure_ascii=False), flush=True)
 
     deadline = time.time() + timeout
     pending = [
@@ -540,6 +576,8 @@ def run_queue(queue: list[dict], poll_interval: float, timeout: float) -> dict:
                 "shot_id": item["shot_id"],
                 "provider": item["provider"],
                 "model": item["model"],
+                "provider_decision": item.get("provider_decision"),
+                "fallback_from": item.get("fallback_from"),
                 "task_id": item.get("task_id"),
                 "status_label": status_label,
                 "render_url": extract_render_url(item["provider"], detail),

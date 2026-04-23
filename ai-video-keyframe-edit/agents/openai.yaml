@@ -1,0 +1,7 @@
+interface:
+  display_name: "AI Video Keyframe Edit"
+  short_description: "把静帧图片通过关键帧轻运镜剪成画面轨"
+  default_prompt: "Use $ai-video-keyframe-edit to turn my approved still images into a lightly keyframed edit track."
+
+policy:
+  allow_implicit_invocation: true
