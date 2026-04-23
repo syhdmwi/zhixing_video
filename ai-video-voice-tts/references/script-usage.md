@@ -29,7 +29,7 @@
 AUDIO_TTS_API_KEY="your_key" \
 TOS_ACCESS_KEY_ID="your_tos_ak" \
 TOS_SECRET_ACCESS_KEY="your_tos_sk" \
-TOS_BUCKET="shdjahdk" \
+TOS_BUCKET="your_tos_bucket" \
 TOS_REGION="cn-beijing" \
 python3 scripts/wuyinkeji_audio_tts.py \
   --text "今天是不是很开心呀，当然了！" \
