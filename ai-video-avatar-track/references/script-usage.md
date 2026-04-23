@@ -22,6 +22,16 @@
 - `video_url` 必须是公网可访问的正面人物视频链接
 - 文档说明里写明 `videoUrl` 时长不得低于 10 秒
 
+如果用户上传的是本地文件：
+
+- 已配置 TOS 时，先用总控脚本 `../ai-short-video-pipeline/scripts/upload_to_tos.py` 自动上传音频和视频
+- 上传完成后，把得到的公网直链填入队列里的 `audio_url` 和 `video_url`
+- 未配置 TOS 时，才提示用户补充 TOS 配置或提供公网 URL
+
+用户侧不要要求手动处理对象存储。默认提示应是：
+
+- `请上传音频和正面人物视频，我会自动转存并提交数字人生成。`
+
 ## Example
 
 ```bash
