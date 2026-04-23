@@ -6,6 +6,7 @@ import json
 import os
 import sys
 import time
+import socket
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -24,6 +25,7 @@ def http_json(
     headers: dict[str, str] | None = None,
     body: dict | None = None,
     timeout: int = 60,
+    retries: int = 3,
 ) -> dict:
     request_headers = {"Content-Type": "application/json"}
     if headers:
@@ -33,15 +35,21 @@ def http_json(
     if body is not None:
         data = json.dumps(body).encode("utf-8")
 
-    request = urllib.request.Request(url, data=data, headers=request_headers, method=method)
-    try:
-        with urllib.request.urlopen(request, timeout=timeout) as response:
-            return json.loads(response.read().decode("utf-8"))
-    except urllib.error.HTTPError as exc:
-        detail = exc.read().decode("utf-8", errors="replace")
-        raise RuntimeError(f"HTTP {exc.code}: {detail}") from exc
-    except urllib.error.URLError as exc:
-        raise RuntimeError(f"Request failed: {exc}") from exc
+    last_error: Exception | None = None
+    for attempt in range(1, retries + 1):
+        request = urllib.request.Request(url, data=data, headers=request_headers, method=method)
+        try:
+            with urllib.request.urlopen(request, timeout=timeout) as response:
+                return json.loads(response.read().decode("utf-8"))
+        except urllib.error.HTTPError as exc:
+            detail = exc.read().decode("utf-8", errors="replace")
+            raise RuntimeError(f"HTTP {exc.code}: {detail}") from exc
+        except (urllib.error.URLError, TimeoutError, socket.timeout, ConnectionResetError) as exc:
+            last_error = exc
+            if attempt >= retries:
+                break
+            time.sleep(min(2 * attempt, 6))
+    raise RuntimeError(f"Request failed after {retries} attempts: {last_error}") from last_error
 
 
 def submit_task(api_key: str, prompt: str, aspect_ratio: str, urls: list[str] | None) -> dict:
@@ -139,13 +147,30 @@ def submit_queue(
             break
 
         active_tasks: dict[str, dict] = {}
+        submit_failed_items: list[dict] = []
         for item in pending_items:
-            response = submit_task(
-                api_key,
-                item["image_prompt"],
-                item["aspect_ratio"],
-                item["reference_urls"],
-            )
+            try:
+                response = submit_task(
+                    api_key,
+                    item["image_prompt"],
+                    item["aspect_ratio"],
+                    item["reference_urls"],
+                )
+            except RuntimeError as exc:
+                print(
+                    json.dumps(
+                        {
+                            "event": "submit_error",
+                            "shot_id": item["shot_id"],
+                            "attempt_index": attempt_index,
+                            "error": str(exc),
+                        },
+                        ensure_ascii=False,
+                    ),
+                    flush=True,
+                )
+                submit_failed_items.append(item)
+                continue
             task_id = (((response or {}).get("data") or {}).get("id"))
             attempt_state = {
                 "attempt_index": attempt_index,
@@ -183,7 +208,23 @@ def submit_queue(
             for task_id, task_info in list(active_tasks.items()):
                 item = task_info["item"]
                 attempt_state = task_info["attempt_state"]
-                detail = fetch_detail(api_key, task_id)
+                try:
+                    detail = fetch_detail(api_key, task_id)
+                except RuntimeError as exc:
+                    print(
+                        json.dumps(
+                            {
+                                "event": "poll_error",
+                                "shot_id": item["shot_id"],
+                                "task_id": task_id,
+                                "attempt_index": attempt_index,
+                                "error": str(exc),
+                            },
+                            ensure_ascii=False,
+                        ),
+                        flush=True,
+                    )
+                    continue
                 summary = summarize_detail(detail)
                 attempt_state["last_detail"] = detail
                 attempt_state["status"] = summary["status"]
@@ -208,7 +249,7 @@ def submit_queue(
             if active_tasks:
                 time.sleep(poll_interval)
 
-        pending_next_attempt: list[dict] = []
+        pending_next_attempt: list[dict] = list(submit_failed_items)
         for task_id, task_info in active_tasks.items():
             item = task_info["item"]
             attempt_state = task_info["attempt_state"]
