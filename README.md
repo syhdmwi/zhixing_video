@@ -1,13 +1,15 @@
-# AI Short Video Skills Suite
+# AI Short Video Workflow Suite
 
-这是一套给 Codex 用的 AI 短视频工作流 skills，适合把一段文案一路做成：
+这是一套面向 AI 编程工具和智能体工具的短视频工作流包，适合把一段文案一路做成：
 
 - 图片
 - 视频
 - 配音
 - 数字人
 
-如果你是第一次用，不用先理解所有 skill 名字。你只需要知道自己现在想做哪件事。
+它可以在 Codex 里作为 skills 使用，也可以迁移到 OpenClaw、Trae、Claude Code 等支持项目规则、上下文文档或自定义工作流的工具里使用。
+
+如果你是第一次用，不用先理解所有目录名字。你只需要知道自己现在想做哪件事。
 
 ## 新手先看这里
 
@@ -24,9 +26,17 @@
 这是我的文案，帮我从头开始做。
 ```
 
+也可以使用统一唤醒词：
+
+```text
+使用知行视频skill，帮我从文案开始做视频。
+```
+
 如果你是第一次把这套 skills 分享给别人，建议让对方先看这份：
 
+- [用户使用说明](./用户使用说明.md)
 - [3分钟快速开始](./3分钟快速开始.md)
+- [跨工具使用说明](./跨工具使用说明.md)
 
 ## 你会经历的流程
 
@@ -134,7 +144,7 @@
   - `图生视频模式`
 - 视频阶段默认只交付单镜头视频，不自动拼总片
 
-## Included Skills
+## Included Workflow Modules
 
 - `ai-short-video-pipeline`
 - `ai-video-shot-planner`
@@ -181,9 +191,15 @@
 
 ## Suggested Install Method
 
-把这 12 个 skill 目录复制到对方的 Codex skills 目录下即可使用。
+如果使用 Codex，可以把这 12 个 skill 目录复制到对方的 Codex skills 目录下使用。
 
-如果对方只想用部分流程，也可以只安装其中的单个 skill。
+如果使用 OpenClaw、Trae、Claude Code 或其它 AI 编程工具，请优先查看：
+
+- [跨工具使用说明](./跨工具使用说明.md)
+
+这些工具如果不能直接识别 Codex skill 目录，也可以把核心说明文档作为项目规则、工作流文档或上下文导入。
+
+如果对方只想用部分流程，也可以只安装或导入其中的单个模块。
 
 ## Install Steps
 
@@ -191,13 +207,21 @@
 
 把 `ai-short-video-skills-suite.zip` 解压到本地任意目录。
 
-### 2. 找到 Codex 的 skills 目录
+### 2. 选择安装方式
 
-通常复制到：
+Codex：
+
+把模块目录复制到：
 
 - `$CODEX_HOME/skills/`
 
-如果对方不确定 `CODEX_HOME`，也可以先在终端里执行：
+OpenClaw / Trae / Claude Code：
+
+- 把本项目作为普通项目文件夹打开
+- 把 [用户使用说明](./用户使用说明.md) 和 [跨工具使用说明](./跨工具使用说明.md) 放进工具的项目上下文
+- 如果工具支持自定义规则文件，把 [ai-short-video-pipeline/SKILL.md](./ai-short-video-pipeline/SKILL.md) 作为总控规则导入
+
+如果使用 Codex 但不确定 `CODEX_HOME`，可以先在终端里执行：
 
 ```bash
 echo $CODEX_HOME
@@ -241,9 +265,9 @@ export TOS_REGION="cn-beijing"
 
 如果只测某一段流程，只配那一段需要的 key 即可。
 
-### 5. 重启或刷新 Codex
+### 5. 重启或刷新工具
 
-让 Codex 重新读取 skills 目录。
+让当前使用的 AI 工具重新读取 skills、项目规则或上下文文档。
 
 ## How To Run Tests
 
