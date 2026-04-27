@@ -1,40 +1,37 @@
 {
-  "series_name": "OpenClaw Cartoon Demo",
-  "series_slug": "openclaw-cartoon-demo",
-  "created_from_script": "/Users/lucarvi/Desktop/文案.txt",
-  "default_image_model": "nanobanana-2",
-  "default_aspect_ratio": "16:9",
-  "default_output_language": "中文",
-  "style_summary": "卡通二次元唯美风，柔和高光，通透配色，科技感办公场景，画面干净，无文字。",
-  "negative_constraints": [
-    "人物变脸",
-    "发型漂移",
-    "服装漂移",
-    "小龙虾跑形",
-    "文字",
-    "水印",
-    "logo",
-    "低清晰度"
-  ],
-  "subject_anchors": [
-    {
-      "subject_id": "host_girl",
-      "subject_type": "person",
-      "summary": "年轻女生，长发微卷，气质清纯，穿休闲米白色碎花连衣裙。",
-      "preview_images": [],
-      "three_view_images": []
-    },
-    {
-      "subject_id": "lobster_mascot",
-      "subject_type": "mascot",
-      "summary": "红色Q版小龙虾，头部前端尖尖的，两根明显触角，两只钳子，八条腿。",
-      "preview_images": [],
-      "three_view_images": []
-    }
-  ],
-  "style_reference_images": [],
-  "approved_preview_images": [],
-  "approved_three_view_images": [],
-  "approved_final_images": [],
-  "notes_for_future_scripts": "后续新文案默认直接复用这套人设与风格；只改剧情和镜头内容。"
+  "template_name": "赛博女主持模板",
+  "template_slug": "cyber-host-template",
+  "template_type": "series_style_template",
+  "created_at": "",
+  "created_from_script": "",
+  "main_character": {
+    "description": "黑长发、红色碎花裙、清冷气质女主持",
+    "front_draft_url": "",
+    "three_view_url": "",
+    "notes": []
+  },
+  "visual_style": {
+    "summary": "半3D二次元科技海报风，深色霓虹背景，红蓝撞色，高光材质",
+    "reference_image_urls": [],
+    "approved_style_sample_urls": []
+  },
+  "prompt_rules": {
+    "image_prompt_structure": "",
+    "negative_constraints": [],
+    "composition_preference": "人物镜头约70%半身/胸像/近景，约30%全身/远景/背影/环境人像",
+    "brand_logo_rule": "文案出现大众熟知品牌、地标或标识时，允许明确写入正式提示词",
+    "subject_rule": "重复主体默认不保存，每篇新文案重新识别；只有用户明确指定长期固定角色时，才保存到 fixed_subjects"
+  },
+  "defaults": {
+    "aspect_ratio": "16:9",
+    "image_model": "GPT-Image-2",
+    "video_mode": "图生视频模式",
+    "output_language": "中文"
+  },
+  "fixed_subjects": [],
+  "notes_for_future_scripts": [
+    "主讲人和视觉风格默认继承模板",
+    "新文案中的重复主体每次重新识别",
+    "正式成图样例必须由用户选择编号后才保存"
+  ]
 }

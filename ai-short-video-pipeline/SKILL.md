@@ -163,7 +163,7 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 3. `ai-video-prompt-to-images`
    负责在用户确认提示词后，把提示词按顺序转成可执行的生图队列，进入实际生图阶段，并在生成成功后默认直接展示图片给用户确认。
 4. `ai-video-series-archive`
-   负责把用户已经满意的人设、重复物、风格参考和正式成图保存成可复用档案，或者在新文案中先读取指定档案继续生成。
+   负责把用户已经满意的主讲人、风格、提示词规则和用户选择的正式图样例保存成可复用模板，或者在新文案中先读取指定模板继续生成。重复主体默认随新文案重新识别，不写入通用模板。
 5. `ai-video-keyframe-edit`
    负责把已确认的静帧图片通过剪辑方式做成“关键帧轻运镜”的画面轨，默认优先使用 `FFmpeg`。
 6. `ai-video-motion-prompts`
@@ -205,7 +205,9 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 
 在进入人物设定和风格设定前，优先先问一件事：
 
-- 这次是否要使用指定的“人设与风格档案”
+- 这次是否要套用已有模板
+
+如果用户说要套用模板，优先调用 `ai-video-series-archive` 读取模板摘要，让用户确认后再继续。
 
 如果当前任务要新做一套静帧风格，默认优先用“向导式”问法，而不是一次压给用户多个内部配置项。
 
@@ -286,7 +288,7 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 
 只有主体确认无误后，才进入正式提示词生成
 
-如果用户要复用已有档案，优先先调用 `ai-video-series-archive` 读取档案，再继续后续流程。
+如果用户要复用已有模板，优先先调用 `ai-video-series-archive` 读取模板，再继续后续流程。套用模板时继承主讲人、风格和提示词规则；新文案中的重复主体仍然重新识别和确认。
 
 ### 2. Decide The Two-Track Plan First
 
@@ -370,7 +372,7 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 - 需要“估时 + 分镜 + 数字人/B-roll 分配”时，用 `ai-video-shot-planner`
 - 需要“参考图一致性 + 生图提示词”时，用 `ai-video-image-prompts`
 - 需要“提示词确认后进入生图”时，用 `ai-video-prompt-to-images`
-- 需要“保存或读取系列人设与风格档案”时，用 `ai-video-series-archive`
+- 需要“保存或读取可复用模板”时，用 `ai-video-series-archive`
 - 需要“把静帧图片剪成关键帧轻运镜画面轨”时，用 `ai-video-keyframe-edit`
 - 需要“静帧转视频动作提示词”时，用 `ai-video-motion-prompts`
 - 需要“自动判断视频 provider 并真实提交图生视频任务”时，用 `ai-video-generate-videos`
