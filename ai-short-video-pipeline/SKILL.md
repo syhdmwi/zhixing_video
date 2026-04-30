@@ -122,6 +122,33 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 
 - [references/user-guidance-templates.md](./references/user-guidance-templates.md)
 
+## State Machine Rule
+
+为了兼容 Trae、OpenClaw、Claude Code 等不会原生执行 Codex skill 状态的工具，本工作流必须按状态机执行。每次被唤醒、用户从中间环节跳入、或用户只回复 `1` / `2` / `全部生图` / `直接生成视频` 等短指令时，都先按状态机检查当前阶段。
+
+执行前必须读取或遵守：
+
+- [references/workflow-state-machine.md](./references/workflow-state-machine.md)
+- [references/project-state-template.json](./references/project-state-template.json)
+
+硬规则：
+
+- 如果没有现成项目状态，先根据对话内容保守推断 `current_stage`，必要时初始化一份项目状态。
+- 如果用户请求的动作缺少前置条件，不要继续执行，先说明缺少什么，并把用户带回正确步骤。
+- 每次进入新阶段时，都要说明当前阶段、已完成内容、下一步和用户可回复的选项。
+- `1` / `2` 只能按当前阶段解释，不能跨阶段猜测。
+- 如果当前阶段不明确，先用“当前流程状态”格式恢复流程，不要直接生图、生成视频或保存模板。
+
+推荐状态提示格式：
+
+```text
+当前流程状态：
+阶段：[current_stage]
+已完成：[completed_items]
+下一步：[next_action]
+你可以回复：[allowed_user_replies]
+```
+
 ## Public Asset URL Rule
 
 凡是第三方模型接口要求传入公网可访问资源 URL，本项目默认不要让用户自己处理对象存储。
@@ -499,6 +526,8 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 ## References
 
 - 输入补全与默认值： [references/intake-checklist.md](./references/intake-checklist.md)
+- 流程状态机： [references/workflow-state-machine.md](./references/workflow-state-machine.md)
+- 项目状态模板： [references/project-state-template.json](./references/project-state-template.json)
 - 一致性控制规则： [references/consistency-rules.md](./references/consistency-rules.md)
 - 标准输出模板： [references/output-format.md](./references/output-format.md)
 - 用户配置模板： [references/provider-config-template.md](./references/provider-config-template.md)

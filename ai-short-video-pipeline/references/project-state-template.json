@@ -1,0 +1,50 @@
+{
+  "project_id": "",
+  "project_name": "",
+  "current_stage": "start",
+  "completed": {
+    "script_received": false,
+    "style_selected": false,
+    "subjects_identified": false,
+    "subjects_confirmed": false,
+    "three_views_generated": false,
+    "three_views_confirmed": false,
+    "prompts_generated": false,
+    "prompts_confirmed": false,
+    "images_generated": false,
+    "images_approved": false,
+    "template_save_decision": false,
+    "video_mode_selected": false,
+    "videos_generated": false,
+    "digital_human_assets_ready": false,
+    "digital_human_generated": false
+  },
+  "selections": {
+    "style_mode": "",
+    "style_name": "",
+    "aspect_ratio": "",
+    "image_model": "",
+    "video_mode": "",
+    "language": "中文",
+    "density": "普通密度"
+  },
+  "assets": {
+    "script": "",
+    "style_reference_urls": [],
+    "main_character_reference_urls": [],
+    "subjects": [],
+    "three_view_urls": [],
+    "prompt_queue_path": "",
+    "image_urls": [],
+    "approved_image_ids": [],
+    "video_urls": [],
+    "digital_human": {
+      "audio_url": "",
+      "person_video_url": "",
+      "result_url": ""
+    }
+  },
+  "next_allowed_actions": [],
+  "last_user_reply_meaning": "",
+  "notes": []
+}
