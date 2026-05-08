@@ -51,7 +51,7 @@ description: 当用户想把已经满意的主讲人形象、主讲人三视图�
 - 主讲人描述
 - 主讲人正面定稿
 - 主讲人三视图
-- 画面风格摘要
+- 画面风格摘要（结构化 Style DNA）
 - 风格参考图
 - 提示词结构
 - 负面约束
@@ -68,6 +68,29 @@ description: 当用户想把已经满意的主讲人形象、主讲人三视图�
 - 不满意或勉强通过的图片
 
 只有当用户明确说某个角色要长期固定出现时，才保存到 `fixed_subjects`。
+
+## Style DNA（风格基因）
+
+`visual_style` 字段从 v2.0 开始使用结构化 Style DNA 格式，包含 6 组基因：
+
+- `color_palette`：色彩基因（主色、辅色、强调色、饱和度、对比度）
+- `lighting_profile`：光影基因（光线类型、方向、色温、光比）
+- `texture_profile`：质感基因（颗粒感、锐度、材质、分辨率感受）
+- `composition_tendencies`：构图基因（构图倾向、景深、三分法、留白）
+- `camera_language`：镜头语言基因（等效焦距、运镜风格、角度倾向）
+- `mood_keywords` + `era_spatial` + `post_processing`：情绪与时空基因
+
+完整 schema 见 [style-gene-structure.md](../ai-short-video-pipeline/references/style-gene-structure.md)。
+
+### 继承与混合
+
+- 子模板可通过 `inherits_from` 继承父模板的基因，只覆盖需要修改的部分
+- 可通过 `mix_from` 从多个模板各取部分基因组合
+- 可通过 `overrides` 做单基因微调
+
+### 旧模板迁移
+
+用户套用旧版扁平风格描述的模板时，自动解析为结构化 Style DNA 并展示给用户确认。旧模板保留不删除，新模板用 `_v2` 后缀区分。
 
 ## Create Workflow
 
@@ -127,12 +150,30 @@ description: 当用户想把已经满意的主讲人形象、主讲人三视图�
 需要修改模板设置请输入 2。
 ```
 
+如果模板使用旧版扁平风格描述，读取时自动解析为结构化 Style DNA 并展示给用户确认。
+
 用户确认后，后续工作流应：
 
 1. 继承模板中的主讲人锚点、风格锚点、提示词规则和默认参数
 2. 根据新文案重新识别重复主体
 3. 不把模板里的旧文案临时主体强行带入新文案
 4. 不重新发明主讲人和风格，除非用户明确要求改
+
+### 微调风格基因
+
+用户可以在套用模板后对单个基因做微调，不需要重新描述整体风格：
+
+```text
+这套模板的风格整体沿用，但色调想暖一点。
+```
+
+此时只覆盖 `lighting_profile.warmth` 和 `color_palette` 中的冷暖倾向，其他基因保持不变。
+
+```text
+构图想更大气一点，多用全景和远景。
+```
+
+此时只覆盖 `composition_tendencies.framing` 和 `camera_language.lens_equivalent`。
 
 ## Output
 

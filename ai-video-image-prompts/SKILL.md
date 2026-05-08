@@ -71,6 +71,8 @@ description: 当用户要把一段文案直接转换成一组可执行的生图�
 ## Inputs
 
 - 文案或镜头表
+- **剧本解析**（如有，来自 shot-planner Step 0）
+- **空间锁定卡**（如有，来自 shot-planner Step 0.5）
 - 图片数量
 - 图片比例
 - 输出语言
@@ -487,6 +489,10 @@ description: 当用户要把一段文案直接转换成一组可执行的生图�
 
 正式提示词生成后必须先展示给用户确认，不要只保存队列文件。
 
+如果当前任务有剧本解析和空间锁定卡，每个镜头的提示词必须注明：
+- 该镜头对应的情绪段（来自剧本解析）
+- 该镜头所在场景的空间锚点（来自空间锁定卡）
+
 推荐话术：
 
 ```text
@@ -603,6 +609,7 @@ description: 当用户要把一段文案直接转换成一组可执行的生图�
 先固定：
 
 - `Subject Consistency Block`
+- `Spatial Lock Block`（从空间锁定卡继承，包含环境锚点和光线方向）
 - `Style Block`
 - `Negative Constraints`
 
@@ -634,19 +641,19 @@ description: 当用户要把一段文案直接转换成一组可执行的生图�
 ```text
 [Character Block from user reference]
 [Recurring subject consistency block]
+[Spatial Lock: 环境锚点 + 光线方向，来自空间锁定卡]
 [Style Block from user preference]
 [Shot-specific action and environment]
 [Composition, lens, framing, lighting]
 [Negative constraints]
 ```
 
-如果用户提供的是文案而不是镜头表，则在写提示词前先补一个内部字段：
+如果用户提供了剧本解析和空间锁定卡（来自 shot-planner），正式提示词必须继承：
 
-```text
-[Narration beat]
-[Visual goal]
-[Prompt body]
-```
+- **空间锁定卡**：该镜头所在场景的环境锚点和光线方向，确保所有镜头的空间关系一致
+- **剧本解析**：该镜头对应的情绪段和色调段，确保光影和色调与情绪线匹配
+
+如果用户没有提供空间锁定卡，则按现有方式生成提示词，但在提示词里主动补充关键环境元素的描述（墙壁、窗户、光源方向等），作为隐式空间约束。
 
 ## Model Routing Guidance
 
@@ -754,3 +761,4 @@ description: 当用户要把一段文案直接转换成一组可执行的生图�
 - 三视图输出模板： [references/three-view-template.md](./references/three-view-template.md)
 - 重复主体一致性规则： [references/subject-consistency-rules.md](./references/subject-consistency-rules.md)
 - 主体预览确认流程： [references/subject-preview-workflow.md](./references/subject-preview-workflow.md)
+- 风格基因结构： [style-gene-structure.md](../ai-short-video-pipeline/references/style-gene-structure.md)
