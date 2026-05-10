@@ -1,21 +1,21 @@
 ---
 name: ai-video-motion-prompts
-description: 当用户已经有静帧图片，接下来要为图生视频生成运动提示词时使用这个 skill。它适用于 doubao-seedance-1.0-pro-fast，并强调基于已确认的静帧生成低风险、易执行的镜头运动描述。
+description: 当用户已经有静帧图片，接下来要为图生视频生成运动提示词时使用这个 skill。它强调基于已确认的静帧生成低风险、易执行、主体可轻微动作的图生视频提示词。
 ---
 
 # AI Video Motion Prompts
 
 ## Overview
 
-这个 skill 只负责“静帧到视频”的动作设计，不负责静帧生图，也不负责数字人视频轨。输入应当是已经通过一致性检查的静帧。
+这个 skill 只负责“静帧到图生视频”的动作设计，不负责静帧生图，也不负责数字人视频轨。输入应当是已经通过一致性检查的静帧。
 
-默认目标不是给每张图写复杂动作脚本，而是优先使用少量固定镜头运动模板，先把线路跑通。
+默认目标不是给每张图写复杂动作脚本，而是先稳定地让人物、机器人或场景产生小幅、自然、低风险的可用动作。
 
 这个 skill 的职责是：
 
 1. 读取已经生成成功的静帧
-2. 为每张图从固定镜头运动模板里选一个
-3. 为 `doubao-seedance-1.0-pro-fast` 输出极简可执行的动作提示词
+2. 为每张图判断动作类型和动作强度
+3. 输出适用于图生视频模型的可执行动作提示词
 4. 先让用户确认测试批次，再进入图生视频阶段
 
 默认不要把数字人视频轨混进来。数字人视频轨仍然由 `ai-video-avatar-track` 单独处理。
@@ -24,7 +24,7 @@ description: 当用户已经有静帧图片，接下来要为图生视频生成�
 
 - 用户已经有图片
 - 用户要把图片转成短视频镜头
-- 用户使用 `doubao-seedance-1.0-pro-fast`
+- 用户要让图里的人物、机器人或环境轻微动起来
 
 ## Required Inputs
 
@@ -35,31 +35,42 @@ description: 当用户已经有静帧图片，接下来要为图生视频生成�
 - 单镜头时长偏好
 - 整体运动风格
 - 是否先做测试批次
+- 当前镜头里谁是主主体
+- 当前镜头更偏讲述、展示、情绪还是场景
 
 ## Core Rules
 
-- 先确认静帧可用，再写运动提示词
+- 先确认静帧可用，再写图生视频提示词
 - 人物一致性优先于复杂运动
-- 默认不写复杂动作编排
-- 默认只从 5 个固定镜头运动里选
+- 默认不写夸张表演或大动作编排
+- 先判断 `motion_type`，再判断 `motion_intensity`
 - 不要求夸张形变、瞬间换装或不现实的多段动作
 - 人物镜头尽量避免大幅转头、夸张嘴型、复杂肢体重构
-- 纯场景镜头也优先先用固定镜头运动模板
+- 纯场景镜头也应保持小幅、可控运动
 - 正式全量生成前，默认优先先做 5 到 10 张测试批次
 
-## Default Motion Presets
+## Default Motion Types
 
-默认只使用这 5 个固定动作：
+默认先把镜头分成这 5 类：
 
-1. 相机缓慢向左平移
-2. 相机缓慢向右平移
-3. 相机缓慢向下平移
-4. 相机缓慢向上平移
-5. 相机缓慢向后拉远
+1. `讲述型`
+2. `展示型`
+3. `情绪型`
+4. `场景型`
+5. `冲突型`
 
-如果用户没有特别要求，不要额外发挥出复杂动作。
+默认动作强度：
 
-## Keyframe Motion Template
+- 全片默认 `low`
+- 个别重点镜头可升到 `medium`
+- 默认不启用 `high`
+
+动作类型与动作强度规则见：
+
+- [references/image-to-video-prompt-rules.md](../ai-video-generate-videos/references/image-to-video-prompt-rules.md)
+- [references/motion-template-library.md](../ai-video-generate-videos/references/motion-template-library.md)
+
+## Keyframe-Light Fallback
 
 如果用户希望“生成的图片去生成视频时，只像关键帧那样轻微移动，人物和环境基本静止”，默认新增这一套模板：
 
@@ -116,34 +127,35 @@ description: 当用户已经有静帧图片，接下来要为图生视频生成�
 
 - 这批图是否先只做测试批次
 - 单镜头目标时长是几秒
-- 每张图要从哪一个固定镜头运动模板里选
+- 每张图更适合哪一种动作类型
+- 动作强度是否保持低动态优先
 
 如果用户没特别说，默认：
 
 - 先做 `5` 到 `10` 张测试批次
 - 单镜头 `4` 到 `5` 秒
+- `low` 动态优先
 - 人物镜头保守优先
 
-### 3. Assign One Preset To Each Image
+### 3. Assign One Motion Type To Each Image
 
-在写动作提示词前，先判断每张图更适合哪一个固定镜头运动：
+在写动作提示词前，先判断每张图更适合哪一种动作类型：
 
-- 人物站立或人物互动图，优先左右移动或后拉远
-- 纯场景图，优先左右移动、上下移动或后拉远
-- 大场景信息图，优先后拉远
-- 竖向结构明显的图，优先向上或向下移动
+- 主讲人表达观点，优先 `讲述型`
+- 机器人或吉祥物解说，优先 `展示型`
+- 沉思、压迫、悲伤、犹豫，优先 `情绪型`
+- 办公室、法庭、会议室、城市环境，优先 `场景型`
+- 强对比、强冲突、强情绪峰值，才考虑 `冲突型`
 
-不要给一张图同时塞多个复杂运动方向。
+不要给一张图同时塞多个复杂动作目标。
 
-### 4. Keep Motion Prompts Minimal
+### 4. Build Motion Prompts From Templates
 
 默认动作提示词应当尽量短，直接可执行，例如：
 
-- 相机缓慢向左平移，保持人物/场景/主要角色不变形，主体保持原地静止，不要行走、不要跟拍人物，只有相机缓慢平移
-- 相机缓慢向右平移，保持人物/场景/主要角色不变形，主体保持原地静止，不要行走、不要跟拍人物，只有相机缓慢平移
-- 相机缓慢向下平移，保持人物/场景/主要角色不变形，主体保持原地静止，不要行走、不要跟拍人物，只有相机缓慢平移
-- 相机缓慢向上平移，保持人物/场景/主要角色不变形，主体保持原地静止，不要行走、不要跟拍人物，只有相机缓慢平移
-- 相机缓慢向后拉远，保持人物/场景/主要角色不变形，主体保持原地静止，不要行走、不要跟拍人物，只有相机缓慢拉远
+- The host makes a slight natural head movement and subtle breathing motion, with a very small hand gesture near the body. The camera gently pushes in. Keep the face, hairstyle, outfit, body proportions, and background composition unchanged.
+- The robot makes a slight head turn and a small arm movement as if explaining something. The camera gently pushes in. Keep the robot design, proportions, materials, background structure, and original art style unchanged.
+- The person shows subtle breathing, a slight downward or upward head movement, and a very small eye-line change. The camera slowly pushes in. Keep the face, hairstyle, outfit, body proportions, and original art style unchanged.
 
 如果用户要“关键帧感”，默认提示词应改成更收紧的版本，例如：
 
@@ -173,14 +185,18 @@ description: 当用户已经有静帧图片，接下来要为图生视频生成�
 
 每个镜头至少说明：
 
+- 主体动作
 - 镜头运动
+- 风格保持
 - 防止脸漂和肢体畸变的约束
 
 推荐结构：
 
 ```text
 [Source image summary]
-[Camera motion preset]
+[Motion type and subject action]
+[Camera motion]
+[Style lock]
 [Default stability preset]
 ```
 
@@ -190,6 +206,8 @@ description: 当用户已经有静帧图片，接下来要为图生视频生成�
 
 - `shot_id`
 - `source_image_requirement`
+- `motion_type`
+- `motion_intensity`
 - `camera_motion`
 - `default_stability_preset`
 - `motion_prompt`
@@ -204,5 +222,7 @@ description: 当用户已经有静帧图片，接下来要为图生视频生成�
 ## References
 
 - 动作设计规则： [references/motion-design-rules.md](./references/motion-design-rules.md)
+- 图生视频提示词规则： [references/image-to-video-prompt-rules.md](../ai-video-generate-videos/references/image-to-video-prompt-rules.md)
+- 动作模板库： [references/motion-template-library.md](../ai-video-generate-videos/references/motion-template-library.md)
 - 输出模板： [references/output-template.md](./references/output-template.md)
 - openclaw 示例： [references/openclaw-motion-example.json](./references/openclaw-motion-example.json)

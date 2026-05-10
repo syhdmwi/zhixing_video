@@ -12,6 +12,7 @@
 - `AI科普赛博明亮HUD风`
 - `手绘水彩教学风`
 - `3D科技讲解风`
+- `黑白素描概念讲解风`
 
 系统内部拿到的则不只是一个名字，还包括：
 
@@ -246,12 +247,74 @@
 }
 ```
 
-## Extended Presets
+### 4. 黑白素描概念讲解风
 
-以下两个预设继续保留，作为扩展风格块或后续追加选择时使用，不作为当前默认主入口：
+- 预设名：`黑白素描概念讲解风`
+- 英文标识：`monochrome_sketch_concept_explainer`
+- 用户侧一句话说明：
+  `黑白铅笔素描、新闻概念插画感、纸面底色和排线阴影明显，适合复刻观点口播类 AI 插画视频`
+- 默认色彩倾向：
+  `黑白灰为主，暖白纸底，可带极少量局部强调色但默认克制`
+- 默认光影倾向：
+  `结构光明确，纸面排线阴影，整体低彩度、低炫光`
+- 默认材质倾向：
+  `铅笔线稿、炭笔排线、纸张纹理、概念草图感、新闻插画感`
+- 默认环境倾向：
+  `办公室、法庭、会议室、实验室、演讲现场、社会议题场景、概念说明场景`
+- 默认构图倾向：
+  `主体明确，画面像观点插画或新闻概念图，允许局部夸张象征元素，但整体结构清晰`
+- 默认负面约束建议：
+  `避免霓虹赛博色、避免厚涂油画、避免写实照片感、避免强 3D 材质、避免卡通低幼、避免背景过满、避免多余彩色元素、避免复杂无意义文字`
 
-- `赛博朋克风格`
-- `素描风格`
+```json
+{
+  "style_name": "黑白素描概念讲解风",
+  "style_key": "monochrome_sketch_concept_explainer",
+  "style_block": "黑白素描概念讲解风，黑白铅笔线稿和排线阴影，暖白纸面底色，新闻概念插画感，适合观点口播、财经科技评论和社会议题讲解",
+  "visual_style": {
+    "color_palette": {
+      "primary": ["#1F1F1F", "#5E5E5E"],
+      "secondary": ["#B9B1A4", "#EDE7DC"],
+      "accent": ["#C97A3D", "#7BA7D9"],
+      "background_tendency": "warm paper light",
+      "saturation": "very low",
+      "contrast": "medium"
+    },
+    "lighting_profile": {
+      "type": "structural light with hand-drawn shading",
+      "direction": "clear form light, sketch-style tonal separation",
+      "warmth": "neutral to slightly warm",
+      "contrast_ratio": "medium",
+      "shadow_style": "cross-hatching, pencil shading, charcoal-like depth",
+      "practical_lights": false
+    },
+    "texture_profile": {
+      "grain": "visible paper grain",
+      "sharpness": "line clarity first",
+      "material_feel": "graphite pencil, charcoal shading, sketchbook paper, editorial concept drawing",
+      "resolution_feel": "high-quality editorial illustration board",
+      "surface_quality": "matte, tactile, hand-drawn"
+    },
+    "composition_tendencies": {
+      "framing": "single strong concept per frame, readable silhouette, concept-illustration layout",
+      "depth_of_field": "minimal optical blur, rely on drawing structure",
+      "rule_of_thirds": true,
+      "leading_lines": true,
+      "symmetry": "optional",
+      "negative_space": "clean paper breathing room around key concept"
+    },
+    "camera_language": {
+      "lens_equivalent": "35mm to 70mm framing logic",
+      "movement_style": "illustrative still-frame logic",
+      "angle_tendency": "readable, descriptive, slightly dramatic when needed",
+      "transition_style": "editorial cut, concept board continuity"
+    },
+    "mood_keywords": ["editorial", "analytical", "serious", "conceptual", "hand-drawn", "narrative"],
+    "era_spatial": "news illustration world, concept storyboard, social-issue explainer scenes",
+    "post_processing": "preserve pencil texture and paper tone, keep grayscale hierarchy clear, avoid digital glow"
+  }
+}
+```
 
 ## Interaction Rule
 
@@ -260,6 +323,7 @@
 - `AI科普赛博明亮HUD风 请输入 1`
 - `手绘水彩教学风 请输入 2`
 - `3D科技讲解风 请输入 3`
+- `黑白素描概念讲解风 请输入 4`
 - `自主设定风格请输入 0`
 
 ## System Rule
@@ -281,4 +345,4 @@
 
 ## Extension Rule
 
-如果后面继续新增预设，例如赛博朋克、素描、油画、像素风、国风、商业广告风，优先继续往这个文件里追加，不要把预设散落在多个 skill 里重复维护。
+如果后面继续新增预设，例如油画、像素风、国风、商业广告风，优先继续往这个文件里追加，不要把预设散落在多个 skill 里重复维护。

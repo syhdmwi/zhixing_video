@@ -1,25 +1,25 @@
 ---
 name: ai-video-generate-videos
-description: 当用户已经有静帧图片和已确认的图生视频镜头运动模板，接下来要真实提交视频生成任务时使用这个 skill。它当前默认使用 grok 提交视频任务；seedance 暂时停用。
+description: 当用户已经有静帧图片和已确认的图生视频动作方案，接下来要真实提交视频生成任务时使用这个 skill。它当前默认使用 grok 提交视频任务；seedance 暂时停用。
 ---
 
 # AI Video Generate Videos
 
 ## Overview
 
-这个 skill 负责“已确认静帧 + 已确认镜头运动模板 -> 真实提交视频生成任务”这一段。
+这个 skill 负责“已确认静帧 + 已确认图生视频动作方案 -> 真实提交视频生成任务”这一段。
 
 它不负责：
 
 - 生图
-- 重写镜头运动模板
+- 重写图生视频动作方案
 - 数字人视频轨
 - 最终剪辑
 
 它的职责是：
 
 1. 判断当前可用视频生成模型
-2. 把图片和镜头运动模板转成可执行任务
+2. 把图片和图生视频动作方案转成可执行任务
 3. 提交任务
 4. 轮询结果
 5. 成功后默认直接展示视频结果或结果链接给用户确认
@@ -70,7 +70,7 @@ description: 当用户已经有静帧图片和已确认的图生视频镜头运�
 - 已确认的静帧图片
 - 已确认静帧图片的公网 URL；如果只有本地图片文件且已配置 TOS，先自动上传到 TOS 再提交
 - 每张图对应的 `shot_id`
-- 已确认的图生视频镜头运动模板
+- 已确认的图生视频动作方案
 - 目标比例和尺寸
 - 是否先跑测试批次
 
@@ -80,9 +80,9 @@ description: 当用户已经有静帧图片和已确认的图生视频镜头运�
 - 默认先跑测试批次，再决定是否全量生成
 - 图生视频接口需要公网图片 URL。用户如果提供本地图片文件，且已配置 TOS，默认先自动上传到 TOS，得到公网直链后再提交给视频模型
 - 只有 TOS 配置缺失时，才提示用户提供公网可访问图片 URL
-- 图生视频提示词默认沿用固定镜头运动模板
-- 每条视频任务默认附带固定稳定性模板：`保持人物/场景/主要角色不变形，主体保持原地静止，不要行走、不要跟拍人物，只有相机缓慢平移或拉远`
-- `grok` 默认优先使用英文强约束提示词，避免模型把镜头移动误解成主体走动
+- 图生视频提示词默认沿用已确认的 `motion_type` 和 `video_prompt`
+- 每条视频任务默认附带固定稳定性模板：`保持人物/场景/主要角色不变形，保持原始画风和构图，主体只做小幅自然动作，不要夸张变形、不要新增角色、不要背景漂移`
+- `grok` 默认优先使用英文强约束提示词，避免模型把“小幅自然动作”误解成大幅表演或结构漂移
 - 生成成功后，默认直接展示结果，不只给任务号
 - 如果 provider 任务长时间卡住，应保留历史 task_id 并标记状态
 - 所有轮询中的进度汇报，默认遵循总控里的统一规则：[references/polling-progress-rules.md](../ai-short-video-pipeline/references/polling-progress-rules.md)
@@ -91,7 +91,7 @@ description: 当用户已经有静帧图片和已确认的图生视频镜头运�
 
 ### 1. Confirm Motion Batch Is Approved
 
-只有当静帧和镜头运动模板都已经确认后，才进入本 skill。
+只有当静帧和图生视频动作方案都已经确认后，才进入本 skill。
 
 如果是用户刚从图片阶段进入视频阶段，优先先展示这个选择：
 
@@ -131,7 +131,9 @@ description: 当用户已经有静帧图片和已确认的图生视频镜头运�
 - `provider`
 - `model`
 - `source_image_url`
-- `motion_prompt`
+- `motion_type`
+- `motion_intensity`
+- `video_prompt`
 - `size`
 
 如果 `source_image_url` 对应的是本地图片路径，不要直接提交给 provider；先按总控公网资源规则上传到 TOS。
@@ -147,6 +149,21 @@ description: 当用户已经有静帧图片和已确认的图生视频镜头运�
 当前脚本层：
 
 - `scripts/video_generation_router.py`
+
+### 5. Preflight Check For Image-To-Video Prompts
+
+真正提交前，每条镜头都先检查：
+
+- `motion_type` 是否已指定
+- `motion_intensity` 是否已指定
+- `video_prompt` 是否已生成
+- `video_prompt` 是否同时包含：
+  - 主体动作
+  - 镜头运动
+  - 风格保持
+  - 负面约束
+
+如果缺任何一项，先回到 `ai-video-motion-prompts` 补齐，不直接提交。
 
 ### 5.5 Video Quality Review Loop（视频质量审核回环）
 
@@ -198,6 +215,8 @@ description: 当用户已经有静帧图片和已确认的图生视频镜头运�
 ## References
 
 - provider 队列模板： [references/provider-queue-example.json](./references/provider-queue-example.json)
+- 图生视频提示词规则： [references/image-to-video-prompt-rules.md](./references/image-to-video-prompt-rules.md)
+- 动作模板库： [references/motion-template-library.md](./references/motion-template-library.md)
 - grok 接入说明： [references/grok-provider-notes.md](./references/grok-provider-notes.md)
 - grok 固定模板： [references/grok-video-template-00.md](./references/grok-video-template-00.md)
 - seedance 停用说明： [references/seedance-provider-notes.md](./references/seedance-provider-notes.md)

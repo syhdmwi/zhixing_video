@@ -52,6 +52,31 @@ description: 当用户已经确认了一批图片提示词，接下来要正式�
 - 展示图片后，再让用户确认哪些镜头可以保留、哪些镜头需要回炉
 - 所有轮询中的进度汇报，默认遵循总控里的统一规则：[references/polling-progress-rules.md](../ai-short-video-pipeline/references/polling-progress-rules.md)
 
+## Codex Built-In Image Priority
+
+如果当前运行环境是 `Codex`,并且用户选择的是 `GPT-Image-2`,本 skill 默认优先使用 `Codex` 自带的生图能力,而不是先走外部批处理脚本。
+
+默认策略:
+
+1. 只要是 `Codex` + `GPT-Image-2` -> 一律优先 `Codex` 自带生图
+2. 非 `Codex` 环境 + `GPT-Image-2` -> 使用外部批处理脚本 / API
+3. `nanobanana-2` -> 继续沿用现有外部脚本
+
+如果在 `Codex` 中走内建生图,仍然必须遵守本 skill 的这些规则:
+
+- 不重写已确认提示词
+- 保持 `shot_id` 顺序
+- 保持主体一致性锚点
+- 生成完成后整批展示给用户确认
+
+硬规则:
+
+- 在 `Codex` 中,不要因为是前 10 张测试批次、审一张改一张、还是 60 张正式生图,就切换执行方式
+- 在 `Codex` 中,不要因为已有 JSON 队列文件就自动改走外部脚本
+- 只有当前 `Codex` 自带生图能力不可用时,才改用：
+
+- `scripts/gpt_image2_batch.py`
+
 ## Workflow
 
 ### 1. Confirm The Batch Is Approved
