@@ -56,14 +56,15 @@ AI 生图模型不认识真实品牌 logo，写品牌名只会让模型瞎编。
 
 这条属于 [主体] 字段的补充约束，不单独成段。
 
-### 附加规则：画面文字最小化
+### 附加规则：画面文字禁止生成（默认）
 
 所有 AI 生图模型（包括 GPT-Image-2）无法稳定生成准确的中文或英文文字。因此：
 
-1. **尽量减少画面中的文字量** — UI 界面优先用空白/占位符，不要写长句或多行文字
-2. **如必须出现文字，只用一句短语** — 例如 `a single short Chinese label like "指挥中心"`，不要写多行或多句
-3. **多行文字、段落文字留给后期剪辑处理** — 生图时不生成可读长文本
-4. 提示词中写 `blank UI panels ready for text overlay in post-production` 代替 `filled with Chinese text`
+1. **默认不生成任何可读文字** — 包括中文标题、英文标签、参数面板文字、品牌说明牌、数据说明字卡
+2. **信息图只保留结构，不保留字** — 可以写 `blank infographic panels ready for text overlay in post-production`
+3. **所有多行文字、段落文字、数字说明留给后期剪辑处理**
+4. **只有用户明确要求且画面必须依赖单个短词时，才允许极少量单词占位**；默认项目不要启用这条例外
+5. 在负面约束里优先加入：`no readable text, no Chinese labels, no English labels, no title cards, no data panel typography`
 
 ### 逐字段说明
 
