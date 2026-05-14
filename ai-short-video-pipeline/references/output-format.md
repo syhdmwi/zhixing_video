@@ -61,9 +61,18 @@
 | `narration_excerpt` | 对应口播片段 |
 | `visual_goal` | 该镜头的表达目标 |
 | `frame_type` | `avatar` / `b-roll` / `split` |
+| `image_prompt_cn` | 对应中文提示词，给用户直接查看 |
 | `image_prompt` | 生图提示词 |
+| `image_to_video_prompt_cn` | 对应中文视频提示词，给用户直接查看 |
 | `image_to_video_prompt` | 图生视频提示词 |
 | `edit_note` | 转场、字幕、强调元素、节奏说明 |
+
+用户侧展示规则：
+
+- 展示分镜表时，默认同时展示 `narration_excerpt` 和 `image_prompt_cn`
+- 不要只给英文 `image_prompt`
+- 如果后续进入视频阶段，默认同时展示 `narration_excerpt` 和 `image_to_video_prompt_cn`
+- 英文提示词保留为执行层字段，中文提示词负责给用户阅读和校对
 
 ## 4. Prompt Writing Pattern
 

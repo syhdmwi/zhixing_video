@@ -128,11 +128,13 @@ description: 当用户已经有静帧图片和已确认的图生视频动作方�
 每条任务至少包含：
 
 - `shot_id`
+- `narration_excerpt`
 - `provider`
 - `model`
 - `source_image_url`
 - `motion_type`
 - `motion_intensity`
+- `video_prompt_cn`
 - `video_prompt`
 - `size`
 
@@ -192,6 +194,14 @@ description: 当用户已经有静帧图片和已确认的图生视频动作方�
 ### 6. Show Generated Results
 
 如果环境支持展示视频或返回视频链接，默认按 `shot_id` 顺序展示结果给用户确认。
+
+展示时默认同时带上：
+
+- `narration_excerpt`
+- `video_prompt_cn`
+- 视频结果
+
+不要只展示视频文件或英文 `video_prompt`，避免用户看不懂当前镜头是根据哪句原文和哪条中文动作提示生成的。
 
 展示完成后，固定询问：
 

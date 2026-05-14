@@ -107,7 +107,9 @@ description: 当用户已经确认了一批图片提示词，接下来要正式�
 按顺序为每条提示词生成执行队列。每条至少包含：
 
 - `shot_id`
+- `narration_excerpt`
 - `frame_type`
+- `image_prompt_cn`
 - `model`
 - `aspect_ratio`
 - `image_prompt`
@@ -152,11 +154,15 @@ description: 当用户已经确认了一批图片提示词，接下来要正式�
 只要当前环境支持直接展示图片，生成成功后默认动作应是：
 
 - 按 `shot_id` 顺序展示图片
+- 每张图同时展示对应的 `narration_excerpt`
+- 每张图同时展示对应的 `image_prompt_cn`
 - 尽量直接渲染图片，不只贴 URL
 - 同时保留图片链接，便于后续复查
 - 展示完成后，再问用户哪些镜头满意，哪些镜头要改
 
 不要在图片已经生成成功的情况下，只返回 JSON 或只返回一堆链接就结束。
+
+如果执行层只有英文 `image_prompt`，也必须在用户展示层补一份中文提示词摘要，不能只让用户看英文。
 
 ### 6.5 Quality Review Loop（质量审核回环）
 

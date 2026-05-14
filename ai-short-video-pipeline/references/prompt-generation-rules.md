@@ -66,6 +66,32 @@ AI 生图模型不认识真实品牌 logo，写品牌名只会让模型瞎编。
 4. **只有用户明确要求且画面必须依赖单个短词时，才允许极少量单词占位**；默认项目不要启用这条例外
 5. 在负面约束里优先加入：`no readable text, no Chinese labels, no English labels, no title cards, no data panel typography`
 
+### 附加规则：抽象主体三视图
+
+当主体不是人物、动物或现实产品，而是抽象概念、系统模块、知识结构、流程节点、RAG 卡片、知识中枢、网络拓扑、数据模块等“抽象主体”时，三视图阶段必须额外遵守：
+
+1. **先锁资产类型，再生成**  
+   未收到用户另行指定时，抽象主体默认按 `科技装置型` 处理，不允许模型自由决定有的变成角色、有的变成图标、有的变成商品。
+
+2. **再锁完成度类型**  
+   抽象主体默认输出为 `商业科技插画设定图 / 科技讲解资产图`，不是：
+   - 写实工业产品渲染
+   - 商品广告主视觉
+   - 摄影棚硬件展示图
+   - 吉祥物 / Q版角色 / 贴纸图标
+
+3. **统一版式**  
+   默认白底或浅灰底，正面 / 侧面 / 背面同图排版，一张图只服务一个主体。
+
+4. **统一风格锚点**  
+   同一项目里，如果后面的抽象主体已经生成出被确认的好结果，前面的抽象主体重做时必须向这批已确认结果看齐，保持同一套材质、光影、线条完成度和设定图语言。
+
+推荐在三视图负面约束中固定加入：
+
+```text
+no mascot character, no chibi proportions, no sticker icon style, no photorealistic industrial product render, no hardware advertising hero shot, no studio product photography look
+```
+
 ### 逐字段说明
 
 | 字段 | 来源 | 内容 | 可变性 |
