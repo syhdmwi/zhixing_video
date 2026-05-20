@@ -52,39 +52,26 @@ description: 当用户已经确认了一批图片提示词，接下来要正式�
 - 展示图片后，再让用户确认哪些镜头可以保留、哪些镜头需要回炉
 - 所有轮询中的进度汇报，默认遵循总控里的统一规则：[references/polling-progress-rules.md](../ai-short-video-pipeline/references/polling-progress-rules.md)
 
-## Codex Built-In Image Priority
+## Unified External Image Execution
 
-如果当前运行环境是 `Codex`,并且用户选择的是 `GPT-Image-2`,本 skill 默认优先使用 `Codex` 自带的生图能力,而不是先走外部批处理脚本。
+本 skill 在正式生图阶段,默认统一使用外部批处理脚本 / API。
 
 默认策略:
 
-1. `Codex` + `GPT-Image-2` -> 优先 `Codex` 自带生图
-2. 非 `Codex` 环境 + `GPT-Image-2` -> 使用外部批处理脚本 / API
-3. 任意环境 + `nanobanana-2` -> 继续沿用现有外部脚本
+1. 任意环境 + `GPT-Image-2` -> 使用外部批处理脚本 / API
+2. 任意环境 + `nanobanana-2` -> 使用外部批处理脚本 / API
 
-按张数的默认切换规则:
+用户明确指定执行方式时,以用户指定为准;但默认正式生图不要再走 `Codex` 内建生图。
 
-- `1` 到 `10` 张 -> 默认使用 `Codex` 自带生图
-- `11` 到 `200` 张 -> 默认使用外部脚本 / API
-- 用户明确指定执行方式时,以用户指定为准
-- 如果还在风格测试或角色确认阶段,即使总量大于 `10` 张,也可以先用 `Codex` 生成 `1` 到 `3` 张样张再切批量
-
-如果在 `Codex` 中走内建生图,仍然必须遵守本 skill 的这些规则:
+正式生图必须遵守这些规则:
 
 - 不重写已确认提示词
 - 保持 `shot_id` 顺序
 - 保持主体一致性锚点
-- 生成完成后整批展示给用户确认
-
-硬规则:
-
-- 在 `Codex` 中,如果本次任务总张数是 `1` 到 `10` 张,默认继续走内建生图
-- 在 `Codex` 中,如果本次任务总张数是 `11` 到 `200` 张,默认改走外部脚本
-- 在 `Codex` 中,如果用户已经进入大批量正式生图,并且明确需要队列执行、任务日志或轮询状态,应优先改走外部脚本
-- 不要因为已有 JSON 队列文件就自动改走外部脚本,除非当前目标本来就是大批量正式生产
-- 只有当前 `Codex` 自带生图能力不可用时,才必须改用：
-
-- `scripts/gpt_image2_batch.py`
+- 一镜一任务提交
+- 禁止把多个分镜提示词合并进一次生成请求
+- 禁止生成 collage、multi-panel、storyboard sheet、contact sheet
+- 生成完成后逐张展示给用户确认
 
 ## Workflow
 
