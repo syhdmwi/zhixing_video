@@ -73,6 +73,8 @@
 - 不要只给英文 `image_prompt`
 - 如果后续进入视频阶段，默认同时展示 `narration_excerpt` 和 `image_to_video_prompt_cn`
 - 英文提示词保留为执行层字段，中文提示词负责给用户阅读和校对
+- 正式生图结果只能逐张展示，不能用总览图、拼图墙、联系表、宫格图替代
+- 每张正式生图结果都必须继续保留 `shot_id`、`narration_excerpt`、`image_prompt_cn`
 
 ## 4. Prompt Writing Pattern
 
