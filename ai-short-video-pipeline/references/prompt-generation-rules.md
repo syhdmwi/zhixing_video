@@ -131,6 +131,61 @@ no readable long text, no Chinese paragraph text, no English paragraph text, no 
 no mascot character, no chibi proportions, no sticker icon style, no photorealistic industrial product render, no hardware advertising hero shot, no studio product photography look
 ```
 
+### 附加规则：人物默认非写实
+
+除非用户明确要求：
+
+- 写实
+- 真人感
+- 纪实照片感
+- 半写实人像
+- `photorealistic`
+
+否则所有人物镜头都默认按**非写实风格化人物**处理。
+
+#### 项目级默认字段
+
+每个项目都应显式维护：
+
+- `character_render_mode`
+
+默认值：
+
+- `stylized_illustration`
+
+可选值建议：
+
+- `stylized_illustration`
+- `anime_illustration`
+- `3d_stylized`
+- `sketch_illustration`
+- `photorealistic`（仅用户明确要求时启用）
+
+#### 参考图规则
+
+如果用户提供的参考图是真人头像、真人照片、证件照、自拍或真人三视图，默认解释为：
+
+1. **参考人物身份特征**
+   - 脸型
+   - 五官比例
+   - 发型
+   - 年龄感
+2. **不继承照片质感**
+   - 不要真实皮肤质感
+   - 不要摄影棚打光
+   - 不要 DSLR/写真感
+   - 不要自动收敛到写实人像
+
+也就是说，参考图负责锁“是谁”，不负责锁“照片材质”。
+
+#### 人物默认负面约束
+
+当 `character_render_mode` 不是 `photorealistic` 时，人物镜头默认补入：
+
+```text
+no photorealistic portrait, no realistic skin texture, no DSLR portrait look, no studio photography lighting, no passport-photo look, no live-action human rendering
+```
+
 ### 逐字段说明
 
 | 字段 | 来源 | 内容 | 可变性 |

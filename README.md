@@ -8,7 +8,7 @@
 - 数字人
 - 可复用模板
 
-它可以在 Codex 里作为 skills 使用，也可以迁移到 OpenClaw、Trae、Claude Code 等支持项目规则、上下文文档或自定义工作流的工具里使用。
+它对外是一个主 skill：`zhixing_video`。也可以迁移到 OpenClaw、Trae、Claude Code 等支持项目规则、上下文文档或自定义工作流的工具里使用。
 
 如果你是第一次用，不用先理解所有目录名字。你只需要知道自己现在想做哪件事。
 
@@ -158,7 +158,9 @@
 - 模板默认保存主讲人、风格和提示词规则；重复主体默认随新文案重新识别
 - 正式图样例只有用户选择编号后才保存进模板
 
-## Included Workflow Modules
+## Internal Workflow Modules
+
+这些目录现在是内部模块，不是给用户单独选择的外部 skill：
 
 - `ai-short-video-pipeline`
 - `ai-video-shot-planner`
@@ -205,15 +207,15 @@
 
 ## Suggested Install Method
 
-如果使用 Codex，可以把这 12 个 skill 目录复制到对方的 Codex skills 目录下使用。
+如果使用 Codex，优先把整个项目目录作为一个主 skill 包来使用，对外入口是根目录下的 [SKILL.md](./SKILL.md)。
 
 如果使用 OpenClaw、Trae、Claude Code 或其它 AI 编程工具，请优先查看：
 
 - [跨工具使用说明](./跨工具使用说明.md)
 
-这些工具如果不能直接识别 Codex skill 目录，也可以把核心说明文档作为项目规则、工作流文档或上下文导入。
+这些工具如果不能直接识别 Codex skill 目录，也可以把根入口 [SKILL.md](./SKILL.md) 和核心说明文档作为项目规则、工作流文档或上下文导入。
 
-如果对方只想用部分流程，也可以只安装或导入其中的单个模块。
+内部模块继续保留给实现层引用，不要求用户单独安装或理解。
 
 ## Install Steps
 
@@ -233,7 +235,7 @@ OpenClaw / Trae / Claude Code：
 
 - 把本项目作为普通项目文件夹打开
 - 把 [用户使用说明](./用户使用说明.md) 和 [跨工具使用说明](./跨工具使用说明.md) 放进工具的项目上下文
-- 如果工具支持自定义规则文件，把 [ai-short-video-pipeline/SKILL.md](./ai-short-video-pipeline/SKILL.md) 作为总控规则导入
+- 如果工具支持自定义规则文件，把根入口 [SKILL.md](./SKILL.md) 作为总控规则导入
 
 如果使用 Codex 但不确定 `CODEX_HOME`，可以先在终端里执行：
 

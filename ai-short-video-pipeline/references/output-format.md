@@ -77,6 +77,22 @@
 
 用一段完整文字描述主角，不拆成碎词。
 
+至少补充一个字段：
+
+- `character_render_mode`
+
+默认值：
+
+- `stylized_illustration`
+
+可选值建议：
+
+- `stylized_illustration`
+- `anime_illustration`
+- `3d_stylized`
+- `sketch_illustration`
+- `photorealistic`（仅用户明确要求时启用）
+
 ### Style Block
 
 用一段完整文字描述全片统一视觉风格。
