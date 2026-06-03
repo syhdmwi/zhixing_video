@@ -38,7 +38,9 @@
 
 - `AI科普赛博明亮HUD风模板01`
 - `手绘水彩教学风模板01`
-- `3D科技讲解风模板01`
+- `黑白素描概念讲解风模板01`
+- `复古纸质拼贴风模板01`
+- `羊毛毡定格动画风模板01`
 
 ### 2. Subject Consistency Template
 
@@ -65,7 +67,8 @@
 执行清单模板负责固定生图批处理输入格式，例如：
 
 - `shot_id`
-- `frame_type`
+- `visual_carrier`
+- `frame_type`（可选兼容字段或执行队列类型）
 - `image_prompt`
 - `reference_urls`
 - `consistency_note`

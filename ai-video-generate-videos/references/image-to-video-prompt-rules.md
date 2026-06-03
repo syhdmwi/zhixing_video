@@ -201,9 +201,20 @@
 - 不要大幅改变机位
 - 不要出现闪烁和背景漂移
 
-## 6. Model-Friendly Writing Rule
+如果用户明确要求“关键帧轻运镜”或“人物和环境都基本静止”，使用这一条收紧版稳定约束：
+
+- 保持人物/场景/主要角色完全静止，像关键帧插画一样固定不动，不要人物动作，不要环境动画，不要道具动画，只允许非常轻微的镜头移动，保持整体构图稳定，不要漂移，不要变形
+
+## 6. Provider Language And Writing Rule
 
 图生视频提示词应短、明确、能执行。
+
+语言随 provider：
+
+- `grok` / 速创链路已实测中文动作提示词可用，可直接使用中文提示词
+- `omni` 可由用户显式选择，适合首尾帧或视频参考 v2v；提示词仍使用本文件的 `motion_type` / `motion_intensity` / 稳定性规则
+- 英文 provider 或英文表现更稳定的 provider，使用英文等价版
+- 不要一刀切要求所有 provider 都用英文；提交前按 provider 选择 `video_prompt_cn` 或英文 `video_prompt`
 
 优先写：
 
@@ -215,7 +226,33 @@
 
 不要写成大段散文式描述。
 
-## 7. Default Duration Rule
+## 7. visual_carrier 运动映射表
+
+分镜阶段的 `visual_carrier` 必须映射到本文件定义的 `motion_type` 与 `motion_intensity`，再从 [motion-template-library.md](./motion-template-library.md) 选模板或已验证中文提示词。
+
+| visual_carrier | 推荐 motion_type | 默认 motion_intensity | 推荐 camera | 对应模板 / 已验证提示词 |
+| --- | --- | --- | --- | --- |
+| `host_primary` | `讲述型` / `情绪型` | `low`，重点句可 `medium` | 推近、轻微横移 | 主讲人讲述模板；已验证 1、已验证 3、已验证 5、已验证 10、已验证 11 |
+| `host_with_visual` | `展示型` | `low` 到 `medium` | 推近 | 数据 / 屏幕展示模板；已验证 8 |
+| `scene_only` | `场景型` / `情绪型` | `low` | 横移、后拉、推近 | 场景展示模板；已验证 2、已验证 6、已验证 7 |
+| `concept_explainer` | `展示型` | `low` | 横移、推近 | 数据 / 屏幕展示模板 |
+| `brand_symbolic` | `展示型` | `low` | 横移、推近 | 数据 / 屏幕展示模板 |
+| `data_compare` | `冲突型` | `medium` | 轻微环绕、横移 | 数据 / 屏幕展示模板；已验证 9 |
+| `ui_closeup` | `展示型` | `low` | 横移、推近 | 数据 / 屏幕展示模板；已验证 4 |
+
+## 8. 风格运动适配
+
+风格只调整运动基调，不复制风格基因；风格基因仍以 [style-presets.md](../../ai-video-image-prompts/references/style-presets.md) 的 `style_key` 为准。
+
+| style_key | 运动基调 |
+| --- | --- |
+| `cyberpunk_bright_hud_infographic` | 数据流光、HUD 面板微动，优先推近和横移，避免大幅角色表演。 |
+| `hand_painted_watercolor_educational` | 极简、淡入淡出、几乎静止，优先轻后拉或非常慢的推近。 |
+| `monochrome_sketch_concept_explainer` | 保持静帧概念图感，使用极轻推近，避免明显动画和复杂肢体变化。 |
+| `vintage_paper_collage` | 纸片层移、定格顿挫感、轻横移，保持拼贴层级稳定。 |
+| `wool_felt_stop_motion` | 定格动画顿挫节奏、缓慢推近、电影柔光呼吸感，保留羊毛纤维和手工质感。 |
+
+## 9. Default Duration Rule
 
 默认单镜头时长：
 
@@ -229,7 +266,7 @@
 
 - `5` 秒
 
-## 8. Review Rule
+## 10. Review Rule
 
 在真正提交图生视频前，每条镜头至少应能回答这 5 个问题：
 

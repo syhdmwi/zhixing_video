@@ -6,12 +6,7 @@
 
 1. **硬结构**：每个 prompt 由哪几段拼成，顺序不能变
 2. **三层分工**：剧本解析、空间锁定卡、风格基因各管什么，不重叠、不遗漏
-3. **风格参数表**：每种风格的 6 组基因填什么值
-
-### 核心认知（2026-05-06） #type/discovery #decision/提示词模板
-
-**同一套提示词用在不同模型（GPT-Image-2、Seedream-5.0-lite），效果大差不差。**
-想要好的风格图片，关键不是换模型，而是提示词的书写质量。提示词框架模板需要持续优化——这是产出质量的核心杠杆。
+3. **风格基因转写方法**：如何把已锁定的 6 组风格基因写进 prompt
 
 ### 当前生效说明
 
@@ -19,10 +14,10 @@
 
 也就是说：
 
-- 用户交互层优先使用 `AI科普赛博明亮HUD风`、`手绘水彩教学风`、`3D科技讲解风`、`黑白素描概念讲解风`
-- 本文件中的结构化示例负责说明“风格基因应该怎么写、怎么转写进提示词”
+- 用户交互层优先使用 `AI科普赛博明亮HUD风`、`手绘水彩教学风`、`黑白素描概念讲解风`、`复古纸质拼贴风`、`羊毛毡定格动画风`
+- 本文件只负责说明“风格基因怎么转写进提示词”
 
-不要因为本文件里保留了更详细的示例风格参数，就绕开 `style-presets.md` 的用户侧命名和选择逻辑。
+预设清单、`style_key`、`style_block`、6 组基因值和默认负面约束都以 `style-presets.md` 为唯一事实来源；不要在本文件复制或改写预设基因值。
 
 ## 1. Prompt Hard Structure（硬结构）
 
@@ -194,7 +189,7 @@ no photorealistic portrait, no realistic skin texture, no DSLR portrait look, no
 | 主体 | 剧本解析 + 三视图 | 人物外貌引用（不重写五官） | 主讲人固定，配角按镜头变 |
 | 动作/状态 | 剧本解析关键动作 | 本镜头人物做什么、什么状态 | 每镜不同 |
 | 构图/景别 | 空间锁定卡机位参考 | 景别、角度、取景范围 | 每镜不同 |
-| 风格基因转写 | 风格参数表 | 色彩+光影+质感+构图+镜头+情绪 的自然语言 | 同项目不变 |
+| 风格基因转写 | `style-presets.md` 或项目自定义风格上下文 | 色彩+光影+质感+构图+镜头+情绪 的自然语言 | 同项目不变 |
 | 负面约束 | Production Bible | 禁止项列表 | 同项目不变 |
 
 ### 示例（赛博朋克风 shot_01）
@@ -238,6 +233,8 @@ Futuristic tech company HQ interior, dark glass walls, grid floor with glowing n
 - `visual_carrier` 分配
 
 再进入提示词拼装。
+
+`visual_carrier` 的值集合与分类语义以 [../SKILL.md](../SKILL.md) 的 `3.4 视觉承载层` 为准；本节只说明提示词转写重点，不重新定义分类法。
 
 也就是说，同一句 `source_text`，如果它的 `visual_carrier` 不同，提示词结构重点就不同：
 
@@ -310,241 +307,73 @@ Futuristic tech company HQ interior, dark glass walls, grid floor with glowing n
   └─ 禁止项列表 ──→ [负面约束]
 ```
 
-## 3. 风格参数表（Style Gene Presets）
+## 3. 风格基因转写方法（Style Gene Transcription）
 
-以下是预置风格模板。新项目套用时，从表中选一个填入对应基因值。
+风格预设库、5 个预设名称、`style_key`、`style_block`、6 组结构化基因和默认负面约束，统一以 [style-presets.md](../../ai-video-image-prompts/references/style-presets.md) 为准。本文件不再维护任何预设 JSON 或具体基因值。
 
-每个预设的负面约束默认包含**画面文字最小化规则**（见 §1 附加规则）。
+本节只规定：拿到已锁定的风格基因后，如何把它们稳定转写进每条 `image_prompt`。
 
-### 预设：AI 科普赛博明亮 HUD 风（Cyberpunk Bright HUD Infographic）
+### 3.1 输入要求
 
-适用：AI 知识科普视频、技术产品展示、科技教育类内容
+进入正式提示词生成前，项目必须已经锁定以下风格上下文：
 
-```json
-{
-  "style_name": "AI科普赛博明亮HUD风",
-  "color_palette": {
-    "primary": ["#00D8FF", "#267BFF"],
-    "secondary": ["#050712", "#101B55"],
-    "accent": ["#B13CFF", "#FF3CFF"],
-    "background_tendency": "dark",
-    "saturation": "high",
-    "contrast": "high"
-  },
-  "lighting_profile": {
-    "type": "emissive neon, holographic glow, volumetric light beams",
-    "direction": "center-weighted, UI panels as light sources",
-    "warmth": "cool",
-    "contrast_ratio": "high",
-    "shadow_style": "deep navy-black shadows, bloom and light trails on glowing elements",
-    "practical_lights": false
-  },
-  "texture_profile": {
-    "grain": "none, clean digital",
-    "sharpness": "high detail on UI panels, bloom softening on edges",
-    "material_feel": "glossy glass HUD panels + reflective floor + transparent overlays",
-    "resolution_feel": "cinematic 4K",
-    "surface_quality": "polished 3D render, smooth gradients"
-  },
-  "composition_tendencies": {
-    "framing": "symmetrical centered, subject in middle with floating panels left/right",
-    "depth_of_field": "shallow to medium, background dissolved in darkness",
-    "rule_of_thirds": false,
-    "leading_lines": true,
-    "symmetry": "primary — centered focal point",
-    "negative_space": "dark navy void surrounding center composition"
-  },
-  "camera_language": {
-    "lens_equivalent": "wide to medium, cinematic 16:9",
-    "movement_style": "static or slow push-in",
-    "angle_tendency": "straight-on or slightly low angle",
-    "transition_style": "clean cuts"
-  },
-  "mood_keywords": ["futuristic", "empowering", "high-tech", "intelligent", "optimistic", "dramatic"],
-  "era_spatial": "dark futuristic cyber lab, holographic command center, digital dashboard room",
-  "post_processing": "heavy bloom, volumetric light, lens flare on glow elements, clean digital grade"
-}
+- `style_key`：来自 `style-presets.md`，或自定义风格生成的项目内 key
+- `style_block`：一句完整风格块，用于快速定调
+- `visual_style.color_palette`
+- `visual_style.lighting_profile`
+- `visual_style.texture_profile`
+- `visual_style.composition_tendencies`
+- `visual_style.camera_language`
+- `visual_style.mood_keywords`
+- `negative_constraints`
+
+如果用户选择 1/2/3/4/5 预设，直接从 `style-presets.md` 读取对应 `style_key` 和完整上下文。如果用户选择 0 自定义风格，也必须先整理成同样的 6 组结构，再进入批量 prompt。
+
+### 3.2 转写顺序
+
+风格层在 prompt 中只填 `[风格基因转写]` 和 `[负面约束]`，不得覆盖空间层和内容层。
+
+推荐转写顺序：
+
+1. 先写 `style_block`，用一句话固定整体画风。
+2. 从 `color_palette` 转写色彩倾向：主色、辅助色、背景明暗、饱和度、对比度。
+3. 从 `lighting_profile` 转写光源语言：光型、方向、冷暖、阴影方式、发光或自然光特征。
+4. 从 `texture_profile` 转写材质和完成度：纸面、玻璃、3D、线稿、颗粒、清洁度、渲染质感。
+5. 从 `composition_tendencies` 转写构图约束：主体位置、信息层布局、留白、景深、画面秩序。
+6. 从 `camera_language` 转写镜头语言：镜头感、角度倾向、运动倾向；静帧 prompt 只写画面感，不写真实视频动作。
+7. 从 `mood_keywords` 转写情绪气质：只选 3-5 个关键词，不堆满整串形容词。
+8. 最后合并 `negative_constraints`，并追加 §1 的画面文字最小化规则。
+
+### 3.3 字段边界
+
+| 基因组 | 转写位置 | 不应越界 |
+| --- | --- | --- |
+| `color_palette` | 色彩、背景明暗、对比度 | 不替代具体场景物件 |
+| `lighting_profile` | 光型、方向、阴影、发光特征 | 不改变空间锁定卡的光源位置 |
+| `texture_profile` | 材质、颗粒、渲染完成度 | 不重写主体身份 |
+| `composition_tendencies` | 信息层布局、留白、主次关系 | 不覆盖 `shot_function` |
+| `camera_language` | 景别倾向、镜头感、角度语言 | 不写图生视频动作 |
+| `mood_keywords` | 情绪、气质、观感 | 不替代文案内容 |
+
+### 3.4 推荐句式
+
+将 6 组基因压缩成一段自然语言，不要把 JSON 键名直接塞进 prompt。
+
+```text
+[style_block]. Use [color_palette] with [lighting_profile]. Render with [texture_profile]. Keep [composition_tendencies] and [camera_language]. Overall mood: [mood_keywords]. [negative_constraints].
 ```
 
-**负面约束（此风格默认）：**
+写作要点：
 
-```
-- No anime-style oversized eyes or chibi proportions
-- No photorealistic humans — use iconic/symbolic geometric AI avatars
-- Minimize on-screen text — use bold glowing single-word English labels only
-- If a well-known brand is referenced, render its OFFICIAL logo from reference image
-- No more than 3-4 main visual elements per frame
-- No warm colors or natural lighting
-- No cluttered compositions — organized infographic layout
-- Deep navy-black (#050712) background, glossy glass HUD panels, reflective floor as scene anchors
-```
-
-### 预设：手绘水彩教学风（Hand-Painted Watercolor Educational）
-
-适用：AI 知识科普、儿童/入门教学、温暖叙事类内容
-
-```json
-{
-  "style_name": "手绘水彩教学风",
-  "color_palette": {
-    "primary": ["#F5F0E8", "#3A4A6B"],
-    "secondary": ["#7B8FA1", "#8B7355"],
-    "accent": ["#C9A96E", "#6B8E6B"],
-    "background_tendency": "light",
-    "saturation": "low",
-    "contrast": "soft"
-  },
-  "lighting_profile": {
-    "type": "diffuse warm ambient, no hard directional source",
-    "direction": "omnidirectional soft fill",
-    "warmth": "warm",
-    "contrast_ratio": "low",
-    "shadow_style": "painted soft irregular shadows, occasional watercolor halo glow around light sources",
-    "practical_lights": false
-  },
-  "texture_profile": {
-    "grain": "heavy cold-press watercolor paper grain visible throughout",
-    "sharpness": "soft — watercolor pigment blooms and uneven ink outlines",
-    "material_feel": "watercolor washes + ink outlines + paper texture + paint splatters",
-    "resolution_feel": "handmade storybook illustration",
-    "surface_quality": "matte, mottled, aged parchment, no gloss"
-  },
-  "composition_tendencies": {
-    "framing": "left-right visual storytelling, mascot on one side and object/scene on the other",
-    "depth_of_field": "flat staged depth, minimal realistic perspective",
-    "rule_of_thirds": false,
-    "leading_lines": false,
-    "symmetry": "occasional for character-portrait or infographic shots",
-    "negative_space": "cream parchment breathing room around center composition"
-  },
-  "camera_language": {
-    "lens_equivalent": "flat illustrative lens, 16:9 storyboard frame",
-    "movement_style": "static, motion conveyed through pose/arrows/splashes not camera",
-    "angle_tendency": "straight-on or slightly elevated desk-level view",
-    "transition_style": "clean storyboard cuts"
-  },
-  "mood_keywords": ["warm", "cozy", "whimsical", "educational", "handmade", "gentle", "storybook", "analog creativity"],
-  "era_spatial": "cozy analog classroom or workshop desk, watercolor storybook world, vintage paper bulletin-board",
-  "post_processing": "no digital post-processing — the watercolor texture itself is the finish"
-}
-```
-
-**此风格专用角色系统：**
-
-本风格使用一个固定 mascot 代替传统主讲人：
-- 简笔画小人：圆白脑袋 + 蓝色围巾 + 黑色单线身体
-- 简单面部表情（点眼 + 弧线嘴）
-- 作为全片的视觉锚点和讲解者
-- 所有镜头中保持一致外观
-
-**文本呈现规则（此风格专用）：**
-
-- 所有画面文字以**手写毛笔/马克笔书法**风格呈现
-- 写在便签、气泡、海报、翻页板、黑板等载体上
-- 不使用数字 UI 或打印字体
-- 中文优先
-
-**负面约束（此风格默认）：**
-
-```
-- No photorealistic rendering — everything must look hand-painted
-- No glossy 3D surfaces, no digital UI, no HUD panels
-- No cinematic depth of field or lens blur
-- No hard directional shadows or dramatic lighting
-- No modern sans-serif typography — all text must be brush-calligraphy or hand-lettered
-- The stick-figure mascot must appear in most frames as the narrator
-- Mascot appearance: round white head, blue scarf, simple black line body — do not redesign
-- Background always cream/parchment paper tone, never pure white or dark
-- Visible watercolor grain, pigment blooms, and uneven ink lines are required — not defects
-- No more than 3-4 main visual elements per frame
-- Warm, gentle, cozy atmosphere only — no cold or aggressive tones
-```
-
-### 预设：3D 科技讲解风（3D Tech Explainer）
-
-适用：商业短视频科普、产品演示、知识讲解、概念可视化
-
-```json
-{
-  "style_name": "3D科技讲解风",
-  "color_palette": {
-    "primary": ["#00D4FF", "#7B68EE"],
-    "secondary": ["#0A0E27", "#1A1F3A"],
-    "accent": ["#FF6B9D", "#00E5A0"],
-    "background_tendency": "dark",
-    "saturation": "medium-high",
-    "contrast": "medium-high"
-  },
-  "lighting_profile": {
-    "type": "cool ambient + screen fill + soft key + holographic glow + neon rim",
-    "direction": "top-down cool ambient, screen panels as fill from front, soft face light on subject, neon rim from behind",
-    "warmth": "cool",
-    "contrast_ratio": "medium-high — subject bright, background darkened",
-    "shadow_style": "soft shadows on subject, deep background with neon spill",
-    "practical_lights": true
-  },
-  "texture_profile": {
-    "grain": "none, clean digital 3D render",
-    "sharpness": "high detail on UI panels and tech objects, smooth on subject",
-    "material_feel": "transparent glass panels + matte tech surfaces + holographic projections + subtle metallic accents",
-    "resolution_feel": "cinematic 4K, commercial-grade",
-    "surface_quality": "polished 3D render, smooth gradients, clean anti-aliased edges"
-  },
-  "composition_tendencies": {
-    "framing": "dual-subject: character on one side + info/holographic object on the other, centered focal point",
-    "depth_of_field": "medium — subject sharp, background slightly softened",
-    "rule_of_thirds": false,
-    "leading_lines": true,
-    "symmetry": "balanced dual-subject, not strict symmetry",
-    "negative_space": "zoned info layers with breathing room for subtitle overlay"
-  },
-  "camera_language": {
-    "lens_equivalent": "35mm to 50mm, 16:9 commercial short-video framing",
-    "movement_style": "slow push-in, slight lateral drift, smooth follow, eye-level to the action",
-    "angle_tendency": "eye-level or slightly elevated, transitioning from subject toward info layer",
-    "transition_style": "clean cuts, occasional smooth rack focus from subject to info"
-  },
-  "mood_keywords": ["futuristic", "clean", "premium", "commercial", "light-cyberpunk", "intelligent", "high-recognition", "trustworthy"],
-  "era_spatial": "futuristic tech interior, digital lab, holographic workspace, abstract concept space, server environment",
-  "post_processing": "clean digital grade, subtle bloom on holographic elements, no heavy film grain"
-}
-```
-
-**此风格专用角色系统：**
-
-- 一个可替换的 3D 主讲角色担任全片视觉 IP
-- 角色承担讲解、演示、互动、引导视线功能
-- 不固定外貌、不锁定服装——不同项目可换不同的主讲形象
-- 同一项目内保持一致外观
-
-**此风格视觉特征：**
-
-- 画面中同时存在「角色」和「信息对象」，形成双主体构图
-- 信息对象包括：全息模型、流程节点、数据图表、产品界面、象征性概念物
-- 大量使用透明玻璃面板、发光数据节点、数字图表、云服务图标、信息流动轨迹
-- UI 界面层级清晰，主次关系明确
-- 适合字幕叠加，信息层分区清晰
-
-**负面约束（此风格默认）：**
-
-```
-- No heavy/dark cyberpunk — keep it light, clean, and commercial
-- No photorealistic humans — host is 3D rendered, stylized, premium
-- No warm natural lighting — maintain cool tech atmosphere
-- No cluttered compositions — info layers must be clearly zoned
-- No gritty textures or film grain — clean digital finish
-- No anime-style or cartoon rendering — premium 3D commercial quality
-- Subject must be prominent against darkened background
-- Info objects must be clearly readable and well-lit
-- Composition must leave space for subtitle overlay
-- No more than 3-4 main visual elements per frame (character + info object + accent element)
-```
+- 每条 prompt 都必须继承同一个项目级风格上下文。
+- 同一批 prompt 中，风格层句式可以略微变化，但基因含义不能漂移。
+- 镜头差异主要来自主体、动作、空间和 `visual_carrier`，不要靠临时改风格制造差异。
+- 不要只写预设名；必须把 `style_block` 和关键基因转写成模型可读的视觉语言。
+- 不要复制整段 JSON 给生图模型；JSON 只用于系统内部锁定上下文。
 
 
 
-### 附加规则：构图多样性强制约束（2026-05-08）
-
-**问题：** 连续多镜使用同一套句式（如「人在左指向右面板」），导致画面雷同。
+### 附加规则：构图多样性强制约束
 
 **规则：写一批提示词前，必须先规划镜头类型分布，写完必须自检。**
 
@@ -598,10 +427,10 @@ Futuristic tech company HQ interior, dark glass walls, grid floor with glowing n
 
 1. `ai-video-shot-planner` 完成 **剧本解析**（Step 0）→ 产出内容层数据
 2. `ai-video-shot-planner` 完成 **空间锁定卡**（Step 0.5）→ 产出空间层数据
-3. 总控根据用户选择的风格，从 **风格参数表（本文档 §3）** 中加载对应基因
+3. 总控根据用户选择的风格，从 [style-presets.md](../../ai-video-image-prompts/references/style-presets.md) 加载对应 `style_key`、`style_block`、6 组基因和负面约束
 4. 三选一：
-   - 直接用预设风格 → 从表里取参数
-   - 从预设出发微调 → 从表里取参数，用户改个别基因值
+   - 直接用预设风格 → 从 `style-presets.md` 取参数
+   - 从预设出发微调 → 从 `style-presets.md` 取参数，用户改个别基因值
    - 完全自定义 → 用户逐个描述 6 组基因
 5. 合并三层数据 → 按 **硬结构（本文档 §1）** 生成每个镜头的 prompt
 
@@ -617,21 +446,9 @@ Futuristic tech company HQ interior, dark glass walls, grid floor with glowing n
 
 如果用户说"下次换个风格"：
 
-- **需要重做的**：风格基因参数（从表里选另一个预设，或重新定义）
+- **需要重做的**：风格基因参数（从 `style-presets.md` 选另一个预设，或重新定义）
 - **不需要重做的**：剧本解析（文案变了才重做）、空间锁定卡（场景变了才重做）、硬结构（永远不变）
 - **可能需要微调的**：负面约束（某些风格有特殊禁止项）
-
-### 昨天的问题复盘
-
-昨天 RALV 项目 16 个镜头的失败模式：
-
-| 问题 | 根因 | 本次规范修复 |
-|------|------|------------|
-| 风格太二次元 | 写了"anime style"但没有硬约束"不要 oversized eyes" | §3 赛博朋克负面约束第一条 |
-| 画面太密集 | 没限制元素数量 | §3 负面约束"no more than 3-4 main elements" |
-| AI 角色太像真人 | 没约束角色风格方向 | §3 负面约束"AI characters should be iconic/symbolic" |
-| 文字全是英文 | 没指定语言方向 | §3 负面约束"Chinese first, English secondary" |
-| 空间一致性漂移 | 空间锁定卡没有真正继承到 prompt | §1 硬结构 [空间锚点] 第一个字段，不可跳过 |
 
 ## 5. 文件关系
 
@@ -639,7 +456,7 @@ Futuristic tech company HQ interior, dark glass walls, grid floor with glowing n
 ai-short-video-pipeline/references/
 ├── prompt-generation-rules.md    ← 本文档（提示词生成总规则）
 ├── consistency-rules.md          ← 一致性控制规则（角色/风格/空间稳定性）
-├── style-gene-structure.md       ← 风格基因数据结构定义（本文档 §3 的格式参考）
+├── style-gene-structure.md       ← 风格基因数据结构定义
 ├── quality-review-loop.md        ← 质量审核回环规则
 └── output-format.md              ← 标准输出格式
 

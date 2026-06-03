@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Seedream-5.0-lite batch image generation via 火山方舟 (Volcengine Ark)."""
+"""seedream-5.0 batch image generation via 火山方舟 (Volcengine Ark)."""
 from __future__ import annotations
 
 import argparse
@@ -17,7 +17,8 @@ from pathlib import Path
 # 火山方舟 OpenAI-compatible endpoint
 BASE_URL = "https://ark.cn-beijing.volces.com/api/v3"
 IMAGES_URL = f"{BASE_URL}/images/generations"
-DEFAULT_MODEL = "doubao-seedream-5-0-260128"  # seedream-5.0-lite
+CANONICAL_MODEL = "seedream-5.0"
+ARK_MODEL_ID = "doubao-seedream-5-0-260128"
 
 
 def http_json(
@@ -61,7 +62,7 @@ def aspect_to_size(aspect_ratio: str) -> str:
 
 def submit_task(api_key: str, prompt: str, aspect_ratio: str, urls: list[str] | None) -> dict:
     payload: dict[str, object] = {
-        "model": DEFAULT_MODEL,
+        "model": ARK_MODEL_ID,
         "prompt": prompt,
         "size": "2K",
         "output_format": "png",
@@ -107,7 +108,7 @@ def normalize_item(item: dict, default_aspect_ratio: str) -> dict:
     return {
         "shot_id": str(item["shot_id"]),
         "frame_type": item.get("frame_type", "scene"),
-        "model": DEFAULT_MODEL,
+        "model": item.get("model", CANONICAL_MODEL),
         "aspect_ratio": item.get("aspect_ratio", default_aspect_ratio),
         "image_prompt": item["image_prompt"],
         "reference_urls": item.get("reference_urls", []),
@@ -213,7 +214,7 @@ def process_batch(
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Run a Seedream-5.0-lite batch via 火山方舟.")
+    parser = argparse.ArgumentParser(description="Run a seedream-5.0 batch via 火山方舟.")
     parser.add_argument("--queue-file", required=True, help="Path to a JSON queue file.")
     parser.add_argument("--aspect-ratio", default="16:9", help="Default aspect ratio.")
     parser.add_argument("--poll-interval", type=float, default=15.0, help="Polling interval (unused — sync API).")

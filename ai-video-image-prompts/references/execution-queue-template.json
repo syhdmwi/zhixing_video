@@ -1,6 +1,7 @@
 [
   {
     "shot_id": "shot-01",
+    "visual_carrier": "host_primary",
     "frame_type": "character",
     "image_prompt": "这里填写正式生图提示词",
     "reference_urls": [
@@ -11,6 +12,7 @@
   },
   {
     "shot_id": "shot-02",
+    "visual_carrier": "scene_only",
     "frame_type": "scene",
     "image_prompt": "这里填写纯场景提示词",
     "consistency_note": "Scene-only frame. Keep overall style aligned with the selected template."

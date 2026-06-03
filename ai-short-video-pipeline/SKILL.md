@@ -1,6 +1,6 @@
 ---
 name: ai-short-video-pipeline
-description: 当用户想把一段文案或口播稿制作成完整的 AI 短视频流程时使用这个总控 skill。用户提到"知行视频skill""知行视频 skill""知行视频工作流""使用知行视频skill帮我制作视频"等表达时,也应优先唤醒本 skill。它负责判断何时调用分镜、图片提示词、图生视频、数字人轨道、剪辑整合等子 skills,并适用于 nanobanana-2、nanobanana-pro、seedream-5.0、grok 视频、即梦 OmniHuman 1.5、蝉镜数字人这类工具链。
+description: 当用户想把一段文案或口播稿制作成完整的 AI 短视频流程时使用这个总控 skill。用户提到"知行视频skill""知行视频 skill""知行视频工作流""使用知行视频skill帮我制作视频"等表达时,也应优先唤醒本 skill。它负责判断何时调用分镜、图片提示词、图生视频、数字人轨道、剪辑整合等子 skills,并适用于 nanobanana-2、nanobanana-pro、seedream-5.0、grok 视频、omni 视频、即梦 OmniHuman 1.5、蝉镜数字人这类工具链。
 ---
 
 # AI Short Video Pipeline
@@ -78,7 +78,7 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 - 用户明确说这件事要拆成多个 skills 分工
 - 用户要区分"数字人视频轨"和"画面分镜视频轨"
 - 用户最终要把多个生成结果剪进一个完整成片
-- 用户明确提到 `nanobanana-2`、`nanobanana-pro`、`seedream-5.0`、`grok`、`即梦 OmniHuman 1.5`、`蝉镜数字人`
+- 用户明确提到 `nanobanana-2`、`nanobanana-pro`、`seedream-5.0`、`grok`、`omni`、`即梦 OmniHuman 1.5`、`蝉镜数字人`
 
 ## Required Inputs
 
@@ -270,16 +270,15 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 - A/B 对比结构
 - 需要视觉隐喻
 
-则必须按这个顺序执行:
+则必须按 [references/workflow-state-machine.md](./references/workflow-state-machine.md) 推进，并在进入正式提示词前完成这些前置产物:
 
-1. 文案接收
-2. 时长与镜头数估算
-3. 剧本解析
-4. 空间锁定卡
-5. 重复主体清单
-6. 主体确认
-7. 三视图生成
-8. 正式提示词
+- 文案接收
+- 时长与镜头数估算
+- 剧本解析
+- 必要的空间锁定卡
+- 重复主体清单
+- 主体确认
+- 三视图生成与确认
 
 硬约束:
 
@@ -325,29 +324,31 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 1. `ai-video-shot-planner`
    负责文案时长估算、镜头数估算、分镜拆分、数字人与 B-roll 的镜头分配。
 2. `ai-video-image-prompts`
-   负责基于用户参考图和统一风格生成生图提示词,适配 `nanobanana-2`、`nanobanana-pro`、`seedream-5.0`。
+   负责把文案或镜头表转换成可执行的生图提示词,适配 `nanobanana-2`、`nanobanana-pro`、`seedream-5.0`,并维持主体一致性和风格一致性。
 3. `ai-video-prompt-to-images`
    负责在用户确认提示词后,把提示词按顺序转成可执行的生图队列,进入实际生图阶段,并在生成成功后默认直接展示图片给用户确认。
 4. `ai-video-series-archive`
-   负责把用户已经满意的主讲人、风格、提示词规则和用户选择的正式图样例保存成可复用模板,或者在新文案中先读取指定模板继续生成。重复主体默认随新文案重新识别,不写入通用模板。
+   负责把用户已经满意的主讲人形象、主讲人三视图、画面风格、提示词规则、默认模型和负面约束保存成可复用模板,或者在新文案中套用指定模板。重复主体默认不保存,除非用户明确指定为长期固定角色。
 5. `ai-video-keyframe-edit`
    负责把已确认的静帧图片通过剪辑方式做成"关键帧轻运镜"的画面轨,默认优先使用 `FFmpeg`。
 6. `ai-video-motion-prompts`
    负责把已确认的静帧镜头转成适用于当前视频阶段的图生视频提示词,并默认先产出测试批次动作方案再进入全量执行。
 7. `ai-video-generate-videos`
-   负责根据当前可用 key 使用 `grok` 真实提交图生视频任务并轮询结果。`seedance` 当前暂时停用。
+   负责根据当前选择使用 `grok` 或用户显式选择的 `omni` 真实提交图生视频任务并轮询结果；默认仍为 `grok`。`seedance` 当前暂时停用。
 8. `ai-video-voice-tts`
    负责在用户只有文案、没有成品音频时,先把文案转成可用于数字人的本地音频文件。当前接入速创异步语音合成接口,不是音色克隆。
 9. `ai-video-voice-clone`
    负责在用户只有文案、但想用自己的参考音频去读这段文案时,先克隆声音并生成可用于数字人的音频文件。
 10. `ai-video-avatar-track`
-   负责为 `即梦 OmniHuman 1.5`、`蝉镜数字人` 或速创 `Digital_Humans` 执行数字人生成阶段。
+   负责为 `即梦 OmniHuman 1.5`、`蝉镜数字人` 或 `速创 Digital_Humans` 执行数字人生成阶段,包括素材校验、真实提交、轮询查询和结果展示。
 11. `ai-video-edit-assembly`
-   负责把"数字人视频轨"和"画面视频轨"合流成最终剪辑方案。
+   负责把"数字人视频轨"和"画面视频轨"合流成完整短视频,覆盖转场、字幕、音乐、封面和平台导出建议。
 
 如果用户只要求其中一段工作,不要调用整套流程。
 
 ## Workflow
+
+完整主流程阶段顺序以 [references/workflow-state-machine.md](./references/workflow-state-machine.md) 的 `Stage List` 与 `Allowed Transitions` 为唯一权威。本节只描述总控 skill 在各阶段内如何提问、分工和检查，不维护第二套阶段顺序。
 
 ### 1. Intake
 
@@ -386,8 +387,9 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 当前可用模板:
 - `AI科普赛博明亮HUD风 请输入 1` - 明亮赛博科技感、HUD 信息图界面、适合 AI 科普和技术讲解
 - `手绘水彩教学风 请输入 2` - 温暖手绘、水彩纸纹理、轻松教学氛围、适合知识科普和入门讲解
-- `3D科技讲解风 请输入 3` - 商业短视频常用的 3D 科技讲解视觉，人物和信息层并重
-- `黑白素描概念讲解风 请输入 4` - 黑白铅笔素描、新闻概念插画感、适合复刻观点口播类 AI 插画视频
+- `黑白素描概念讲解风 请输入 3` - 黑白铅笔素描、新闻概念插画感、适合复刻观点口播类 AI 插画视频
+- `复古纸质拼贴风 请输入 4` - 旧报纸纹理、胶带印章元素、纪录片分镜感，适合历史复盘和案例拆解
+- `羊毛毡定格动画风 请输入 5` - 羊毛毡与黏土手工质感、柔光电影级渲染，适合品牌故事和治愈系科普
 - `自主设定风格请输入 0`
 
 2. 再问图片比例
@@ -405,9 +407,9 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 
 ### 模板加载与全局风格上下文注入
 
-用户选择风格模板(输入 `1`、`2`、`3` 或 `4`)后,必须执行以下步骤,不是只记一个选择:
+用户选择风格模板(输入 `1`、`2`、`3`、`4` 或 `5`)后,必须执行以下步骤,不是只记一个选择:
 
-1. **加载模板**:从 `ai-video-image-prompts/references/style-presets.md` 中加载对应预设的完整风格上下文。当前可选:「AI科普赛博明亮HUD风」「手绘水彩教学风」「3D科技讲解风」「黑白素描概念讲解风」。加载内容不只是预设名,还包括 `style_block`、色彩倾向、光影倾向、材质倾向、环境倾向、构图倾向、负面约束建议,以及可用时的 `visual_style` 结构化字段
+1. **加载模板**:从 `ai-video-image-prompts/references/style-presets.md` 中加载对应预设的完整风格上下文。当前可选:「AI科普赛博明亮HUD风」「手绘水彩教学风」「黑白素描概念讲解风」「复古纸质拼贴风」「羊毛毡定格动画风」。加载内容不只是预设名,还包括 `style_block`、色彩倾向、光影倾向、材质倾向、环境倾向、构图倾向、负面约束建议,以及可用时的 `visual_style` 结构化字段
 
 2. **展示核确认**:用精简格式展示模板核心特征(风格名 + 色彩倾向 + 光影类型 + 情绪关键词),不要吐出完整 JSON。用户确认后锁定
 
@@ -546,6 +548,13 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 
 如果用户选择 `图生视频模式`,再继续走 `ai-video-motion-prompts` + `ai-video-generate-videos`。
 
+图生视频模型选择：
+
+- `1 grok（默认）`
+- `2 omni（支持首尾帧、视频参考）`
+
+如果用户不选图生视频模型，默认使用 `grok`。
+
 在 `图生视频模式` 下,默认执行顺序是:
 
 1. 先给每张已确认静帧判断 `motion_type`
@@ -623,14 +632,7 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 - `importance`：高 / 中 / 低
 - `visual_carrier`
 
-`visual_carrier` 默认从以下集合里选:
-
-- `host_talk`
-- `scene_demo`
-- `concept_diagram`
-- `ui_interface`
-- `data_compare`
-- `symbolic_insert`
+`visual_carrier` 必须使用 3.4 视觉承载层定义的 7 值集合；信息单元阶段只做初判，不另起一套分类法。
 
 信息单元层的目标是先回答:
 
@@ -673,6 +675,17 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 
 旧的 `frame_type` 逻辑继续保留,但它现在属于更粗粒度的中间兼容字段。真正的提示词决策优先参考 `visual_carrier`。
 
+兼容映射唯一按下表执行:
+
+| 旧 `frame_type` 兼容别名 | 对应 `visual_carrier` |
+| --- | --- |
+| `people_primary` | `host_primary` |
+| `people_with_scene` | `host_with_visual` |
+| `scene_only` | `scene_only` |
+| `concept_explainer` | `concept_explainer` |
+
+如果旧队列或外部工具仍要求输出 `frame_type`,只能按这张表从 `visual_carrier` 派生,不得用 `frame_type` 反向覆盖新的镜头决策。
+
 #### 3.5 镜头配比检查
 
 正式提示词输出前,必须先基于 `visual_carrier` 做一次镜头配比检查:
@@ -702,15 +715,15 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 
 - `host_primary`
 - `host_with_visual`
-- `scene_demo`
-- 需要稳定摄影空间关系的真实场景镜头
+- `scene_only`（真实场景镜头）
+- 其它需要稳定摄影空间关系的镜头
 
 以下镜头默认不强制做传统空间锁定,只要求视觉系统一致:
 
-- `concept_diagram`
-- `ui_interface`
+- `concept_explainer`
+- `ui_closeup`
 - `data_compare`
-- `symbolic_insert`
+- `brand_symbolic`
 
 也就是说,抽象解释类文案不应被强行塞进“所有镜头都先按真实空间摄影语言规划”的框架里。
 
@@ -800,7 +813,7 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 - 只在动作、机位、场景、道具、情绪上做局部变化
 - 避免同一批次中无理由更换服装、发色、年龄感、脸型、时代背景
 
-如果用户指定 `nanobanana`、`Seedream 4.6` 等模型,但没有给出该模型的提示词偏好或长度限制,则默认输出"模型无关、结构清晰、可直接改写"的提示词,不假设厂商私有语法。
+如果用户指定 `nanobanana-2`、`seedream-5.0` 等模型,但没有给出该模型的提示词偏好或长度限制,则默认输出"模型无关、结构清晰、可直接改写"的提示词,不假设厂商私有语法。
 
 ### 7.5 Quality Review Loop(质量审核回环)
 
@@ -903,9 +916,9 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 当前这套 skill 套件默认围绕以下工具链编排:
 
 - 生图:`nanobanana-2`、`nanobanana-pro`、`seedream-5.0`
-- 图生视频:`doubao-seedance-1.0-pro-fast`
+- 图生视频:`grok` 默认启用；`omni` 可由用户显式选择；`doubao-seedance-1.0-pro-fast` 暂时停用
 - 数字人:`即梦 OmniHuman 1.5`、`蝉镜数字人`
-- 速创数字人:`Digital_Humans`
+- 速创数字人:`速创 Digital_Humans`
 - 发布平台:抖音、视频号、小红书
 - 画幅:根据用户要求选择,不强制固定
 

@@ -1,38 +1,15 @@
----
-name: ai-video-edit-assembly
-description: 当用户已经分别生成了数字人视频轨和画面视频轨，接下来要把两者剪成一条完整短视频时使用这个 skill。它负责转场、覆盖关系、字幕、音乐、封面和平台导出建议。
----
+# AI Video Edit Assembly（模块索引）
 
-# AI Video Edit Assembly
+> 本模块完整规则见同目录 [SKILL.md](./SKILL.md)。本文件只做角色定位与导航。
 
-## Overview
+## 角色
 
-这个 skill 只负责后期整合。输入是至少两条素材轨：
+当用户已经分别生成数字人视频轨和画面视频轨，接下来要剪成一条完整短视频时使用，负责转场、覆盖关系、字幕、音乐、封面和平台导出建议。
 
-- 数字人视频轨
-- 画面视频轨
+## 关键 references
 
-## When To Use
+- 暂无独立 references；完整规则见 [SKILL.md](./SKILL.md)。
 
-- 数字人素材和画面素材已经分别生成
-- 用户要做最终成片
-- 用户要适配抖音、视频号、小红书
+## 上下游
 
-## Core Rules
-
-- 不重新设计前期分镜，除非明显冲突
-- 优先保证口播信息传达完整
-- B-roll 覆盖不能破坏关键口型同步段
-- 平台导向优先考虑竖屏节奏和开头钩子
-
-## Output
-
-至少输出：
-
-- 成片结构概述
-- 时间线整合建议
-- 每段素材覆盖关系
-- 字幕强调点
-- BGM/SFX 建议
-- 封面与 CTA 建议
-- 平台导出建议
+上游：`ai-video-generate-videos`、`ai-video-keyframe-edit`、`ai-video-avatar-track` / 下游：最终交付包。

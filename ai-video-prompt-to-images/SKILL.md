@@ -95,7 +95,8 @@ description: 当用户已经确认了一批图片提示词，接下来要正式�
 
 - `shot_id`
 - `narration_excerpt`
-- `frame_type`
+- `visual_carrier`
+- `frame_type`（可选兼容字段或执行队列类型）
 - `image_prompt_cn`
 - `model`
 - `aspect_ratio`

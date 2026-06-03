@@ -19,7 +19,9 @@ YIJIA_CREATE_PATH = "/v1/videos"
 YIJIA_CHAT_COMPLETIONS_PATH = "/v1/chat/completions"
 ARK_BASE_URL = "https://ark.cn-beijing.volces.com/api/v3"
 ARK_CONTENTS_GENERATION_PATH = "/contents/generations/tasks"
-GROK_DEFAULT_MODEL = "grok-imagine-1.0-video-super"
+GROK_DEFAULT_MODEL = "grok"
+GROK_API_MODEL_ID = "grok-imagine-1.0-video-super"
+OMNI_DEFAULT_MODEL = "omni_flash"
 
 
 def http_json(
@@ -96,6 +98,8 @@ def load_queue(path: Path) -> list[dict]:
 def provider_has_credentials(provider: str) -> bool:
     if provider == "grok":
         return bool(os.environ.get("YIJIA_API_KEY"))
+    if provider == "omni":
+        return bool(os.environ.get("YIJIA_API_KEY"))
     if provider == "seedance":
         return False
     return False
@@ -104,6 +108,8 @@ def provider_has_credentials(provider: str) -> bool:
 def default_model_for_provider(provider: str) -> str:
     if provider == "grok":
         return GROK_DEFAULT_MODEL
+    if provider == "omni":
+        return OMNI_DEFAULT_MODEL
     if provider == "seedance":
         raise RuntimeError("seedance is temporarily disabled")
     raise RuntimeError(f"Unsupported provider: {provider}")
@@ -132,6 +138,8 @@ def resolve_provider_and_model(item: dict) -> tuple[dict, str]:
 
 
 def yijia_base_url_for_item(item: dict) -> str:
+    if item.get("provider") == "omni":
+        return item.get("base_url", YIJIA_DEFAULT_BASE_URL)
     source = str(item.get("source_image_url", ""))
     if "|" in source:
         return YIJIA_US_BASE_URL
@@ -208,7 +216,7 @@ def submit_grok(api_key: str, item: dict) -> dict:
     preset = item.get("preset", "fun")
 
     payload: dict[str, object] = {
-        "model": item["model"],
+        "model": GROK_API_MODEL_ID if item["model"] == GROK_DEFAULT_MODEL else item["model"],
         "messages": [
             {
                 "role": "user",
@@ -418,6 +426,13 @@ def submit_item(item: dict) -> tuple[dict, str | None]:
         response = submit_veo(api_key, item)
         video_id = response.get("id") or ((response.get("data") or {}).get("id") if isinstance(response.get("data"), dict) else None)
         return response, video_id
+    if provider == "omni":
+        api_key = os.environ.get("YIJIA_API_KEY")
+        if not api_key:
+            raise RuntimeError("YIJIA_API_KEY is not set")
+        response = submit_veo(api_key, item)
+        video_id = response.get("id") or ((response.get("data") or {}).get("id") if isinstance(response.get("data"), dict) else None)
+        return response, video_id
     if provider == "seedance":
         raise RuntimeError("seedance is temporarily disabled")
     raise RuntimeError(f"Unsupported provider: {provider}")
@@ -428,6 +443,11 @@ def poll_item(item: dict, task_id: str) -> dict:
     if provider == "grok":
         return item.get("detail") or {}
     if provider == "veo":
+        api_key = os.environ.get("YIJIA_API_KEY")
+        if not api_key:
+            raise RuntimeError("YIJIA_API_KEY is not set")
+        return poll_veo(api_key, item, task_id)
+    if provider == "omni":
         api_key = os.environ.get("YIJIA_API_KEY")
         if not api_key:
             raise RuntimeError("YIJIA_API_KEY is not set")
@@ -452,6 +472,13 @@ def status_is_terminal(provider: str, detail: dict) -> tuple[bool, bool]:
         if status == "error":
             return True, False
         return False, False
+    if provider == "omni":
+        status = str(detail.get("status", "")).lower()
+        if status == "completed":
+            return True, True
+        if status == "error":
+            return True, False
+        return False, False
     if provider == "seedance":
         status = str(detail.get("status", "")).lower()
         if status in {"succeeded", "failed", "expired"}:
@@ -464,6 +491,8 @@ def extract_render_url(provider: str, detail: dict) -> str | None:
     if provider == "grok":
         return detail.get("video_url") or extract_video_url_from_text(str(detail.get("stream_transcript", "")))
     if provider == "veo":
+        return detail.get("video_url") or detail.get("url")
+    if provider == "omni":
         return detail.get("video_url") or detail.get("url")
     if provider == "seedance":
         content = detail.get("content")
@@ -557,6 +586,14 @@ def run_queue(queue: list[dict], poll_interval: float, timeout: float) -> dict:
             if veo_status == "completed":
                 status_label = "success"
             elif veo_status == "error":
+                status_label = "failed"
+            else:
+                status_label = "pending"
+        elif item["provider"] == "omni":
+            omni_status = str(detail.get("status", "")).lower()
+            if omni_status == "completed":
+                status_label = "success"
+            elif omni_status == "error":
                 status_label = "failed"
             else:
                 status_label = "pending"
