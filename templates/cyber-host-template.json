@@ -1,0 +1,59 @@
+{
+  "template_id": "cyber-host-template",
+  "template_name": "赛博女主持模板",
+  "version": "1.0.0",
+  "description": "用于 AI 科普类短视频的赛博 HUD 风主讲人模板示例。",
+  "style": {
+    "style_key": "cyberpunk_bright_hud_infographic",
+    "style_preset_ref": "../ai-video-image-prompts/references/style-presets.md",
+    "style_summary": "AI科普赛博明亮HUD风；具体 style_block、6 组风格基因和负面约束以 style-presets.md 中同名 style_key 为准。",
+    "style_reference_images": [
+      "[占位：用户确认可复用的风格参考图 URL]"
+    ]
+  },
+  "host_anchor": {
+    "subject_id": "host_cyber_female_01",
+    "summary": "年轻女性 AI 科普主讲人，黑色长发，红色碎花一字肩连衣裙，坚定自信，非写实商业科技插画人物。",
+    "identity_lock": [
+      "保持同一脸型、五官比例、发型、服装和气质",
+      "参考图只用于锁定人物身份，不复刻三视图版式",
+      "人物渲染方式遵循所选 style_key 的非写实科技插画语言"
+    ]
+  },
+  "host_three_views": {
+    "front_view_ref": "[占位：主讲人正面定稿图 URL]",
+    "three_view_ref": "[占位：主讲人白底三视图 URL]",
+    "review_status": "approved_placeholder"
+  },
+  "prompt_rules": {
+    "hard_structure_ref": "../ai-short-video-pipeline/references/prompt-generation-rules.md",
+    "subject_consistency_ref": "../ai-video-image-prompts/references/subject-consistency-rules.md",
+    "default_visual_carrier_mix": "优先 host_primary / host_with_visual，保留约三分之一 scene_only。",
+    "text_policy": "默认不生成可读长文字；信息图文字留给后期叠字。"
+  },
+  "negative_constraints": [
+    "no photorealistic portrait",
+    "no chibi proportions",
+    "no cluttered composition",
+    "no dense readable text",
+    "no extra characters",
+    "no distorted hands or faces"
+  ],
+  "defaults": {
+    "aspect_ratio": "16:9",
+    "image_model": "GPT-Image-2",
+    "video_provider": "grok"
+  },
+  "selected_sample_images": [
+    {
+      "shot_id": "shot_sample_01",
+      "image_ref": "[占位：用户选定的正式图样例 URL]",
+      "usage_note": "作为后续同系列画面的一致性参考，不作为新文案的具体镜头内容。"
+    }
+  ],
+  "excluded_from_template": [
+    "单篇文案临时重复主体",
+    "未被用户选择的正式图",
+    "单次项目任务队列"
+  ]
+}

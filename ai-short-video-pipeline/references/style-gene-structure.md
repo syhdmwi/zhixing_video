@@ -14,61 +14,47 @@
 
 ## Style DNA Schema
 
-每个风格模板的 `visual_style` 字段应从扁平文字升级为结构化对象：
+每个风格模板的 `visual_style` 字段应从扁平文字升级为结构化对象。具体预设值只在 [style-presets.md](../../ai-video-image-prompts/references/style-presets.md) 维护；本文件只定义字段结构。
 
-```json
-{
-  "visual_style": {
-    "style_name": "赛博朋克主持风",
-    "style_version": "2.0",
-
-    "color_palette": {
-      "primary": ["#0ff0fc", "#ff2d95"],
-      "secondary": ["#1a1a2e", "#16213e"],
-      "accent": ["#e94560", "#ffd700"],
-      "background_tendency": "dark",
-      "saturation": "high",
-      "contrast": "high"
-    },
-
-    "lighting_profile": {
-      "type": "neon artificial",
-      "direction": "side + backlight",
-      "warmth": "cool",
-      "contrast_ratio": "high",
-      "shadow_style": "hard edges, neon glow spill",
-      "practical_lights": true
-    },
-
-    "texture_profile": {
-      "grain": "light film grain",
-      "sharpness": "high detail",
-      "material_feel": "glossy + metallic + glass",
-      "resolution_feel": "8K cinematic",
-      "surface_quality": "reflective, wet streets"
-    },
-
-    "composition_tendencies": {
-      "framing": "center-weighted with environmental breathing room",
-      "depth_of_field": "shallow to medium, bokeh on backgrounds",
-      "rule_of_thirds": false,
-      "leading_lines": true,
-      "symmetry": "occasional for impact shots",
-      "negative_space": "used for text overlay zones"
-    },
-
-    "camera_language": {
-      "lens_equivalent": "35mm to 50mm",
-      "movement_style": "slow dolly, occasional orbit",
-      "angle_tendency": "slightly low angle for authority",
-      "transition_style": "whip pans, glitch cuts"
-    },
-
-    "mood_keywords": ["futuristic", "edgy", "electric", "mysterious", "high-energy"],
-    "era_spatial": "near-future urban, neon-lit streets, dark interiors with tech overlays",
-    "post_processing": "teal-orange grade, chromatic aberration on edges, subtle scan lines"
-  }
-}
+```text
+visual_style
+├── style_name
+├── style_version
+├── color_palette
+│   ├── primary
+│   ├── secondary
+│   ├── accent
+│   ├── background_tendency
+│   ├── saturation
+│   └── contrast
+├── lighting_profile
+│   ├── type
+│   ├── direction
+│   ├── warmth
+│   ├── contrast_ratio
+│   ├── shadow_style
+│   └── practical_lights
+├── texture_profile
+│   ├── grain
+│   ├── sharpness
+│   ├── material_feel
+│   ├── resolution_feel
+│   └── surface_quality
+├── composition_tendencies
+│   ├── framing
+│   ├── depth_of_field
+│   ├── rule_of_thirds
+│   ├── leading_lines
+│   ├── symmetry
+│   └── negative_space
+├── camera_language
+│   ├── lens_equivalent
+│   ├── movement_style
+│   ├── angle_tendency
+│   └── transition_style
+├── mood_keywords
+├── era_spatial
+└── post_processing
 ```
 
 ## Gene Categories
@@ -151,46 +137,19 @@
 
 子模板可以指定 `inherits_from` 字段，声明从哪个父模板继承。未显式覆盖的基因自动沿用父模板的值。
 
-```json
-{
-  "inherits_from": "赛博朋克主持风",
-  "visual_style": {
-    "color_palette": {
-      "primary": ["#ff6b6b", "#4ecdc4"]
-    }
-  }
-}
-```
-
-这个子模板只覆盖了色彩基因，其他基因（光影、质感、构图等）全部继承父模板。
+子模板只写 `inherits_from` 和需要覆盖的字段路径。未显式覆盖的基因（光影、质感、构图等）全部继承父模板。父模板引用必须使用 `style_key` 或已保存模板 ID，不使用临时风格名。
 
 ### 基因混合
 
 可以从多个模板各取部分基因：
 
-```json
-{
-  "mix_from": [
-    { "template": "赛博朋克主持风", "genes": ["color_palette", "mood_keywords"] },
-    { "template": "纪录片质感", "genes": ["texture_profile", "camera_language"] }
-  ]
-}
-```
+混合时只记录来源模板 ID / `style_key` 与基因组名称，例如“从模板 A 取 `color_palette`，从模板 B 取 `texture_profile`”。不要在混合规则里复制任何来源模板的具体基因值。
 
 ### 微调覆盖
 
 用户可以在任何层级做微调：
 
-```json
-{
-  "inherits_from": "赛博朋克主持风",
-  "overrides": {
-    "color_palette.saturation": "medium",
-    "lighting_profile.warmth": "warm",
-    "mood_keywords": ["futuristic", "warm", "inviting"]
-  }
-}
-```
+微调只记录字段路径和用户确认后的新值，例如 `color_palette.saturation` 或 `lighting_profile.warmth`。如果微调来自某个预设，仍保留原始 `style_key` 引用，不复制整段预设 JSON。
 
 ## How To Generate Style DNA From Existing Templates
 
@@ -209,11 +168,10 @@
 
 生成正式提示词时，Style DNA 自动转写为提示词中的 Style Block：
 
-```
-Style: Cyberpunk cinematic, neon-lit, cool teal-magenta palette with gold accents,
-high contrast, dark backgrounds, glossy metallic surfaces, 8K detail,
-35-50mm lens, shallow depth of field with bokeh, slightly low angle,
-film grain, teal-orange color grade, chromatic aberration on edges.
+```text
+Style: [style_block]. Use [color_palette] with [lighting_profile].
+Render with [texture_profile]. Keep [composition_tendencies] and [camera_language].
+Overall mood: [mood_keywords]. Apply [post_processing].
 ```
 
 转写规则：

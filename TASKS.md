@@ -80,22 +80,27 @@
 
 ## Phase 3 — 风格模板
 
-### T3.1 风格预设 SSOT 化
+### [x] T3.1 风格预设 SSOT 化
 - **权威处**：`ai-video-image-prompts/references/style-presets.md`（4 预设，含结构化基因 JSON）。
 - **改动点**：`ai-short-video-pipeline/references/prompt-generation-rules.md §3 风格参数表`：
   - 删除其中重复的 3 段基因 JSON。
   - 改为：保留"如何把 6 组基因转写进 prompt"的方法论；预设清单与基因值"以 style-presets.md 为准"的引用。
 - **验收**：基因 JSON 全仓库只有一份（在 style-presets.md）；prompt-generation-rules 不再列举具体预设基因值。
 
-### T3.2 补齐第 4 预设的全仓库一致性
+### [x] T3.2 补齐第 4 预设的全仓库一致性
 - **改动点**：所有列举风格预设处都包含 4 个（含「黑白素描概念讲解风」），无 3/4 不一致。
 - **验收**：`grep` 风格名，四个预设在每个枚举点都齐全。
 
-### T3.3 templates/ 落地示例模板
+### [x] T3.3 templates/ 落地示例模板
 - **新建**：`templates/cyber-host-template.json`，按 `templates/README.md` 描述的字段（主讲人锚点、风格摘要=引用 style-presets 的 key、提示词规则、负面约束、默认比例、默认模型、用户选定样例占位）。与 Phase 5 demo 配套（同一主讲人/风格）。
 - **验收**：JSON 合法；字段与 README 约定一致；风格字段引用 style-presets 的 `style_key` 而非复制整段。
 
 > `[REVIEW Phase 3]` Claude 检查：预设数量/命名/编号一致、基因 JSON 单份、示例模板合规。
+>
+> **Claude review 结论（2026-06-03）：全部通过，已打本地 commit 存档点。**
+> - T3.1：prompt-generation-rules.md 预设基因 JSON 清零；style-gene-structure.md 为纯 schema（无预设硬编码值）；基因块仅 style-presets.md 一份(4个)。
+> - T3.2：四预设在所有枚举点齐全，无只列 3 个的残留。
+> - T3.3：cyber-host-template.json 合法，用 style_key 引用而非复制基因；字段对齐 README；默认值 GPT-Image-2/grok/16:9 与 SSOT 一致。
 
 ---
 
