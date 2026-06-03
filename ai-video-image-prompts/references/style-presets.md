@@ -11,7 +11,6 @@
 
 - `AI科普赛博明亮HUD风`
 - `手绘水彩教学风`
-- `3D科技讲解风`
 - `黑白素描概念讲解风`
 - `复古纸质拼贴风`
 - `羊毛毡定格动画风`
@@ -33,13 +32,12 @@
 
 - `AI科普赛博明亮HUD风 请输入 1`
 - `手绘水彩教学风 请输入 2`
-- `3D科技讲解风 请输入 3`
-- `黑白素描概念讲解风 请输入 4`
-- `复古纸质拼贴风 请输入 5`
-- `羊毛毡定格动画风 请输入 6`
+- `黑白素描概念讲解风 请输入 3`
+- `复古纸质拼贴风 请输入 4`
+- `羊毛毡定格动画风 请输入 5`
 - `自主设定风格请输入 0`
 
-如果用户输入 `1`、`2`、`3`、`4`、`5` 或 `6`，加载对应风格预设的完整结构化上下文。
+如果用户输入 `1`、`2`、`3`、`4` 或 `5`，加载对应风格预设的完整结构化上下文。
 
 如果用户输入 `0`，再继续按自定义风格描述生成。
 
@@ -193,80 +191,7 @@
 }
 ```
 
-### 3. 3D科技讲解风
-
-- 预设名：`3D科技讲解风`
-- 英文标识：`3d_tech_explainer`
-- 用户侧一句话说明：
-  `商业短视频常用的 3D 科技讲解风，人物和信息层并重，适合产品演示和概念可视化`
-- 默认色彩倾向：
-  `蓝青、紫色、荧光粉、深色科技背景`
-- 默认光影倾向：
-  `屏幕补光、冷色环境光、柔和主光、轻霓虹轮廓光`
-- 默认材质倾向：
-  `透明玻璃面板、科技磨砂材质、全息投影、少量金属点缀`
-- 默认环境倾向：
-  `科技办公室、讲解舞台、数字产品空间、信息可视化场景`
-- 默认构图倾向：
-  `人物主体和信息对象分区并置，适合短视频讲解镜头`
-- 推荐文字容器语言：
-  `科技信息卡、状态框、产品说明条、悬浮数据标签`
-- 默认人物渲染方式：
-  `风格化 3D 讲解人物，非真人写实`
-- 默认负面约束建议：
-  `避免画面过暗、避免 UI 堆满画面、避免信息层太多导致主体被淹没、避免低幼卡通、避免写实照片感、避免杂乱文字`
-
-```json
-{
-  "style_name": "3D科技讲解风",
-  "style_key": "3d_tech_explainer",
-  "style_block": "3D 科技讲解风，商业短视频常用的 3D 科技讲解视觉，人物与信息层并重，蓝青紫科技色调，适合产品演示、概念可视化和知识讲解",
-  "visual_style": {
-    "color_palette": {
-      "primary": ["#00D4FF", "#7B68EE"],
-      "secondary": ["#0A0E27", "#1A1F3A"],
-      "accent": ["#FF6B9D", "#00E5A0"],
-      "background_tendency": "dark",
-      "saturation": "medium-high",
-      "contrast": "medium-high"
-    },
-    "lighting_profile": {
-      "type": "cool ambient, screen fill, soft key, holographic glow, neon rim",
-      "direction": "top-down cool ambient, front fill from panels, soft face light, rim from behind",
-      "warmth": "cool",
-      "contrast_ratio": "medium-high",
-      "shadow_style": "soft shadows on subject, deep background with neon spill",
-      "practical_lights": true
-    },
-    "texture_profile": {
-      "grain": "none, clean digital 3D render",
-      "sharpness": "high detail on UI panels and tech objects, smooth on subject",
-      "material_feel": "transparent glass panels, matte tech surfaces, holographic projections, subtle metallic accents",
-      "resolution_feel": "cinematic 4K, commercial-grade",
-      "surface_quality": "polished 3D render, smooth gradients, clean edges"
-    },
-    "composition_tendencies": {
-      "framing": "dual-subject composition, character on one side plus holographic object or info layer on the other",
-      "depth_of_field": "medium, subject sharp and background slightly softened",
-      "rule_of_thirds": false,
-      "leading_lines": true,
-      "symmetry": "balanced but not strict",
-      "negative_space": "zoned info layers with breathing room for subtitle overlay"
-    },
-    "camera_language": {
-      "lens_equivalent": "35mm to 50mm, 16:9 commercial short-video framing",
-      "movement_style": "slow push-in, slight lateral drift, smooth follow",
-      "angle_tendency": "eye-level or slightly elevated",
-      "transition_style": "clean editorial tech cuts"
-    },
-    "mood_keywords": ["commercial", "clear", "smart", "futuristic", "educational", "premium"],
-    "era_spatial": "tech workspace, product demo stage, holographic explainer scene",
-    "post_processing": "clean digital grade, restrained bloom, premium commercial finish"
-  }
-}
-```
-
-### 4. 黑白素描概念讲解风
+### 3. 黑白素描概念讲解风
 
 - 预设名：`黑白素描概念讲解风`
 - 英文标识：`monochrome_sketch_concept_explainer`
@@ -339,7 +264,7 @@
 }
 ```
 
-### 5. 复古纸质拼贴风
+### 4. 复古纸质拼贴风
 
 - 预设名：`复古纸质拼贴风`
 - 英文标识：`vintage_paper_collage`
@@ -412,7 +337,7 @@
 }
 ```
 
-### 6. 羊毛毡定格动画风
+### 5. 羊毛毡定格动画风
 
 - 预设名：`羊毛毡定格动画风`
 - 英文标识：`wool_felt_stop_motion`
@@ -491,10 +416,9 @@
 
 - `AI科普赛博明亮HUD风 请输入 1`
 - `手绘水彩教学风 请输入 2`
-- `3D科技讲解风 请输入 3`
-- `黑白素描概念讲解风 请输入 4`
-- `复古纸质拼贴风 请输入 5`
-- `羊毛毡定格动画风 请输入 6`
+- `黑白素描概念讲解风 请输入 3`
+- `复古纸质拼贴风 请输入 4`
+- `羊毛毡定格动画风 请输入 5`
 - `自主设定风格请输入 0`
 
 ## System Rule

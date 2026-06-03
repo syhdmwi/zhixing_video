@@ -222,6 +222,44 @@
 
 ---
 
+## Round 4 — 删除「3D科技讲解风」预设
+
+> 目标：删除预设「3D科技讲解风」(`3d_tech_explainer`)，预设库从 6 → 5。**强约束**：删除后重新编号为 `1-5 + 0`，保持其余预设相对顺序（原 4/5/6 上移为 3/4/5），所有枚举点同步，不留编号空洞。基因 JSON 仍只在 `style-presets.md`。
+> 已确认：demo 与 templates 未引用该预设，删除不影响样例。
+
+**重排后目标编号：**
+- 1 AI科普赛博明亮HUD风
+- 2 手绘水彩教学风
+- 3 黑白素描概念讲解风（原 4）
+- 4 复古纸质拼贴风（原 5）
+- 5 羊毛毡定格动画风（原 6）
+- 0 自主设定风格
+
+### [x] R4.1 删除 style-presets.md 中的预设块与列举
+- `ai-video-image-prompts/references/style-presets.md`：
+  - 删除整个 `### 3. 3D科技讲解风` 段落（含一句话说明、各 default bullet、`3d_tech_explainer` 基因 JSON、负面约束）。
+  - 把原 `### 4./5./6.` 重新编号为 `### 3./4./5.`。
+  - 顶部 `Usage Rule` 列表与底部 `Interaction Rule` 列表删除 `3D科技讲解风 请输入 3`，其余项重排为 `1-5 + 0`。
+- **验收**：style-presets.md 剩 5 个 `style_key` 块，section 编号连续 `### 1.`～`### 5.`，5 个 JSON 全合法，无 `3d_tech_explainer` 残留。
+
+### [x] R4.2 全仓库枚举点删除 + 重排为 1-5/0
+- 逐一处理以下点（删除该项并把后续编号上移）：
+  - `ai-video-image-prompts/SKILL.md`：两处前台/选项块（约 line 175、202 区域）删 `3 3D科技讲解风`，4/5/6 → 3/4/5。
+  - `ai-short-video-pipeline/SKILL.md`：Intake 选项清单（约 line 390 `3D科技讲解风 请输入 3 - ...` 整行删除并重排）；"模板加载"段（约 line 413）的内联"当前可选"名单删除「3D科技讲解风」。
+  - `ai-short-video-pipeline/references/user-guidance-templates.md`（约 line 38）删 `3 3D科技讲解风` 并重排。
+  - `ai-short-video-pipeline/references/prompt-generation-rules.md`（约 line 17）内联名单删除 `3D科技讲解风`（此处仅名字、无编号）。
+  - `SOP-如何使用知行视频skill.md`（约 line 158）删 `3 3D科技讲解风` 并重排。
+  - `ai-video-image-prompts/references/reusable-template-system.md`（约 line 41）示例命名 `3D科技讲解风模板01` 改为某个保留预设（如 `复古纸质拼贴风模板01`），不要留已删预设。
+- **验收**：`grep -rn "3D科技讲解风\|3d_tech_explainer"`（排除 OPTIMIZATION_PLAN/TASKS/CHANGELOG）零结果；所有风格选择块编号为连续 `1-5 + 0`，无空号、无 `请输入 6`；无断链。
+
+> `[REVIEW Round 4]` Codex 停。Claude 检查：预设块已删且 section 重排连续、基因 JSON 单份且 5 块合法、所有枚举点重排为 1-5/0 无残留无空号、无断链。
+>
+> **Claude review 结论（2026-06-03）：全部通过，已打本地 commit 存档点。**
+> - R4.1：3D科技讲解风/3d_tech_explainer 全仓库零残留；style-presets.md 剩 5 个 style_key，section 重排连续 ###1-5，5 JSON 合法。
+> - R4.2：所有枚举点重排为 1-5+0，无空号、无'请输入6'残留；reusable-template-system 示例命名已更新为保留预设；无断链。
+
+---
+
 ## 执行须知（给 Codex）
 1. 一次只推进一个 Phase，做完停下，输出"改了哪些文件 + 如何自检"的简报。
 2. 任何与 OPTIMIZATION_PLAN §2 原则冲突的地方，停下提问，不要自行决定破坏对外行为。
