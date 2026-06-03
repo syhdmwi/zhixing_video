@@ -14,6 +14,7 @@
 - `3D科技讲解风`
 - `黑白素描概念讲解风`
 - `复古纸质拼贴风`
+- `羊毛毡定格动画风`
 
 系统内部拿到的则不只是一个名字，还包括：
 
@@ -35,9 +36,10 @@
 - `3D科技讲解风 请输入 3`
 - `黑白素描概念讲解风 请输入 4`
 - `复古纸质拼贴风 请输入 5`
+- `羊毛毡定格动画风 请输入 6`
 - `自主设定风格请输入 0`
 
-如果用户输入 `1`、`2`、`3`、`4` 或 `5`，加载对应风格预设的完整结构化上下文。
+如果用户输入 `1`、`2`、`3`、`4`、`5` 或 `6`，加载对应风格预设的完整结构化上下文。
 
 如果用户输入 `0`，再继续按自定义风格描述生成。
 
@@ -410,6 +412,79 @@
 }
 ```
 
+### 6. 羊毛毡定格动画风
+
+- 预设名：`羊毛毡定格动画风`
+- 英文标识：`wool_felt_stop_motion`
+- 用户侧一句话说明：
+  `羊毛毡定格动画质感、黏土手工感、毛茸茸针脚纹理、皮克斯式 3D 卡通、柔光电影级渲染，商务氛围；推荐画幅 9:16`
+- 默认色彩倾向：
+  `暖米色、柔和蓝绿、浅棕、珊瑚橙、低对比温暖商务色`
+- 默认光影倾向：
+  `柔和电影级棚拍光、暖色漫射主光、轻微轮廓光、圆润接触阴影`
+- 默认材质倾向：
+  `针毡羊毛、软黏土、毛茸茸纤维表面、可见针脚、针戳纹理、手工触感材质`
+- 默认环境倾向：
+  `手作羊毛毡微缩世界、温暖办公桌或商务场景微缩布景、治愈系手工片场`
+- 默认构图倾向：
+  `3D 微缩定格布景，毡偶角色或产品主体清晰，焦点明确，适合品牌故事与产品讲解`
+- 推荐文字容器语言：
+  `手作毡布标签、纸牌道具、软质标牌（仍遵守无可读长文字，仅作纹理）`
+- 默认人物渲染方式：
+  `毡偶 / 黏土风格化角色，皮克斯式 3D，非写实真人`
+- 默认负面约束建议：
+  `避免写实真人照片、避免冷硬赛博霓虹、避免扁平 2D 矢量、避免廉价塑料光泽、避免锐利数字 HUD、避免可读长文字与段落、保留羊毛纤维/针脚/手工不完美作为特征而非瑕疵`
+
+```json
+{
+  "style_name": "羊毛毡定格动画风",
+  "style_key": "wool_felt_stop_motion",
+  "style_block": "羊毛毡定格动画风，羊毛毡与黏土质感，手工制作，毛茸茸纤维表面，细腻针脚纹理，柔光，皮克斯式 3D 卡通造型，电影级渲染，超高细节，温暖商务氛围，适合品牌故事、产品讲解和治愈系科普",
+  "visual_style": {
+    "color_palette": {
+      "primary": ["#E8C9A0", "#5B8A9A"],
+      "secondary": ["#F4EDE2", "#7A5C44"],
+      "accent": ["#E07A5F", "#81B29A"],
+      "background_tendency": "warm soft",
+      "saturation": "medium",
+      "contrast": "soft-medium"
+    },
+    "lighting_profile": {
+      "type": "soft cinematic studio light, warm diffused key, gentle rim",
+      "direction": "soft key from upper side, gentle fill, subtle rim light",
+      "warmth": "warm",
+      "contrast_ratio": "low-medium",
+      "shadow_style": "soft rounded contact shadows on tabletop set, gentle ambient occlusion",
+      "practical_lights": false
+    },
+    "texture_profile": {
+      "grain": "fine wool fiber fuzz, felt fluff, subtle clay surface bumps",
+      "sharpness": "macro tactile detail on fibers and stitches, soft overall",
+      "material_feel": "needle-felted wool, soft clay, fuzzy fiber surface, visible stitches and needle-poke texture, handmade tactile materials",
+      "resolution_feel": "cinematic 8K stop-motion render, ultra high detail",
+      "surface_quality": "matte fuzzy felt, soft rounded clay forms, handcrafted slight imperfection"
+    },
+    "composition_tendencies": {
+      "framing": "3D miniature diorama staging, felt figurine characters in a crafted set, clear focal subject",
+      "depth_of_field": "shallow macro depth, gentle tilt-shift miniature feel, soft background bokeh",
+      "rule_of_thirds": true,
+      "leading_lines": true,
+      "symmetry": "occasional",
+      "negative_space": "soft cozy crafted set space"
+    },
+    "camera_language": {
+      "lens_equivalent": "macro to 50mm cinematic framing",
+      "movement_style": "slow cinematic push-in or gentle orbit, subtle stop-motion beats",
+      "angle_tendency": "eye-level to slightly low, character-focused",
+      "transition_style": "smooth cinematic cuts with stop-motion rhythm"
+    },
+    "mood_keywords": ["handmade", "cozy", "warm", "whimsical", "premium", "cinematic", "tactile", "pixar-like", "professional-friendly"],
+    "era_spatial": "crafted felt miniature world, cozy handmade office or desk diorama, business scene as felt set",
+    "post_processing": "cinematic warm color grade, soft bloom, preserve wool fiber and stitch texture"
+  }
+}
+```
+
 ## Interaction Rule
 
 风格选择固定使用以下编号：
@@ -419,6 +494,7 @@
 - `3D科技讲解风 请输入 3`
 - `黑白素描概念讲解风 请输入 4`
 - `复古纸质拼贴风 请输入 5`
+- `羊毛毡定格动画风 请输入 6`
 - `自主设定风格请输入 0`
 
 ## System Rule

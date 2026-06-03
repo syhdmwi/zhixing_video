@@ -193,6 +193,35 @@
 
 ---
 
+## Round 3 — 扩充风格预设库（第 6 预设）
+
+> 目标：新增第 6 个正式风格预设「羊毛毡定格动画风」。**强约束**：编号从 `1-5 + 0` 扩为 `1-6 + 0`，必须同步**所有枚举点**（同 Round 2 列表）。基因 JSON 仍只许在 `style-presets.md`。
+> **架构注意**：画幅 9:16 是项目级独立参数，**不锁进基因 JSON**，只在用户侧一句话里写"推荐画幅 9:16"；8K 归入 `resolution_feel`。
+
+### [x] R3.1 在 style-presets.md 新增预设 6「羊毛毡定格动画风」
+- **唯一落点**：`ai-video-image-prompts/references/style-presets.md`，新增 `### 6. 羊毛毡定格动画风`，格式严格对齐现有预设。
+- **预设规格（按此插入，可微调措辞不改语义）**：
+  - 预设名：`羊毛毡定格动画风`
+  - 英文标识 / style_key：`wool_felt_stop_motion`
+  - 用户侧一句话：`羊毛毡定格动画质感、黏土手工感、毛茸茸针脚纹理、皮克斯式 3D 卡通、柔光电影级渲染，商务氛围；推荐画幅 9:16`
+  - 默认人物渲染方式：`毡偶 / 黏土风格化角色，皮克斯式 3D，非写实真人`
+  - 推荐文字容器语言：`手作毡布标签、纸牌道具、软质标牌（仍遵守无可读长文字，仅作纹理）`
+  - 完整基因 JSON 已迁入 `ai-video-image-prompts/references/style-presets.md`，任务卡不再保留副本，避免破坏 SSOT。
+  - 默认负面约束建议：`避免写实真人照片、避免冷硬赛博霓虹、避免扁平 2D 矢量、避免廉价塑料光泽、避免锐利数字 HUD、避免可读长文字与段落、保留羊毛纤维/针脚/手工不完美作为特征而非瑕疵`
+- **验收**：style-presets.md 有 6 个 `style_key` 块且结构一致；JSON 全部合法；基因 JSON 未出现在其它文件；画幅未被写进 JSON 字段。
+
+### [x] R3.2 全仓库枚举点同步为 6 预设 + 编号 1-6/0
+- **改动点**：同 Round 2 R2.2 的全部枚举点（style-presets Usage/Interaction、image-prompts SKILL 前台块、pipeline SKILL Intake 与模板加载段、user-guidance-templates、workflow-state-machine 的 Ambiguous Reply Rule、SOP），把 `复古纸质拼贴风 请输入 5` 之后补 `羊毛毡定格动画风 请输入 6`，编号方案改为 `1-6 + 0`。
+- **验收**：`grep "羊毛毡定格动画风"` 在每个枚举点都出现；无"只列到 5"的残留；编号唯一 `1-6 + 0`。
+
+> `[REVIEW Round 3]` Codex 停。Claude 检查：基因 JSON 单份且结构对齐、画幅未入基因、所有枚举点齐 6 预设、编号唯一 1-6/0、无断链。
+>
+> **Claude review 结论（2026-06-03）：全部通过，已打本地 commit 存档点。**
+> - R3.1：style-presets.md 现 6 个 style_key 块，新预设 wool_felt_stop_motion 结构对齐；6 个 JSON 全合法；基因 JSON 仅此一处；无独立 aspect_ratio 字段(9:16 仅作 camera_language 描述，同现有预设惯例)。
+> - R3.2：所有枚举点补齐第 6 个，前台块编号 1-6+0，无'只列到 5'残留，无断链。
+
+---
+
 ## 执行须知（给 Codex）
 1. 一次只推进一个 Phase，做完停下，输出"改了哪些文件 + 如何自检"的简报。
 2. 任何与 OPTIMIZATION_PLAN §2 原则冲突的地方，停下提问，不要自行决定破坏对外行为。

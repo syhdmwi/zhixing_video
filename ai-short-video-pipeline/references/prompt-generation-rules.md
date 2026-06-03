@@ -14,7 +14,7 @@
 
 也就是说：
 
-- 用户交互层优先使用 `AI科普赛博明亮HUD风`、`手绘水彩教学风`、`3D科技讲解风`、`黑白素描概念讲解风`、`复古纸质拼贴风`
+- 用户交互层优先使用 `AI科普赛博明亮HUD风`、`手绘水彩教学风`、`3D科技讲解风`、`黑白素描概念讲解风`、`复古纸质拼贴风`、`羊毛毡定格动画风`
 - 本文件只负责说明“风格基因怎么转写进提示词”
 
 预设清单、`style_key`、`style_block`、6 组基因值和默认负面约束都以 `style-presets.md` 为唯一事实来源；不要在本文件复制或改写预设基因值。
@@ -309,7 +309,7 @@ Futuristic tech company HQ interior, dark glass walls, grid floor with glowing n
 
 ## 3. 风格基因转写方法（Style Gene Transcription）
 
-风格预设库、5 个预设名称、`style_key`、`style_block`、6 组结构化基因和默认负面约束，统一以 [style-presets.md](../../ai-video-image-prompts/references/style-presets.md) 为准。本文件不再维护任何预设 JSON 或具体基因值。
+风格预设库、6 个预设名称、`style_key`、`style_block`、6 组结构化基因和默认负面约束，统一以 [style-presets.md](../../ai-video-image-prompts/references/style-presets.md) 为准。本文件不再维护任何预设 JSON 或具体基因值。
 
 本节只规定：拿到已锁定的风格基因后，如何把它们稳定转写进每条 `image_prompt`。
 
@@ -327,7 +327,7 @@ Futuristic tech company HQ interior, dark glass walls, grid floor with glowing n
 - `visual_style.mood_keywords`
 - `negative_constraints`
 
-如果用户选择 1/2/3/4/5 预设，直接从 `style-presets.md` 读取对应 `style_key` 和完整上下文。如果用户选择 0 自定义风格，也必须先整理成同样的 6 组结构，再进入批量 prompt。
+如果用户选择 1/2/3/4/5/6 预设，直接从 `style-presets.md` 读取对应 `style_key` 和完整上下文。如果用户选择 0 自定义风格，也必须先整理成同样的 6 组结构，再进入批量 prompt。
 
 ### 3.2 转写顺序
 
