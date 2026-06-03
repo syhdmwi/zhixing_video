@@ -4,7 +4,7 @@
     "provider": "grok",
     "model": "grok",
     "source_image_url": "https://example.com/shot-01.png",
-    "motion_prompt": "A young woman holding a small mascot remains completely still like a frozen illustration in a bright scene. No walking, no body motion, no hand motion, no head turn, no blinking, no mouth movement, and no pose change. The camera slowly cranes upward while gradually pulling back from the subject. Keep the subject and composition stable. Preserve face, clothing, key object details, and background consistency. Avoid character animation and avoid subject drift.",
+    "motion_prompt": "A young woman holding a small mascot remains completely still like a frozen illustration in a bright scene. No walking, no body motion, no hand motion, no head turn, no blinking, no mouth movement, and no pose change. The camera slowly pulls back with a very slight sideways drift. Keep the subject and composition stable. Preserve face, clothing, key object details, and background consistency. Avoid character animation and avoid subject drift.",
     "size": "854x480",
     "duration_seconds": 5,
     "preset": "fun",

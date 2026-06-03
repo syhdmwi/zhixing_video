@@ -81,8 +81,8 @@ description: 当用户已经有静帧图片和已确认的图生视频动作方�
 - 图生视频接口需要公网图片 URL。用户如果提供本地图片文件，且已配置 TOS，默认先自动上传到 TOS，得到公网直链后再提交给视频模型
 - 只有 TOS 配置缺失时，才提示用户提供公网可访问图片 URL
 - 图生视频提示词默认沿用已确认的 `motion_type` 和 `video_prompt`
-- 每条视频任务默认附带固定稳定性模板：`保持人物/场景/主要角色不变形，保持原始画风和构图，主体只做小幅自然动作，不要夸张变形、不要新增角色、不要背景漂移`
-- `grok` 默认优先使用英文强约束提示词，避免模型把“小幅自然动作”误解成大幅表演或结构漂移
+- 每条视频任务默认附带稳定性约束，具体以 [references/image-to-video-prompt-rules.md](./references/image-to-video-prompt-rules.md) 的 `§5 Default Safe Rules` 为准
+- 提示词语言随 provider 选择；`grok` / 速创链路已实测中文可用，英文 provider 使用英文等价版
 - 生成成功后，默认直接展示结果，不只给任务号
 - 如果 provider 任务长时间卡住，应保留历史 task_id 并标记状态
 - 所有轮询中的进度汇报，默认遵循总控里的统一规则：[references/polling-progress-rules.md](../ai-short-video-pipeline/references/polling-progress-rules.md)

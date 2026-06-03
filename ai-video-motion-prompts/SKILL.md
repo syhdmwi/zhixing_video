@@ -51,21 +51,9 @@ description: 当用户已经有静帧图片，接下来要为图生视频生成�
 
 ## Default Motion Types
 
-默认先把镜头分成这 5 类：
+`motion_type` 定义与 `motion_intensity` 规则以 [image-to-video-prompt-rules.md](../ai-video-generate-videos/references/image-to-video-prompt-rules.md) 的 `§3 Motion Types` 和 `§4 Motion Intensity` 为唯一权威。
 
-1. `讲述型`
-2. `展示型`
-3. `情绪型`
-4. `场景型`
-5. `冲突型`
-
-默认动作强度：
-
-- 全片默认 `low`
-- 个别重点镜头可升到 `medium`
-- 默认不启用 `high`
-
-动作类型与动作强度规则见：
+动作模板与已验证提示词见：
 
 - [references/image-to-video-prompt-rules.md](../ai-video-generate-videos/references/image-to-video-prompt-rules.md)
 - [references/motion-template-library.md](../ai-video-generate-videos/references/motion-template-library.md)
@@ -87,10 +75,12 @@ description: 当用户已经有静帧图片，接下来要为图生视频生成�
 
 默认思路：
 
-- 把视频理解成“静帧被轻微推镜、平移、上移、下移或后拉”
+- 把视频理解成“静帧被轻微推镜、左右平移或后拉”
 - 主体像海报或关键帧一样基本不动
 - 整个画面只允许非常轻的相机运动
 - 不允许人物、角色、环境发生明显动画变化
+
+关键帧轻运镜的收紧稳定性正文以 [image-to-video-prompt-rules.md](../ai-video-generate-videos/references/image-to-video-prompt-rules.md) 的 `§5 Default Safe Rules` 为准。
 
 当用户明确提到：
 
@@ -103,15 +93,9 @@ description: 当用户已经有静帧图片，接下来要为图生视频生成�
 
 ## Default Stability Preset
 
-默认固定稳定性模板为：
+默认稳定性约束以 [image-to-video-prompt-rules.md](../ai-video-generate-videos/references/image-to-video-prompt-rules.md) 的 `§5 Default Safe Rules` 为唯一权威。
 
-- 保持人物/场景/主要角色不变形，主体保持原地静止，不要行走、不要跟拍人物，只有相机缓慢平移或拉远
-
-如果使用 `关键帧轻运镜模板01`，则稳定性约束进一步收紧为：
-
-- 保持人物/场景/主要角色完全静止，像关键帧插画一样固定不动，不要人物动作，不要环境动画，不要道具动画，只允许非常轻微的镜头移动，保持整体构图稳定，不要漂移，不要变形
-
-如果用户没有特别要求，每条图生视频提示词都应默认附带这句，不要遗漏。
+如果用户没有特别要求，每条图生视频提示词都应默认附带该安全规则，不要遗漏。
 
 ## Default Workflow
 
@@ -161,9 +145,8 @@ description: 当用户已经有静帧图片，接下来要为图生视频生成�
 
 - 画面像关键帧插画一样基本静止，人物、环境、主要角色和道具全部保持固定不动，只做非常轻微的相机向左平移
 - 画面像关键帧插画一样基本静止，人物、环境、主要角色和道具全部保持固定不动，只做非常轻微的相机向右平移
-- 画面像关键帧插画一样基本静止，人物、环境、主要角色和道具全部保持固定不动，只做非常轻微的相机向上移动
-- 画面像关键帧插画一样基本静止，人物、环境、主要角色和道具全部保持固定不动，只做非常轻微的相机向下移动
 - 画面像关键帧插画一样基本静止，人物、环境、主要角色和道具全部保持固定不动，只做非常轻微的相机后拉远
+- 纯场景竖向空间镜头可使用非常轻微的相机向上或向下移动；人物镜头不用
 
 不要在默认模板之外额外加长段说明，除非用户明确要求。
 

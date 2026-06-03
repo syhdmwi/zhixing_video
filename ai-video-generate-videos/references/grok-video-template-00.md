@@ -9,7 +9,7 @@
 - `grok` provider
 - 单张静帧图生视频
 - 人物或主要角色需要尽量保持静止
-- 希望镜头以较稳的方式做“缓慢上移 + 逐渐后拉”
+- 希望镜头以较稳的方式做“逐渐后拉 / 轻微横移 / 轻微推近”
 - 当前镜头里存在一个或多个需要保持一致的高频主体
 
 变量槽位：
@@ -30,7 +30,7 @@
 默认提示词：
 
 ```text
-{main_subject} and {recurring_subject_2} remain completely still like a frozen illustration in {scene_summary}. No walking, no body motion, no hand motion, no head turn, no blinking, no mouth movement, and no pose change. The camera slowly cranes upward while gradually pulling back from the subject. Keep the main subject, recurring subjects, and the composition stable. Preserve {consistency_points} and background consistency. Avoid character animation and avoid subject drift.
+{main_subject} and {recurring_subject_2} remain completely still like a frozen illustration in {scene_summary}. No walking, no body motion, no hand motion, no head turn, no blinking, no mouth movement, and no pose change. The camera slowly pulls back with a very slight sideways drift or a gentle push-in. Keep the main subject, recurring subjects, and the composition stable. Preserve {consistency_points} and background consistency. Avoid character animation and avoid subject drift.
 ```
 
 套用规则：
@@ -38,7 +38,9 @@
 - 用户选择 `grok` 后，应先询问是否要使用 `grok视频模版套用00`
 - 如果用户同意，优先用这条模板作为基础提示词
 - 再按当前镜头内容替换主体、场景和关键一致性描述
-- 保留“主体固定不动 + 镜头缓慢上移并后拉 + 保持构图稳定”的结构
+- 保留“主体固定不动 + 人物安全镜头运动 + 保持构图稳定”的结构
+- 人物镜头默认只用后拉、轻微横移或轻微推近，不使用上移
+- 上移仅用于纯场景竖向空间镜头，例如高楼、台阶、门或竖向空间；人物镜头不用
 - 如果当前镜头不是人物图，而是纯场景图，只沿用“镜头运动 + 构图稳定 + 避免漂移”的结构，不强行保留人物约束句
 
 # Grok 视频模版套用01

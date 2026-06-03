@@ -33,12 +33,13 @@
 
 Grok 默认提示词建议：
 
-- 优先使用英文动作提示词，不要只用中文
+- 中文动作提示词已实测可用，可直接使用中文
+- 如当前 provider 或具体镜头对英文更稳定，可同时提供英文等价版
 - 对“人物不要乱动”要写成强约束，而不是只写“不变形”
 - 推荐结构：
   - `Slow camera pan left. The subject remains perfectly still. Do not animate walking, body movement, hand movement, or pose change. Keep the character design, face, clothes, and background consistent. Only move the camera.`
 - 如果用户要更详细的测试版提示词，可以明确写：
-  - `The character remains completely fixed like a still illustration. Lock body position, hand position, head angle, facial expression, and the relative position between the girl and the lobster. No walking, no stepping, no swaying, no hand motion, no blinking, no mouth motion, no pose change. The camera slowly moves upward while gradually pulling away from the subject. Only the camera moves. Do not animate the character. Keep the face, hair, dress, lobster anatomy, and background fully consistent.`
+  - `The character remains completely fixed like a still illustration. Lock body position, hand position, head angle, facial expression, and the relative position between the main subjects. No walking, no stepping, no swaying, no hand motion, no blinking, no mouth motion, no pose change. The camera slowly pulls back with a very slight sideways drift. Only the camera moves. Do not animate the character. Keep the face, hair, outfit, key subject details, and background fully consistent.`
 
 当前已保存固定模板：
 
@@ -74,4 +75,4 @@ Grok 默认提示词建议：
 - 如需双图或多图输入，可在 `source_image_url` 中使用 `|` 分隔多个图片 URL，脚本会自动展开成多个 `image_url` 项
 - `source_image_url` 必须是公网可访问 URL。如果用户提供本地图片文件，且已配置 TOS，先用总控上传脚本转存到 TOS，再把公网直链写入 `source_image_url`
 - 不要把本地路径直接传给 grok
-- 如果中文提示词容易触发“人物自己走动”，优先切换为英文强约束提示词
+- 如果某条中文提示词触发“人物自己走动”，优先补充或切换为英文等价强约束提示词

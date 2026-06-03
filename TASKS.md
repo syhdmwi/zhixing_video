@@ -260,6 +260,75 @@
 
 ---
 
+## Round 5 — 优化图生视频提示词
+
+> 目标：闭合"分镜→视频"的词表断层、SSOT 去重、修 grok 冲突、按风格差异化运动，并把用户实测验证过的中文动作提示词正式沉淀。
+> **SSOT 决策**：
+> - 图生视频 **规则** 唯一权威 = `ai-video-generate-videos/references/image-to-video-prompt-rules.md`（motion_type 定义、motion_intensity、安全/稳定约束、映射表）。
+> - 图生视频 **模板/样板** 唯一权威 = `ai-video-generate-videos/references/motion-template-library.md`（含已验证中文提示词库）。
+> - `ai-video-motion-prompts/SKILL.md` 与 `references/motion-design-rules.md` 不再各自重复定义，改为引用上述两处；motion-design-rules 仅保留它独有的"镜头方向预设 + 人物/场景方向规则 + 风险等级"。
+
+### [x] R5.1 沉淀已验证动作提示词库（11 条，用户实测流畅）
+- **落点**：`motion-template-library.md` 新增章节「已验证动作提示词库（中文 · grok 实测流畅）」。
+- **要求**：以下 11 条**逐字保留**，每条加标签行 `visual_carrier / motion_type / motion_intensity / camera`。语言保持中文（已实测可用，不要翻译成英文替换原文，可在条目下附英文等价版供英文 provider）。
+  1. `主讲人轻微点头，眼神稳定看镜头，肩膀有细微呼吸感，镜头轻微推近，保持人物发型、服装、肤色完全不变，画面风格稳定，不要新增角色，不要闪烁。` — host_primary / 讲述型 / low / 推近
+  2. `数据流动轻微闪烁，画面缓慢横移，展示AI内容泛滥的场景，保持场景结构稳定，风格不变。` — scene_only / 场景型 / low / 横移
+  3. `主讲人轻微抬手强调，点头幅度稍明显，眼神坚定，镜头轻微推近，保持人物外观完全不变。` — host_primary / 讲述型 / medium / 推近
+  4. `AI工具界面轻微动效，按钮有极小幅动画，镜头缓慢横移，保持场景稳定。` — ui_closeup / 展示型 / low / 横移
+  5. `主讲人表情严肃，眼神略显忧虑，头部轻微下沉，镜头轻微推近，保持人物外观不变。` — host_primary / 情绪型 / low / 推近
+  6. `极简画面缓慢淡出淡入，镜头缓慢后拉，展示大面积留白，保持风格稳定。` — scene_only / 场景型 / low / 后拉
+  7. `画面轻微呼吸感，色温保持稳定，镜头缓慢推近，展示电影质感，保持风格不变。` — scene_only / 情绪型 / low / 推近
+  8. `主讲人伸手与界面互动，手指轻微动效，镜头轻微推近，保持人物外观完全不变。` — host_with_visual / 展示型 / medium / 推近
+  9. `对比画面缓慢切换，镜头轻微环绕感，保持场景稳定，风格不变。` — data_compare / 冲突型 / medium / 环绕
+  10. `主讲人自信表情，轻微点头，眼神坚定，镜头轻微推近，保持人物外观完全不变。` — host_primary / 讲述型 / low / 推近
+  11. `主讲人微笑看镜头，自然站姿，胳膊自然下垂，肩膀放松，镜头轻微推近，保持人物外观完全不变。` — host_primary / 讲述型 / low / 推近
+- **验收**：11 条逐字在库中；每条都有标签行；章节注明"实测可用、可直接套用"。
+
+### [x] R5.2 建立 visual_carrier → motion_type → 模板 映射表（SSOT）
+- **落点**：`image-to-video-prompt-rules.md` 新增「visual_carrier 运动映射表」。
+- **内容**：7 个 visual_carrier 各给出：推荐 motion_type、默认 motion_intensity、推荐 camera、对应模板/已验证提示词编号。建议：
+  - host_primary→讲述型/low/推近·横移（验证 1,3,5,10,11）
+  - host_with_visual→展示型/low-medium/推近（验证 8）
+  - scene_only→场景型/low/横移·后拉·推近（验证 2,6,7）
+  - concept_explainer→展示型/low/横移·推近
+  - data_compare→冲突型(对比)/medium/轻微环绕·横移（验证 9）
+  - ui_closeup→展示型/low/横移·推近（验证 4）
+  - brand_symbolic→展示型/low/横移·推近
+- **验收**：7 个 visual_carrier 全覆盖；映射引用 R5.1 的已验证编号；`motion-template-library.md` §8 旧"中文映射"键改为对齐 visual_carrier 或指向本表，不再是第三套词表。
+
+### [x] R5.3 SSOT 去重 + 补全镜头预设
+- 稳定性约束：以 `image-to-video-prompt-rules.md §5 Default Safe Rules` 为唯一权威；`motion-prompts/SKILL.md` 的「Default Stability Preset」与 `motion-design-rules.md §5` 改为引用（keyframe 收紧版只在一处保留）。
+- motion_intensity：以 `image-to-video-prompt-rules.md §4` 为唯一权威；motion-prompts SKILL 改引用。
+- motion_type 定义：以 `image-to-video-prompt-rules.md §3` 为唯一权威；motion-prompts SKILL「Default Motion Types」改引用。
+- **补缺口**：`motion-design-rules.md §2 固定镜头预设` 增加 `缓慢推近(push-in)` 与 `轻微环绕(slight orbit，仅用于对比/冲突镜头)`——因为模板与已验证提示词大量使用，但原 §2 缺失。
+- 语言规则：`image-to-video-prompt-rules.md §6` 改为"语言随 provider；grok/速创实测中文可用，英文 provider 用英文等价版"，不要一刀切要求英文。
+- **验收**：稳定性/强度/类型在仓库中各只有一处定义，其余为引用；§2 含推近与环绕；§6 不再硬性要求英文。
+
+### [x] R5.4 修 grok 模板与人物镜头规则的冲突
+- `grok-video-template-00.md` 的 `grok视频模版套用00` 默认"镜头上移+后拉"与 `motion-design-rules §3`（人物镜头避免上下移动）冲突。
+- **处理**：把该模板默认相机运动改为人物安全方向（后拉 / 轻微横移 / 轻微推近）；"上移"仅在注释里标明"仅用于纯场景竖向空间镜头，人物镜头不用"。
+- **验收**：grok 模板默认不再对人物镜头用上移；与 motion-design-rules §3 口径一致。
+
+### [x] R5.5 按风格差异化运动适配
+- **落点**：`image-to-video-prompt-rules.md` 新增「风格运动适配」section，对 style-presets 的 5 个 `style_key` 各给一句运动基调指引，例如：
+  - cyberpunk_bright_hud_infographic：数据流光/面板微动 + 推近·横移
+  - hand_painted_watercolor_educational：极简、淡入淡出、几乎静止，轻后拉
+  - monochrome_sketch_concept_explainer：静帧感、极轻推近，避免明显动画
+  - vintage_paper_collage：纸片层移/定格顿挫感、轻横移
+  - wool_felt_stop_motion：定格动画顿挫节奏、缓慢推近、电影柔光呼吸感
+- **验收**：5 个 style_key 全覆盖；引用 style-presets 的 key，不复制基因。
+
+> `[REVIEW Round 5]` Codex 停。Claude 检查：11 条逐字保留且打标签、visual_carrier 映射表 7 值全覆盖且消除第三套词表、稳定性/强度/类型各单份、§2 含推近·环绕、grok 冲突已修、5 风格运动适配齐全、无断链。
+>
+> **Claude review 结论（2026-06-03）：全部通过，已打本地 commit 存档点。**
+> - R5.1：11 条实测中文提示词逐字保留于 motion-template-library，每条带 visual_carrier/motion_type/intensity/camera 标签。
+> - R5.2：image-to-video-prompt-rules 新增 visual_carrier 运动映射表(7 值全覆盖, 引用已验证编号); 模板库 §8 旧第三词表(主讲人出镜等)已删, 改为指向该映射表。
+> - R5.3：稳定性(§5 Default Safe Rules)/intensity(§4)/motion_type(§3) 各唯一权威, motion-design-rules 与 motion-prompts SKILL 改引用; §2 补 推近+环绕; §6 语言改为随 provider(中文实测可用)。
+> - R5.4：grok 模版00 默认改人物安全方向(后拉/横移/推近), 上移仅标注纯场景竖向。
+> - R5.5：5 个 style_key 运动适配齐全; 无断链。
+
+---
+
 ## 执行须知（给 Codex）
 1. 一次只推进一个 Phase，做完停下，输出"改了哪些文件 + 如何自检"的简报。
 2. 任何与 OPTIMIZATION_PLAN §2 原则冲突的地方，停下提问，不要自行决定破坏对外行为。

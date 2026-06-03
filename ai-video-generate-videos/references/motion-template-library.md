@@ -78,14 +78,108 @@ The scene remains mostly stable, with only slight ambient motion and a gentle ca
 The main subject stays stable while the screens or holographic panels show slight subtle activity. The camera gently pushes in or drifts sideways. Keep the subject appearance, screen layout, scene structure, and original art style unchanged. No new elements, no distortion, no heavy animation.
 ```
 
-## 8. 中文映射建议
+## 8. visual_carrier 映射指引
 
-为了便于上游分镜使用，可用以下映射：
+上游分镜只使用 `visual_carrier` 7 值，不再维护第三套中文场景词表。具体 `visual_carrier -> motion_type -> 模板/已验证提示词` 映射以 [image-to-video-prompt-rules.md](./image-to-video-prompt-rules.md) 的「visual_carrier 运动映射表」为准。
 
-- `主讲人出镜` -> `主讲人讲述模板`
-- `机器人解说` -> `机器人讲解模板`
-- `办公室办公` -> `办公室工作模板`
-- `法庭/会议` -> `法庭 / 会议讲述模板`
-- `情绪/思考` -> `情绪沉思模板`
-- `环境介绍` -> `场景展示模板`
-- `图表/面板` -> `数据 / 屏幕展示模板`
+本库可被映射表引用的通用模板包括：
+
+- `主讲人讲述模板`
+- `机器人讲解模板`
+- `办公室工作模板`
+- `法庭 / 会议讲述模板`
+- `情绪沉思模板`
+- `场景展示模板`
+- `数据 / 屏幕展示模板`
+
+## 9. 已验证动作提示词库（中文 · grok 实测流畅）
+
+这些提示词为用户实测可用、可直接套用的中文动作提示词。原文保持不改写；英文 provider 可在条目下另配英文等价版。
+
+### 已验证 1
+
+标签：`visual_carrier=host_primary` / `motion_type=讲述型` / `motion_intensity=low` / `camera=推近`
+
+```text
+主讲人轻微点头，眼神稳定看镜头，肩膀有细微呼吸感，镜头轻微推近，保持人物发型、服装、肤色完全不变，画面风格稳定，不要新增角色，不要闪烁。
+```
+
+### 已验证 2
+
+标签：`visual_carrier=scene_only` / `motion_type=场景型` / `motion_intensity=low` / `camera=横移`
+
+```text
+数据流动轻微闪烁，画面缓慢横移，展示AI内容泛滥的场景，保持场景结构稳定，风格不变。
+```
+
+### 已验证 3
+
+标签：`visual_carrier=host_primary` / `motion_type=讲述型` / `motion_intensity=medium` / `camera=推近`
+
+```text
+主讲人轻微抬手强调，点头幅度稍明显，眼神坚定，镜头轻微推近，保持人物外观完全不变。
+```
+
+### 已验证 4
+
+标签：`visual_carrier=ui_closeup` / `motion_type=展示型` / `motion_intensity=low` / `camera=横移`
+
+```text
+AI工具界面轻微动效，按钮有极小幅动画，镜头缓慢横移，保持场景稳定。
+```
+
+### 已验证 5
+
+标签：`visual_carrier=host_primary` / `motion_type=情绪型` / `motion_intensity=low` / `camera=推近`
+
+```text
+主讲人表情严肃，眼神略显忧虑，头部轻微下沉，镜头轻微推近，保持人物外观不变。
+```
+
+### 已验证 6
+
+标签：`visual_carrier=scene_only` / `motion_type=场景型` / `motion_intensity=low` / `camera=后拉`
+
+```text
+极简画面缓慢淡出淡入，镜头缓慢后拉，展示大面积留白，保持风格稳定。
+```
+
+### 已验证 7
+
+标签：`visual_carrier=scene_only` / `motion_type=情绪型` / `motion_intensity=low` / `camera=推近`
+
+```text
+画面轻微呼吸感，色温保持稳定，镜头缓慢推近，展示电影质感，保持风格不变。
+```
+
+### 已验证 8
+
+标签：`visual_carrier=host_with_visual` / `motion_type=展示型` / `motion_intensity=medium` / `camera=推近`
+
+```text
+主讲人伸手与界面互动，手指轻微动效，镜头轻微推近，保持人物外观完全不变。
+```
+
+### 已验证 9
+
+标签：`visual_carrier=data_compare` / `motion_type=冲突型` / `motion_intensity=medium` / `camera=环绕`
+
+```text
+对比画面缓慢切换，镜头轻微环绕感，保持场景稳定，风格不变。
+```
+
+### 已验证 10
+
+标签：`visual_carrier=host_primary` / `motion_type=讲述型` / `motion_intensity=low` / `camera=推近`
+
+```text
+主讲人自信表情，轻微点头，眼神坚定，镜头轻微推近，保持人物外观完全不变。
+```
+
+### 已验证 11
+
+标签：`visual_carrier=host_primary` / `motion_type=讲述型` / `motion_intensity=low` / `camera=推近`
+
+```text
+主讲人微笑看镜头，自然站姿，胳膊自然下垂，肩膀放松，镜头轻微推近，保持人物外观完全不变。
+```
