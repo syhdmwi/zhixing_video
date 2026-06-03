@@ -1,6 +1,6 @@
 ---
 name: ai-short-video-pipeline
-description: 当用户想把一段文案或口播稿制作成完整的 AI 短视频流程时使用这个总控 skill。用户提到"知行视频skill""知行视频 skill""知行视频工作流""使用知行视频skill帮我制作视频"等表达时,也应优先唤醒本 skill。它负责判断何时调用分镜、图片提示词、图生视频、数字人轨道、剪辑整合等子 skills,并适用于 nanobanana-2、nanobanana-pro、seedream-5.0、grok 视频、即梦 OmniHuman 1.5、蝉镜数字人这类工具链。
+description: 当用户想把一段文案或口播稿制作成完整的 AI 短视频流程时使用这个总控 skill。用户提到"知行视频skill""知行视频 skill""知行视频工作流""使用知行视频skill帮我制作视频"等表达时,也应优先唤醒本 skill。它负责判断何时调用分镜、图片提示词、图生视频、数字人轨道、剪辑整合等子 skills,并适用于 nanobanana-2、nanobanana-pro、seedream-5.0、grok 视频、omni 视频、即梦 OmniHuman 1.5、蝉镜数字人这类工具链。
 ---
 
 # AI Short Video Pipeline
@@ -78,7 +78,7 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 - 用户明确说这件事要拆成多个 skills 分工
 - 用户要区分"数字人视频轨"和"画面分镜视频轨"
 - 用户最终要把多个生成结果剪进一个完整成片
-- 用户明确提到 `nanobanana-2`、`nanobanana-pro`、`seedream-5.0`、`grok`、`即梦 OmniHuman 1.5`、`蝉镜数字人`
+- 用户明确提到 `nanobanana-2`、`nanobanana-pro`、`seedream-5.0`、`grok`、`omni`、`即梦 OmniHuman 1.5`、`蝉镜数字人`
 
 ## Required Inputs
 
@@ -334,7 +334,7 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 6. `ai-video-motion-prompts`
    负责把已确认的静帧镜头转成适用于当前视频阶段的图生视频提示词,并默认先产出测试批次动作方案再进入全量执行。
 7. `ai-video-generate-videos`
-   负责根据当前可用 key 使用 `grok` 真实提交图生视频任务并轮询结果。`seedance` 当前暂时停用。
+   负责根据当前选择使用 `grok` 或用户显式选择的 `omni` 真实提交图生视频任务并轮询结果；默认仍为 `grok`。`seedance` 当前暂时停用。
 8. `ai-video-voice-tts`
    负责在用户只有文案、没有成品音频时,先把文案转成可用于数字人的本地音频文件。当前接入速创异步语音合成接口,不是音色克隆。
 9. `ai-video-voice-clone`
@@ -547,6 +547,13 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 如果用户选择 `图转镜头移动视频模式`,优先调用 `ai-video-keyframe-edit`,直接用已确认静帧图片生成轻运镜画面轨。
 
 如果用户选择 `图生视频模式`,再继续走 `ai-video-motion-prompts` + `ai-video-generate-videos`。
+
+图生视频模型选择：
+
+- `1 grok（默认）`
+- `2 omni（支持首尾帧、视频参考）`
+
+如果用户不选图生视频模型，默认使用 `grok`。
 
 在 `图生视频模式` 下,默认执行顺序是:
 
@@ -909,7 +916,7 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 当前这套 skill 套件默认围绕以下工具链编排:
 
 - 生图:`nanobanana-2`、`nanobanana-pro`、`seedream-5.0`
-- 图生视频:`grok` 当前启用；`doubao-seedance-1.0-pro-fast` 暂时停用
+- 图生视频:`grok` 默认启用；`omni` 可由用户显式选择；`doubao-seedance-1.0-pro-fast` 暂时停用
 - 数字人:`即梦 OmniHuman 1.5`、`蝉镜数字人`
 - 速创数字人:`速创 Digital_Humans`
 - 发布平台:抖音、视频号、小红书

@@ -72,7 +72,7 @@ description: 知行视频主入口 skill。对外只暴露这一个入口，负�
 - 图片提示词、风格预设、主体一致性、三视图 -> `ai-video-image-prompts/MODULE.md`
 - 提示词确认后的正式生图执行 -> `ai-video-prompt-to-images/MODULE.md`
 - 已确认静帧的图生视频动作方案 -> `ai-video-motion-prompts/MODULE.md`
-- 已确认静帧和动作方案的视频真实提交（grok 当前启用，seedance 暂停） -> `ai-video-generate-videos/MODULE.md`
+- 已确认静帧和动作方案的视频真实提交（grok 默认启用，omni 可显式选择，seedance 暂停） -> `ai-video-generate-videos/MODULE.md`
 - 静帧图片的 FFmpeg 关键帧轻运镜 -> `ai-video-keyframe-edit/MODULE.md`
 - 文案转音频 / 参考音频克隆 -> `ai-video-voice-tts/MODULE.md`、`ai-video-voice-clone/MODULE.md`
 - 数字人生成提交、轮询和结果展示 -> `ai-video-avatar-track/MODULE.md`

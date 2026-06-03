@@ -16,8 +16,11 @@
 | 规范名 | 用户可见 | 用途 | 对应脚本 | 别名收敛 |
 | --- | --- | --- | --- | --- |
 | `grok` | 是 | 当前启用的默认图生视频 provider | `ai-video-generate-videos/scripts/video_generation_router.py` | `grok-imagine-1.0-video-super`、Grok |
+| `omni` | 是 | 图生视频 provider，支持首尾帧（多图 `|` 分隔）与视频参考（v2v） | `ai-video-generate-videos/scripts/video_generation_router.py` | `omni_flash-v2v` |
 | `doubao-seedance-1.0-pro-fast` | 否 | 已接入但当前停用的图生视频 provider | `ai-video-generate-videos/scripts/video_generation_router.py` | `seedance`、`doubao-seedance-1-0-pro-fast-251015` |
-| `veo` | 否 | 历史/备用 provider 资料，用户侧不再选择 | `ai-video-generate-videos/scripts/video_generation_router.py` | `VEO`、`veo_3_1-fast-fl` |
+| `veo` | 否 | 历史/备用 provider 资料，用户侧不再选择；`veo_3_1-fast` / `veo_3_1-fast-fl` / `veo_3_1-fast-4K` 为同 `/v1/videos` endpoint 的实现层变体 | `ai-video-generate-videos/scripts/video_generation_router.py` | `VEO`、`veo_3_1-fast`、`veo_3_1-fast-fl`、`veo_3_1-fast-4K` |
+
+`omni` 接口：`POST https://api.yijiarj.cn/v1/videos` 创建任务，`GET /v1/videos/{id}` 轮询，鉴权 `Authorization: Bearer ${YIJIA_API_KEY}`。
 
 ## 数字人 / 语音模型
 

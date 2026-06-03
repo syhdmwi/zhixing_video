@@ -10,6 +10,7 @@
 
 - [references/grok-provider-notes.md](./references/grok-provider-notes.md) — grok provider 说明
 - [references/grok-video-template-00.md](./references/grok-video-template-00.md) — grok 固定模板
+- [references/omni-provider-notes.md](./references/omni-provider-notes.md) — omni provider 说明
 - [references/seedance-provider-notes.md](./references/seedance-provider-notes.md) — seedance 停用说明
 - [references/provider-queue-example.json](./references/provider-queue-example.json) — provider 队列示例
 - [references/image-to-video-prompt-rules.md](./references/image-to-video-prompt-rules.md) — 图生视频提示词规则

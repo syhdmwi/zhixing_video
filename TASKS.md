@@ -329,6 +329,52 @@
 
 ---
 
+## Round 6 — 新增图生视频模型 omni（用户可选）
+
+> 目标：把 `omni` 接成与 `grok` 并列、用户可选的图生视频模型。grok 仍为 auto 默认，omni 仅在用户显式选择时使用。
+> **已核实事实（来自官方 Apifox 文档，勿编造其它字段）**：
+> - 规范名 `omni`，**API model ID = `omni_flash-v2v`**。
+> - 接口 `POST https://api.yijiarj.cn/v1/videos`（异步），轮询 `GET /v1/videos/{id}`；鉴权 `Authorization: Bearer ${YIJIA_API_KEY}`。
+> - 参数：`prompt`(必填) / `model`(必填) / `size`(WxH，如 `1920x1080`/`720x720`/`1024x1024`) / `input_reference`(可选，**可传首尾帧，多图用 `|` 分隔**；omni 额外支持**视频参考 v2v**) / `remix_id`(可选)。
+> - **无 duration 参数**。同 endpoint 另有 veo 系列(`veo_3_1-fast`/`-fast-fl`/`-4K`)，属同族实现层。
+> - 与现有 `video_generation_router.py` 的 `submit_veo`/`poll_veo`(POST `/v1/videos` + GET `/v1/videos/{id}`) **完全同形**，复用即可。
+
+### [x] R6.1 MODELS.md 登记 omni
+- 图生视频模型表新增一行：`omni` / 用户可见=是 / 用途=图生视频，支持首尾帧(多图 `|` 分隔)与视频参考(v2v) / 脚本 `video_generation_router.py` / 别名收敛 `omni_flash-v2v`。
+- veo 行补注：`veo_3_1-fast`/`-fast-fl`/`-4K` 为同 `/v1/videos` endpoint 的实现层变体。
+- **验收**：omni 在表中且标用户可见；API model ID `omni_flash-v2v` 写明；endpoint 与鉴权准确。
+
+### [x] R6.2 新增 omni-provider-notes.md
+- 新建 `ai-video-generate-videos/references/omni-provider-notes.md`：endpoint、鉴权、参数(prompt/model=`omni_flash-v2v`/size WxH/input_reference 首尾帧或视频参考用 `|` 分隔/可选 remix_id)、异步 status+progress、轮询 `GET /v1/videos/{id}`、size 示例、无 duration；并写"与 grok 的区别：omni 支持首尾帧与视频参考"。
+- **验收**：仅含文档已给出的字段，不编造私有参数；与 grok-provider-notes.md 风格一致。
+
+### [x] R6.3 router 接入 omni
+- `video_generation_router.py` 新增 provider `omni`，复用 `/v1/videos` create+poll（与 veo 同形）：
+  - `provider_has_credentials("omni")` → `YIJIA_API_KEY`
+  - `default_model_for_provider("omni")` → `omni_flash-v2v`
+  - `submit_item`/`poll_item`/`status_is_terminal`/`extract_render_url` 增加 omni 分支，走 `submit_veo`/`poll_veo` 形态（`input_reference` 取 `source_image_url`，支持 `|` 首尾帧）。
+- grok 仍为 `choose_auto_provider` 默认；omni 仅在 `item.provider == "omni"` 显式指定时启用。不破坏 grok/seedance 现有逻辑。
+- **验收**：`python3 -m py_compile` 通过；omni 队列项能构造出正确 payload(model=`omni_flash-v2v`)；grok 路径不受影响。
+
+### [x] R6.4 用户可选视频模型（grok / omni）
+- 在「图生视频模式」入口增加用户可选模型：`图生视频模型：1 grok（默认）/ 2 omni（支持首尾帧、视频参考）`。
+- 涉及：`ai-short-video-pipeline/SKILL.md`（Two-Track / 图生视频模式段）、`ai-video-generate-videos/SKILL.md`、必要时 `image-to-video-prompt-rules.md`。保持对外简洁，omni 作为并列可选项，默认仍 grok。
+- **验收**：用户可选 grok 或 omni；默认仍 grok；omni 差异能力有一句说明；选择编号清晰。
+
+### [x] R6.5 provider-queue-example.json 补 omni 示例
+- 在 `ai-video-generate-videos/references/provider-queue-example.json` 增加一个 `provider: "omni"` 的示例条目（含 shot_id/source_image_url/motion_prompt/size，演示首尾帧 `|` 用法），JSON 合法。
+- **验收**：JSON 合法；omni 示例字段与 router 期望一致。
+
+> `[REVIEW Round 6]` Codex 停。Claude 检查：MODELS.md 登记准确(omni_flash-v2v)、notes 不编造字段、router omni 分支正确且 py_compile 通过且不破坏 grok、用户可选 grok/omni 默认 grok、示例 JSON 合法、无断链。
+>
+> **Claude review 结论（2026-06-04）：全部通过，已打本地 commit 存档点。**
+> - R6.1/R6.2：MODELS.md 与 omni-provider-notes.md 准确写明 model ID omni_flash-v2v、POST /v1/videos 创建 + GET /v1/videos/{id} 轮询、YIJIA_API_KEY、首尾帧(|)与视频参考(v2v)；无编造字段。
+> - R6.3：router 新增 omni 分支复用 submit_veo/poll_veo(/v1/videos 同形)，credentials/default-model(omni_flash-v2v)/terminal/render-url 齐全；choose_auto_provider 仍 grok-first，omni 仅显式启用，grok 失败不回退 omni；py_compile 通过。
+> - R6.4：pipeline/generate-videos SKILL 与 user-guidance 提供 1 grok(默认)/2 omni(首尾帧·视频参考)，唤醒词与工具链描述同步。
+> - R6.5：provider-queue-example.json 含合法 omni 条目，4 必填字段齐全；无断链。
+
+---
+
 ## 执行须知（给 Codex）
 1. 一次只推进一个 Phase，做完停下，输出"改了哪些文件 + 如何自检"的简报。
 2. 任何与 OPTIMIZATION_PLAN §2 原则冲突的地方，停下提问，不要自行决定破坏对外行为。

@@ -212,6 +212,7 @@
 语言随 provider：
 
 - `grok` / 速创链路已实测中文动作提示词可用，可直接使用中文提示词
+- `omni` 可由用户显式选择，适合首尾帧或视频参考 v2v；提示词仍使用本文件的 `motion_type` / `motion_intensity` / 稳定性规则
 - 英文 provider 或英文表现更稳定的 provider，使用英文等价版
 - 不要一刀切要求所有 provider 都用英文；提交前按 provider 选择 `video_prompt_cn` 或英文 `video_prompt`
 

@@ -1,6 +1,6 @@
 ---
 name: ai-video-generate-videos
-description: 当用户已经有静帧图片和已确认的图生视频动作方案，接下来要真实提交视频生成任务时使用这个 skill。它当前默认使用 grok 提交视频任务；seedance 暂时停用。
+description: 当用户已经有静帧图片和已确认的图生视频动作方案，接下来要真实提交视频生成任务时使用这个 skill。它当前默认使用 grok 提交视频任务；omni 可由用户显式选择；seedance 暂时停用。
 ---
 
 # AI Video Generate Videos
@@ -27,6 +27,7 @@ description: 当用户已经有静帧图片和已确认的图生视频动作方�
 ## Supported Providers
 
 - `grok`
+- `omni`
 - `seedance`：暂时停用
 
 ## Provider Routing Rule
@@ -35,12 +36,13 @@ description: 当用户已经有静帧图片和已确认的图生视频动作方�
 
 默认按这套规则自动判断：
 
-1. 当前默认只启用 `grok`
+1. 当前默认使用 `grok`
 2. 如果 `YIJIA_API_KEY` 可用，就直接用 `grok`
-3. `seedance` 当前不参与自动路由
-4. `grok` 失败时，先直接报错和展示结果，不自动回退到 `seedance`
+3. 如果用户明确选择 `omni`，才使用 `omni`
+4. `seedance` 当前不参与自动路由
+5. `grok` 失败时，先直接报错和展示结果，不自动回退到 `seedance` 或 `omni`
 
-只有当后续重新启用 `seedance` 时，才恢复双 provider 路由。
+只有当后续重新启用 `seedance` 时，才恢复更多 provider 自动路由。
 
 如果最终路由到 `grok`，默认直接套用 `grok视频模版套用00`，不再额外追问。
 这里的模板不是写死“龙虾”这类单一角色，而是要先识别当前文案里反复出现、需要保持一致的高频主体，再动态代入。
@@ -62,6 +64,8 @@ description: 当用户已经有静帧图片和已确认的图生视频动作方�
   已按一加 `POST /v1/chat/completions` 流式接口接入真实执行链路。
   并已保存一个可复用模板：`grok视频模版套用00`
   该模板按“动态高频主体”方式套用，不应写死某个固定角色名。
+- `omni`
+  已按一加 `POST /v1/videos` + `GET /v1/videos/{id}` 异步接口接入；支持首尾帧（多图 `|` 分隔）与视频参考 v2v。仅在用户明确选择时使用。
 - `seedance`
   当前接口能力和文档仍保留，但这条链路已暂时停用，不参与自动路由，也不参与回退。
 
@@ -77,6 +81,7 @@ description: 当用户已经有静帧图片和已确认的图生视频动作方�
 ## Core Rules
 
 - 默认使用 `grok`，再提交任务
+- 用户可显式选择 `omni`，用于需要首尾帧或视频参考的图生视频任务
 - 默认先跑测试批次，再决定是否全量生成
 - 图生视频接口需要公网图片 URL。用户如果提供本地图片文件，且已配置 TOS，默认先自动上传到 TOS，得到公网直链后再提交给视频模型
 - 只有 TOS 配置缺失时，才提示用户提供公网可访问图片 URL
@@ -108,6 +113,10 @@ description: 当用户已经有静帧图片和已确认的图生视频动作方�
 如果用户进入 `图生视频模式`，默认再补一个“视频清晰度”选择，但不要直接问 `size`。优先用用户能理解的说法：
 
 ```text
+图生视频模型：
+1 grok（默认）
+2 omni（支持首尾帧、视频参考）
+
 视频清晰度：
 1 480p
 2 720p
@@ -133,6 +142,10 @@ description: 当用户已经有静帧图片和已确认的图生视频动作方�
 1 图转镜头移动视频模式
 2 图生视频模式
 
+图生视频模型：
+1 grok（默认）
+2 omni（支持首尾帧、视频参考）
+
 视频清晰度：
 1 480p
 2 720p
@@ -143,13 +156,15 @@ description: 当用户已经有静帧图片和已确认的图生视频动作方�
 默认沿用当前图片比例
 ```
 
-除非用户已经明确给出视频模式和清晰度,否则不要省略这个固定选项块。
+除非用户已经明确给出视频模式、图生视频模型和清晰度,否则不要省略这个固定选项块。
 
 ### 2. Auto Route Provider First
 
 先根据当前可用 key 判断视频生成模型，但不要把这个判断过程暴露给普通用户。
 
 当前默认直接路由到 `grok`。
+
+如果用户明确选择 `omni`，则 provider 队列中写 `provider: "omni"`，脚本使用 `omni_flash-v2v` 和 `/v1/videos` 异步通道。
 
 如果自动路由到 `grok`，默认直接套用 `grok视频模版套用00`。
 
@@ -161,7 +176,7 @@ description: 当用户已经有静帧图片和已确认的图生视频动作方�
 
 再把这些内容代入模板，不要直接复制旧镜头里的“龙虾”或其他固定对象。
 
-如果 `grok` 提交失败，当前直接返回失败结果，不自动回退到 `seedance`。
+如果 `grok` 提交失败，当前直接返回失败结果，不自动回退到 `seedance` 或 `omni`。
 
 ### 3. Build Provider Queue
 
@@ -284,4 +299,5 @@ description: 当用户已经有静帧图片和已确认的图生视频动作方�
 - 动作模板库： [references/motion-template-library.md](./references/motion-template-library.md)
 - grok 接入说明： [references/grok-provider-notes.md](./references/grok-provider-notes.md)
 - grok 固定模板： [references/grok-video-template-00.md](./references/grok-video-template-00.md)
+- omni 接入说明： [references/omni-provider-notes.md](./references/omni-provider-notes.md)
 - seedance 停用说明： [references/seedance-provider-notes.md](./references/seedance-provider-notes.md)
