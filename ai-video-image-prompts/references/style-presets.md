@@ -13,6 +13,7 @@
 - `手绘水彩教学风`
 - `3D科技讲解风`
 - `黑白素描概念讲解风`
+- `复古纸质拼贴风`
 
 系统内部拿到的则不只是一个名字，还包括：
 
@@ -33,9 +34,10 @@
 - `手绘水彩教学风 请输入 2`
 - `3D科技讲解风 请输入 3`
 - `黑白素描概念讲解风 请输入 4`
+- `复古纸质拼贴风 请输入 5`
 - `自主设定风格请输入 0`
 
-如果用户输入 `1`、`2`、`3` 或 `4`，加载对应风格预设的完整结构化上下文。
+如果用户输入 `1`、`2`、`3`、`4` 或 `5`，加载对应风格预设的完整结构化上下文。
 
 如果用户输入 `0`，再继续按自定义风格描述生成。
 
@@ -335,6 +337,79 @@
 }
 ```
 
+### 5. 复古纸质拼贴风
+
+- 预设名：`复古纸质拼贴风`
+- 英文标识：`vintage_paper_collage`
+- 用户侧一句话说明：
+  `复古纸质拼贴、剪纸人物、旧报纸纹理与胶带印章元素、红棕色档案室氛围、纪录片分镜感，适合历史复盘、调查叙事和案例拆解`
+- 默认色彩倾向：
+  `牛皮纸棕、旧报纸米黄、红棕印章色、深褐档案室阴影`
+- 默认光影倾向：
+  `暖色档案室环境光、桌灯实用光、纸张边缘柔和投影`
+- 默认材质倾向：
+  `旧报纸、牛皮纸、胶带、印章油墨、打字机文字、档案卡纸、纸张分层`
+- 默认环境倾向：
+  `旧侦探办公室、档案室、1970s 新闻编辑桌、案件线索板`
+- 默认构图倾向：
+  `层叠纸张拼贴，剪纸主体被图钉或胶带固定，纪录片分镜面板`
+- 推荐文字容器语言：
+  `手写便签、打字机字条、档案标签、印章戳记、报纸标题剪贴（仍遵守无可读长文字，仅作纹理）`
+- 默认人物渲染方式：
+  `剪纸拼贴插画人物，非写实真人`
+- 默认负面约束建议：
+  `避免高光 3D 渲染、避免霓虹赛博色、避免干净数字 HUD、避免现代扁平矢量、避免写实电影照片感、避免纯白或纯黑背景（用做旧纸色）、避免可读长文字与段落、保留胶带/印章/纸纹做旧作为特征而非瑕疵`
+
+```json
+{
+  "style_name": "复古纸质拼贴风",
+  "style_key": "vintage_paper_collage",
+  "style_block": "复古纸质拼贴风，复古纸质拼贴插画，剪纸人物，旧报纸与牛皮纸纹理，胶带固定的纸张，红棕色旧办公室背景，手写标注与档案袋、印章、打字机元素，纪录片分镜感，细节丰富，适合历史复盘、调查叙事、案例拆解和怀旧人文类内容",
+  "visual_style": {
+    "color_palette": {
+      "primary": ["#C4A77D", "#8B5A2B"],
+      "secondary": ["#E8DCC0", "#3A2E22"],
+      "accent": ["#A83232", "#2E2A24"],
+      "background_tendency": "warm aged paper",
+      "saturation": "low",
+      "contrast": "medium"
+    },
+    "lighting_profile": {
+      "type": "warm archival ambient with desk-lamp practical light",
+      "direction": "soft side light from upper-left, tabletop fall-off",
+      "warmth": "warm",
+      "contrast_ratio": "medium",
+      "shadow_style": "soft paper-edge drop shadows under taped and layered cutouts",
+      "practical_lights": true
+    },
+    "texture_profile": {
+      "grain": "heavy newsprint and kraft paper grain, foxing spots, aged speckle",
+      "sharpness": "crisp cut-paper edges, slightly degraded photo clippings",
+      "material_feel": "torn newspaper, kraft paper, masking and cellophane tape, rubber-stamp ink, typewriter type, file-folder cardstock, string connectors",
+      "resolution_feel": "handmade collage scrapbook / case-file board",
+      "surface_quality": "matte aged paper with visible tape sheen and layered cutout depth"
+    },
+    "composition_tendencies": {
+      "framing": "layered paper-collage layout, cutout subjects pinned or taped onto a board, documentary storyboard panels",
+      "depth_of_field": "flat collage layering, minimal optical blur",
+      "rule_of_thirds": false,
+      "leading_lines": true,
+      "symmetry": "occasional",
+      "negative_space": "kraft and newsprint margins with handwritten annotations"
+    },
+    "camera_language": {
+      "lens_equivalent": "flat scan-like top-down or 35-50mm documentary framing",
+      "movement_style": "static collage, motion conveyed by paper layers and arrows",
+      "angle_tendency": "straight-on tabletop or scan view",
+      "transition_style": "paper cut, page turn, archival editorial cut"
+    },
+    "mood_keywords": ["vintage", "archival", "investigative", "nostalgic", "handmade", "documentary", "analog", "detailed"],
+    "era_spatial": "old detective office, archive room, 1970s newsroom desk, pinned case-file board",
+    "post_processing": "paper grain overlay, gentle sepia grade, tape and stamp artifacts, no digital glow"
+  }
+}
+```
+
 ## Interaction Rule
 
 风格选择固定使用以下编号：
@@ -343,6 +418,7 @@
 - `手绘水彩教学风 请输入 2`
 - `3D科技讲解风 请输入 3`
 - `黑白素描概念讲解风 请输入 4`
+- `复古纸质拼贴风 请输入 5`
 - `自主设定风格请输入 0`
 
 ## System Rule

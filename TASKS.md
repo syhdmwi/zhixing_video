@@ -159,6 +159,40 @@
 
 ---
 
+## Round 2 — 扩充风格预设库
+
+> 目标：新增第 5 个正式风格预设「复古纸质拼贴风」。**强约束**：第一轮已把风格选择编号统一为 `1-4 预设 + 0 自定义`，本轮新增后必须同步**所有枚举点**为 `1-5 预设 + 0 自定义`，否则会破坏已建立的一致性。基因 JSON 仍只许存在于 `style-presets.md`（SSOT）。
+
+### [x] R2.1 在 style-presets.md 新增预设 5「复古纸质拼贴风」
+- **唯一落点**：`ai-video-image-prompts/references/style-presets.md`，新增 `### 5. 复古纸质拼贴风`，格式严格对齐现有 4 个预设（用户侧一句话说明 + 各 default 倾向 bullet + 完整 `visual_style` JSON）。
+- **预设规格（按此插入，可微调措辞但不改语义）**：
+  - 预设名：`复古纸质拼贴风`
+  - 英文标识 / style_key：`vintage_paper_collage`
+  - 用户侧一句话：`复古纸质拼贴、剪纸人物、旧报纸纹理与胶带印章元素、红棕色档案室氛围、纪录片分镜感，适合历史复盘、调查叙事和案例拆解`
+  - 默认人物渲染方式：`剪纸拼贴插画人物，非写实真人`
+  - 推荐文字容器语言：`手写便签、打字机字条、档案标签、印章戳记、报纸标题剪贴（仍遵守无可读长文字，仅作纹理）`
+  - 完整基因 JSON 已迁入 `ai-video-image-prompts/references/style-presets.md`，任务卡不再保留副本，避免破坏 SSOT。
+  - 默认负面约束建议：`避免高光 3D 渲染、避免霓虹赛博色、避免干净数字 HUD、避免现代扁平矢量、避免写实电影照片感、避免纯白或纯黑背景（用做旧纸色）、避免可读长文字与段落、保留胶带/印章/纸纹做旧作为特征而非瑕疵`
+- **验收**：style-presets.md 有 5 个 `style_key` 块；新预设 JSON 字段结构与前 4 个一致；基因 JSON 未出现在其它文件。
+
+### [x] R2.2 全仓库枚举点同步为 5 预设 + 编号 1-5/0
+- **改动点**（逐一核对，先 grep 现有 4 预设枚举处再补第 5 个）：
+  - `style-presets.md`：顶部 `Usage Rule` 选项列表、底部 `Interaction Rule` 选项列表 → 加 `复古纸质拼贴风 请输入 5`，自定义保持 `0`。
+  - `ai-video-image-prompts/SKILL.md` 与 `MODULE.md`：前台固定选项块（风格 1-4 → 1-5）、"如果用户输入 `1`、`2`、`3` 或 `4`" → 含 `5`。
+  - `ai-short-video-pipeline/SKILL.md`：Intake 里的风格选项清单（`...请输入 1..4` + `自主设定风格请输入 0`）、"模板加载" 段落里"当前可选/当前可用模板"的 4 个名字 → 补第 5 个。
+  - `ai-short-video-pipeline/references/user-guidance-templates.md`：风格选项块（5 行 → 6 行）。
+  - `ai-short-video-pipeline/references/workflow-state-machine.md`：Ambiguous Reply Rule "在风格阶段 `1`/`2`/`3`/`4` = 四个风格预设" → "1-5 = 五个风格预设"。
+  - `SOP-如何使用知行视频skill.md`：风格选项块补第 5 个。
+- **验收**：`grep "复古纸质拼贴风"` 在以上每个枚举点都出现；全仓库再无"只列 4 个预设"的风格选择块；编号方案唯一为 `1-5 + 0`。
+
+> `[REVIEW Round 2]` Codex 停。Claude 检查：基因 JSON 单份且结构对齐、所有枚举点齐 5 预设、编号唯一 1-5/0、无断链。
+>
+> **Claude review 结论（2026-06-03）：全部通过，已打本地 commit 存档点。**
+> - R2.1：style-presets.md 现有 5 个 style_key 块，新预设 vintage_paper_collage 结构与前 4 个一致；5 个 JSON 块全部合法；基因 JSON 仅此一处。
+> - R2.2：前台块/Usage/Interaction/pipeline Intake/user-guidance/状态机/SOP 所有枚举点均补齐第 5 个；编号唯一 1-5+0；image-prompts/MODULE.md 为薄索引不枚举风格(正确)；无真实断链。
+
+---
+
 ## 执行须知（给 Codex）
 1. 一次只推进一个 Phase，做完停下，输出"改了哪些文件 + 如何自检"的简报。
 2. 任何与 OPTIMIZATION_PLAN §2 原则冲突的地方，停下提问，不要自行决定破坏对外行为。
