@@ -4,7 +4,7 @@
 
 - provider 名：`omni`
 - 规范名：`omni`
-- API model ID：`omni_flash-v2v`
+- API model ID：`omni_flash`
 
 ## Endpoint
 
@@ -17,7 +17,7 @@
 只使用以下参数：
 
 - `prompt`：必填，图生视频动作提示词
-- `model`：必填，固定使用 `omni_flash-v2v`
+- `model`：必填，固定使用 `omni_flash`
 - `size`：必填，格式为 `WxH`，例如 `1920x1080`、`720x720`、`1024x1024`
 - `input_reference`：可选，输入参考；首尾帧或多图用 `|` 分隔，也可用于视频参考 v2v
 - `remix_id`：可选

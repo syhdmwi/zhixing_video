@@ -24,7 +24,7 @@
   {
     "shot_id": "shot-02",
     "provider": "omni",
-    "model": "omni_flash-v2v",
+    "model": "omni_flash",
     "source_image_url": "https://example.com/shot-02-first.png|https://example.com/shot-02-last.png",
     "motion_prompt": "主讲人保持外观稳定，镜头缓慢推近，首尾帧之间做平滑过渡，保持场景结构和画面风格不变。",
     "size": "1920x1080"

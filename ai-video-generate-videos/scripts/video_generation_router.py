@@ -21,7 +21,7 @@ ARK_BASE_URL = "https://ark.cn-beijing.volces.com/api/v3"
 ARK_CONTENTS_GENERATION_PATH = "/contents/generations/tasks"
 GROK_DEFAULT_MODEL = "grok"
 GROK_API_MODEL_ID = "grok-imagine-1.0-video-super"
-OMNI_DEFAULT_MODEL = "omni_flash-v2v"
+OMNI_DEFAULT_MODEL = "omni_flash"
 
 
 def http_json(

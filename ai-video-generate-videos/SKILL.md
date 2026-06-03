@@ -164,7 +164,7 @@ description: 当用户已经有静帧图片和已确认的图生视频动作方�
 
 当前默认直接路由到 `grok`。
 
-如果用户明确选择 `omni`，则 provider 队列中写 `provider: "omni"`，脚本使用 `omni_flash-v2v` 和 `/v1/videos` 异步通道。
+如果用户明确选择 `omni`，则 provider 队列中写 `provider: "omni"`，脚本使用 `omni_flash` 和 `/v1/videos` 异步通道。
 
 如果自动路由到 `grok`，默认直接套用 `grok视频模版套用00`。
 
