@@ -1,0 +1,105 @@
+{
+  "project_id": "demo-ai-popsci",
+  "project_name": "AI 不只是会聊天",
+  "current_stage": "completed",
+  "completed": {
+    "script_received": true,
+    "style_selected": true,
+    "subjects_identified": true,
+    "subjects_confirmed": true,
+    "three_views_generated": true,
+    "three_views_confirmed": true,
+    "prompts_generated": true,
+    "prompts_confirmed": true,
+    "images_generated": true,
+    "images_approved": true,
+    "template_save_decision": true,
+    "video_mode_selected": true,
+    "videos_generated": true,
+    "digital_human_assets_ready": false,
+    "digital_human_generated": false
+  },
+  "selections": {
+    "style_mode": "preset",
+    "style_name": "AI科普赛博明亮HUD风",
+    "style_key": "cyberpunk_bright_hud_infographic",
+    "aspect_ratio": "16:9",
+    "image_model": "GPT-Image-2",
+    "video_mode": "图生视频模式",
+    "video_provider": "grok",
+    "language": "中文",
+    "density": "普通密度"
+  },
+  "assets": {
+    "script": "00-source-script.md",
+    "style_reference_urls": [
+      "[占位：用户确认可复用的风格参考图 URL]"
+    ],
+    "main_character_reference_urls": [
+      "[占位：主讲人正面定稿图 URL]",
+      "[占位：主讲人白底三视图 URL]"
+    ],
+    "subjects": [
+      {
+        "subject_id": "host_cyber_female_01",
+        "type": "host",
+        "status": "confirmed"
+      },
+      {
+        "subject_id": "ai_agent_core_01",
+        "type": "abstract_subject",
+        "status": "confirmed"
+      },
+      {
+        "subject_id": "workflow_board_01",
+        "type": "abstract_scene_asset",
+        "status": "text_locked"
+      }
+    ],
+    "three_view_urls": [
+      "[占位：host_cyber_female_01 三视图 URL]",
+      "[占位：ai_agent_core_01 三视图 URL]"
+    ],
+    "prompt_queue_path": "04-image-prompts.md",
+    "image_urls": [
+      "[占位：shot_01 生成图]",
+      "[占位：shot_02 生成图]",
+      "[占位：shot_03 生成图]",
+      "[占位：shot_04 生成图]",
+      "[占位：shot_05 生成图]",
+      "[占位：shot_06 生成图]",
+      "[占位：shot_07 生成图]"
+    ],
+    "approved_image_ids": [
+      "shot_01",
+      "shot_02",
+      "shot_03",
+      "shot_04",
+      "shot_05",
+      "shot_06",
+      "shot_07"
+    ],
+    "video_urls": [
+      "[占位：shot_01 视频]",
+      "[占位：shot_02 视频]",
+      "[占位：shot_03 视频]",
+      "[占位：shot_04 视频]",
+      "[占位：shot_05 视频]",
+      "[占位：shot_06 视频]",
+      "[占位：shot_07 视频]"
+    ],
+    "digital_human": {
+      "audio_url": "",
+      "person_video_url": "",
+      "result_url": ""
+    }
+  },
+  "next_allowed_actions": [],
+  "last_user_reply_meaning": "demo static workflow completed without API calls",
+  "notes": [
+    "Demo uses static placeholders only.",
+    "All model names use MODELS.md canonical names.",
+    "All style references use style-presets.md style_key.",
+    "All shot visual_carrier values use the pipeline 7-value taxonomy."
+  ]
+}

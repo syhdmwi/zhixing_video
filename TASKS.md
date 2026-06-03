@@ -133,23 +133,29 @@
 
 ## Phase 5 — 最小可跑样例（demo）
 
-### T5.1 准备样例文案
+### [x] T5.1 准备样例文案
 - **新建** `examples/demo-ai-popsci/00-source-script.md`：一段 ~45s（中文约 170 字）AI 科普口播文案，含钩子/解释/对比/CTA 结构，便于触发完整流程但规模小。
 
-### T5.2 逐阶段产出静态产物（不调 API）
+### [x] T5.2 逐阶段产出静态产物（不调 API）
 - 按重构后流程产出：`01-shot-plan.md`（时长+镜头数估算+信息单元表+visual_carrier 分配+配比检查）、`02-style-selection.md`（引用某个 style-presets 预设 key + 比例 + 模型）、`03-subjects-and-three-views.md`（重复主体清单 + 每主体三视图提示词）、`04-image-prompts.md`（6~8 条按硬结构拼装的正式图片提示词，每条含 shot_id/原文片段/中文说明/英文 prompt/负面约束）、`05-image-to-video-prompts.md`（对应图生视频动作提示词）、`06-delivery-package.md`（交付包汇总）。
 - 图片/视频本体用"提示词 + [占位：此处为生成图/视频]"呈现。
 - **验收**：每个产物引用的是重构后的 SSOT（风格 key、模型名、visual_carrier）；前后阶段数据一致（同一主讲人、同一风格、shot_id 贯通）。
 
-### T5.3 末态状态机快照
+### [x] T5.3 末态状态机快照
 - **新建** `examples/demo-ai-popsci/project-state.json`：基于 `ai-short-video-pipeline/references/project-state-template.json` 结构，填到 `videos_generated`/`completed` 附近的合理末态，字段与状态机阶段一致。
 - **验收**：JSON 合法、阶段值在 workflow-state-machine 的 Stage List 内。
 
-### T5.4 README 增加 demo 入口
+### [x] T5.4 README 增加 demo 入口
 - **改动点**：`README.md` 新增"看一个完整样例"小节，链接 `examples/demo-ai-popsci/`。
 - **验收**：链接有效。
 
 > `[REVIEW Phase 5]` Claude 检查：demo 端到端完整、每步对齐 SSOT、可作为对外 showcase。
+>
+> **Claude review 结论（2026-06-03）：全部通过，已打本地 commit 存档点。第一轮重构完成。**
+> - 8 个产物齐全(00-06 + project-state.json)，README 入口有效。
+> - 自动校验：7 个 shot_id 的 visual_carrier 在 分镜表/图片提示词/图生视频 三处完全一致，全部属 7 值规范集。
+> - SSOT 引用处处正确：style_key=cyberpunk_bright_hud_infographic、模型=GPT-Image-2/grok、主讲人 host_cyber_female_01 全程贯通；project-state current_stage=completed 在 Stage List 内。
+> - 软性观察(留作下轮打磨，不卡通过)：shot_05 brand_symbolic 语义略偏(实为泛化工具符号)；scene_only 占 1/7 低于约 1/3 默认(已文档化为 7 镜 demo 例外)。
 
 ---
 
