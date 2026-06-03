@@ -57,7 +57,7 @@
 推荐枚举值：
 
 - `shot_function`：`hook` / `setup` / `explain` / `compare` / `evidence` / `transition` / `emotion_push` / `cta`
-- `visual_carrier`：`host_primary` / `host_with_visual` / `scene_only` / `concept_explainer` / `data_compare` / `ui_closeup` / `brand_symbolic`
+- `visual_carrier`：使用 [../SKILL.md](../SKILL.md) 的 `3.4 视觉承载层` 定义，不在输出格式文件维护第二份枚举
 
 ## 1.65 空间锁定卡
 

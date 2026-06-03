@@ -239,6 +239,8 @@ Futuristic tech company HQ interior, dark glass walls, grid floor with glowing n
 
 再进入提示词拼装。
 
+`visual_carrier` 的值集合与分类语义以 [../SKILL.md](../SKILL.md) 的 `3.4 视觉承载层` 为准；本节只说明提示词转写重点，不重新定义分类法。
+
 也就是说，同一句 `source_text`，如果它的 `visual_carrier` 不同，提示词结构重点就不同：
 
 - `host_primary`：人物口播表达优先

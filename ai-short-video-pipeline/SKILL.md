@@ -270,16 +270,15 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 - A/B 对比结构
 - 需要视觉隐喻
 
-则必须按这个顺序执行:
+则必须按 [references/workflow-state-machine.md](./references/workflow-state-machine.md) 推进，并在进入正式提示词前完成这些前置产物:
 
-1. 文案接收
-2. 时长与镜头数估算
-3. 剧本解析
-4. 空间锁定卡
-5. 重复主体清单
-6. 主体确认
-7. 三视图生成
-8. 正式提示词
+- 文案接收
+- 时长与镜头数估算
+- 剧本解析
+- 必要的空间锁定卡
+- 重复主体清单
+- 主体确认
+- 三视图生成与确认
 
 硬约束:
 
@@ -348,6 +347,8 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 如果用户只要求其中一段工作,不要调用整套流程。
 
 ## Workflow
+
+完整主流程阶段顺序以 [references/workflow-state-machine.md](./references/workflow-state-machine.md) 的 `Stage List` 与 `Allowed Transitions` 为唯一权威。本节只描述总控 skill 在各阶段内如何提问、分工和检查，不维护第二套阶段顺序。
 
 ### 1. Intake
 
@@ -623,14 +624,7 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 - `importance`：高 / 中 / 低
 - `visual_carrier`
 
-`visual_carrier` 默认从以下集合里选:
-
-- `host_talk`
-- `scene_demo`
-- `concept_diagram`
-- `ui_interface`
-- `data_compare`
-- `symbolic_insert`
+`visual_carrier` 必须使用 3.4 视觉承载层定义的 7 值集合；信息单元阶段只做初判，不另起一套分类法。
 
 信息单元层的目标是先回答:
 
@@ -673,6 +667,17 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 
 旧的 `frame_type` 逻辑继续保留,但它现在属于更粗粒度的中间兼容字段。真正的提示词决策优先参考 `visual_carrier`。
 
+兼容映射唯一按下表执行:
+
+| 旧 `frame_type` 兼容别名 | 对应 `visual_carrier` |
+| --- | --- |
+| `people_primary` | `host_primary` |
+| `people_with_scene` | `host_with_visual` |
+| `scene_only` | `scene_only` |
+| `concept_explainer` | `concept_explainer` |
+
+如果旧队列或外部工具仍要求输出 `frame_type`,只能按这张表从 `visual_carrier` 派生,不得用 `frame_type` 反向覆盖新的镜头决策。
+
 #### 3.5 镜头配比检查
 
 正式提示词输出前,必须先基于 `visual_carrier` 做一次镜头配比检查:
@@ -702,15 +707,15 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 
 - `host_primary`
 - `host_with_visual`
-- `scene_demo`
-- 需要稳定摄影空间关系的真实场景镜头
+- `scene_only`（真实场景镜头）
+- 其它需要稳定摄影空间关系的镜头
 
 以下镜头默认不强制做传统空间锁定,只要求视觉系统一致:
 
-- `concept_diagram`
-- `ui_interface`
+- `concept_explainer`
+- `ui_closeup`
 - `data_compare`
-- `symbolic_insert`
+- `brand_symbolic`
 
 也就是说,抽象解释类文案不应被强行塞进“所有镜头都先按真实空间摄影语言规划”的框架里。
 

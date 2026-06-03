@@ -65,7 +65,8 @@
 执行清单模板负责固定生图批处理输入格式，例如：
 
 - `shot_id`
-- `frame_type`
+- `visual_carrier`
+- `frame_type`（可选兼容字段或执行队列类型）
 - `image_prompt`
 - `reference_urls`
 - `consistency_note`

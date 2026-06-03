@@ -139,7 +139,7 @@ description: 当用户要把文案拆成镜头表时使用这个 skill。它负�
 - `time_range`
 - `narration_excerpt`
 - `message_goal`
-- `frame_type`，只能是 `avatar`、`b-roll`、`split`
+- `track_type`，只能是 `avatar`、`b-roll`、`split`
 - `scene`，对应空间锁定卡的场景名
 - `reason`
 

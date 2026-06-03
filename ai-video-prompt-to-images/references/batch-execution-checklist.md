@@ -17,7 +17,8 @@
 执行队列至少应包含：
 
 - `shot_id`
-- `frame_type`
+- `visual_carrier`
+- `frame_type`（可选兼容字段或执行队列类型）
 - `model`
 - `aspect_ratio`
 - `image_prompt`

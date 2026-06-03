@@ -72,10 +72,11 @@
 1. shot_id:
 2. narration_excerpt:
 3. visual_goal:
-4. frame_type: character / scene
-5. image_prompt:
-6. negative_prompt_or_constraints:
-7. consistency_note:
+4. visual_carrier:
+5. frame_type: optional compatibility or execution queue type
+6. image_prompt:
+7. negative_prompt_or_constraints:
+8. consistency_note:
 
 注意：
 - narration_excerpt 要对应文案原句或原句摘要

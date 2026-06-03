@@ -270,16 +270,15 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 - A/B 对比结构
 - 需要视觉隐喻
 
-则必须按这个顺序执行:
+则必须按 [references/workflow-state-machine.md](./references/workflow-state-machine.md) 推进，并在进入正式提示词前完成这些前置产物:
 
-1. 文案接收
-2. 时长与镜头数估算
-3. 剧本解析
-4. 空间锁定卡
-5. 重复主体清单
-6. 主体确认
-7. 三视图生成
-8. 正式提示词
+- 文案接收
+- 时长与镜头数估算
+- 剧本解析
+- 必要的空间锁定卡
+- 重复主体清单
+- 主体确认
+- 三视图生成与确认
 
 硬约束:
 
@@ -623,14 +622,7 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 - `importance`：高 / 中 / 低
 - `visual_carrier`
 
-`visual_carrier` 默认从以下集合里选:
-
-- `host_talk`
-- `scene_demo`
-- `concept_diagram`
-- `ui_interface`
-- `data_compare`
-- `symbolic_insert`
+`visual_carrier` 必须使用 3.4 视觉承载层定义的 7 值集合；信息单元阶段只做初判，不另起一套分类法。
 
 信息单元层的目标是先回答:
 
@@ -661,17 +653,7 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 
 #### 3.4 视觉承载层
 
-在镜头功能确定后,再给镜头指定视觉承载类型。默认至少区分:
-
-- `host_primary`
-- `host_with_visual`
-- `scene_only`
-- `concept_explainer`
-- `data_compare`
-- `ui_closeup`
-- `brand_symbolic`
-
-旧的 `frame_type` 逻辑继续保留,但它现在属于更粗粒度的中间兼容字段。真正的提示词决策优先参考 `visual_carrier`。
+视觉承载类型与旧 `frame_type` 兼容映射，统一以 [SKILL.md](./SKILL.md) 的 `3.4 视觉承载层` 为准。MODULE 不维护第二份分类法定义。
 
 #### 3.5 镜头配比检查
 
@@ -702,15 +684,15 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 
 - `host_primary`
 - `host_with_visual`
-- `scene_demo`
-- 需要稳定摄影空间关系的真实场景镜头
+- `scene_only`（真实场景镜头）
+- 其它需要稳定摄影空间关系的镜头
 
 以下镜头默认不强制做传统空间锁定,只要求视觉系统一致:
 
-- `concept_diagram`
-- `ui_interface`
+- `concept_explainer`
+- `ui_closeup`
 - `data_compare`
-- `symbolic_insert`
+- `brand_symbolic`
 
 也就是说,抽象解释类文案不应被强行塞进“所有镜头都先按真实空间摄影语言规划”的框架里。
 

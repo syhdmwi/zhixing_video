@@ -98,10 +98,10 @@ description: 当用户要把一段文案直接转换成一组可执行的生图�
 - 先确认必要参数，再直接生成整批提示词
 - 默认至少三分之一提示词是纯场景画面
 - 默认剩余提示词以人物画面或人物参与画面为主
-- 正式提示词生成前，必须先给每个分镜打 `frame_type` 标签，至少区分：`people_primary`、`people_with_scene`、`scene_only`、`concept_explainer`
-- `frame_type` 先于正式提示词存在；如果还没完成镜头分类，不要直接吐整批正式提示词
-- 正式提示词输出前，必须先做一次配比检查：默认 `scene_only` 至少约占三分之一，其余镜头以人物主镜头和人物参与镜头为主
-- 如果配比失衡，先修改对应镜头的 `frame_type` 和 `visual_goal`，再重生成这些镜头的正式提示词；不要等整批图片生成后才被动返工
+- 正式提示词生成前，必须先给每个分镜打 `visual_carrier` 标签；分类语义以 [../ai-short-video-pipeline/SKILL.md](../ai-short-video-pipeline/SKILL.md) 的 `3.4 视觉承载层` 为准
+- `frame_type` 只作为粗粒度兼容别名保留，按 pipeline 的映射表从 `visual_carrier` 派生；如果还没完成 `visual_carrier` 分类，不要直接吐整批正式提示词
+- 正式提示词输出前，必须先基于 `visual_carrier` 做一次配比检查：默认 `scene_only` 至少约占三分之一，其余镜头以 `host_primary` 和 `host_with_visual` 为主
+- 如果配比失衡，先修改对应镜头的 `visual_carrier` 和 `visual_goal`，再重生成这些镜头的正式提示词；不要等整批图片生成后才被动返工
 - 生成的提示词必须能直接用于生图工具，不要停留在概括层
 - 如果多个镜头里反复出现同一个人或同一个物，也必须保持主体一致性
 - 对于会反复出现的主体，先展示主体清单并让用户确认；用户确认后，默认直接分别生成每个主体的独立三视图给用户直观看
@@ -171,8 +171,11 @@ description: 当用户要把一段文案直接转换成一组可执行的生图�
 3. 下一步会识别重复主体
 
 先选风格方式：
-使用风格模版请输入 1
-自主设定风格请输入 2
+1 AI科普赛博明亮HUD风
+2 手绘水彩教学风
+3 3D科技讲解风
+4 黑白素描概念讲解风
+0 自主设定风格
 ```
 
 如果是新手用户，不要默认要求一次输入 `1+1+1`。
@@ -183,7 +186,7 @@ description: 当用户要把一段文案直接转换成一组可执行的生图�
 1+1+1
 ```
 
-如果用户输入 `1`，再从 [references/style-presets.md](./references/style-presets.md) 展示可选项。
+如果用户输入 `1`、`2`、`3` 或 `4`，从 [references/style-presets.md](./references/style-presets.md) 加载对应预设的完整风格上下文。
 
 对熟练用户，风格模版、图片比例和生图模型可以放在同一轮确认；对新手用户，优先拆成逐步确认。
 
@@ -237,7 +240,7 @@ description: 当用户要把一段文案直接转换成一组可执行的生图�
 
 才切换到英文输出；不要默认再单独追问一轮语言。
 
-如果用户输入 `2`，则直接收集用户自己的风格描述，不再展示内置风格模版。
+如果用户输入 `0`，则直接收集用户自己的风格描述，不再展示内置风格模版。
 
 自主设定风格时，推荐话术：
 
@@ -690,32 +693,28 @@ description: 当用户要把一段文案直接转换成一组可执行的生图�
 
 如果用户没有提供空间锁定卡，则按现有方式生成提示词，但在提示词里主动补充关键环境元素的描述（墙壁、窗户、光源方向等），作为隐式空间约束。
 
-## Frame Type Balance Gate
+## Visual Carrier Balance Gate
 
 在输出整批正式提示词之前,先整理一份镜头分类结果。每个镜头至少包含:
 
 - `shot_id`
-- `frame_type`
+- `visual_carrier`
+- `frame_type`（可选兼容别名，只能由 `visual_carrier` 派生）
 - `visual_goal`
 
-推荐理解:
-
-- `people_primary`：主讲人或关键人物是画面核心
-- `people_with_scene`：人物参与其中,但场景也承担信息表达
-- `scene_only`：不出现人物,靠空间、道具、环境、界面解释信息
-- `concept_explainer`：以概念结构、系统流程、关系网络、信息图为主的解释镜头
+`visual_carrier` 的 7 值语义与旧 `frame_type` 映射表，统一引用 [../ai-short-video-pipeline/SKILL.md](../ai-short-video-pipeline/SKILL.md) 的 `3.4 视觉承载层`。本 skill 不再独立定义旧 4 值分类法。
 
 执行顺序固定为:
 
 1. 剧本解析
 2. 空间锁定卡
-3. 分镜分类(`frame_type`)
+3. 分镜分类(`visual_carrier`)
 4. 配比检查
 5. 正式提示词输出
 
 如果配比不合理,优先修:
 
-- `frame_type`
+- `visual_carrier`
 - `visual_goal`
 
 然后只重写受影响镜头的提示词,而不是整批推倒重来。
@@ -738,17 +737,9 @@ description: 当用户要把一段文案直接转换成一组可执行的生图�
 
 模板见 [references/master-prompt-template.md](./references/master-prompt-template.md)。
 
-如果任务目标是“帮用户跑完整工作流”，默认顺序必须是：
+如果任务目标是“帮用户跑完整工作流”，阶段顺序必须以 [../ai-short-video-pipeline/references/workflow-state-machine.md](../ai-short-video-pipeline/references/workflow-state-machine.md) 的 `Stage List` 与 `Allowed Transitions` 为准。
 
-1. 询问图片数量、比例、语言、风格
-2. 识别重复主体
-3. 先生成重复主体预览图
-4. 用户确认或修改预览图
-5. 生成主体三视图参考图
-6. 再生成整批正式提示词
-7. 默认保持至少三分之一纯场景
-8. 让用户确认提示词
-9. 用户确认后进入生图
+本 skill 只负责图片提示词相关区间的门禁与产物：参数确认后识别重复主体，完成主体预览或三视图确认，再生成整批正式提示词；提示词确认后交给生图阶段。配比检查仍保持 `scene_only` 约占三分之一，但不在这里维护第二套 9 步流程。
 
 ## Script-To-Prompt Mapping Rules
 
@@ -780,7 +771,8 @@ description: 当用户要把一段文案直接转换成一组可执行的生图�
 - `shot_id`
 - `narration_excerpt`
 - `visual_goal`
-- `frame_type`
+- `visual_carrier`
+- `frame_type`（可选兼容别名）
 - `model`
 - `image_prompt`
 - `negative_prompt_or_constraints`
