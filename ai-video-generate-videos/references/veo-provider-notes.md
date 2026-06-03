@@ -18,7 +18,7 @@
 
 ### Notes
 
-- 文档备注显示：首尾帧请使用 `veo_3_1-fast-fl`
+- 文档备注中的首尾帧模型别名已在根目录 [MODELS.md](../../MODELS.md) 收敛到 `veo`
 - 多张图片 / 首尾帧场景建议使用 `https://apius.yijiarj.cn`
 
 ## Poll

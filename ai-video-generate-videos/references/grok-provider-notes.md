@@ -11,7 +11,8 @@
 当前脚本按图生视频场景构造如下请求：
 
 - `model`
-  - 当前默认可用模型示例：`grok-imagine-1.0-video-super`
+  - 当前规范名：`grok`
+  - 具体 API 模型 ID 以脚本内部常量为准，别名收敛见根目录 [MODELS.md](../../MODELS.md)
 - `messages`
   - `role: user`
   - `content`

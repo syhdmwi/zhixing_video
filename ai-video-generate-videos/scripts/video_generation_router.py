@@ -19,7 +19,8 @@ YIJIA_CREATE_PATH = "/v1/videos"
 YIJIA_CHAT_COMPLETIONS_PATH = "/v1/chat/completions"
 ARK_BASE_URL = "https://ark.cn-beijing.volces.com/api/v3"
 ARK_CONTENTS_GENERATION_PATH = "/contents/generations/tasks"
-GROK_DEFAULT_MODEL = "grok-imagine-1.0-video-super"
+GROK_DEFAULT_MODEL = "grok"
+GROK_API_MODEL_ID = "grok-imagine-1.0-video-super"
 
 
 def http_json(
@@ -208,7 +209,7 @@ def submit_grok(api_key: str, item: dict) -> dict:
     preset = item.get("preset", "fun")
 
     payload: dict[str, object] = {
-        "model": item["model"],
+        "model": GROK_API_MODEL_ID if item["model"] == GROK_DEFAULT_MODEL else item["model"],
         "messages": [
             {
                 "role": "user",

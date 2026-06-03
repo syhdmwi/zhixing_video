@@ -15,7 +15,7 @@ from pathlib import Path
 
 SUBMIT_URL = "https://api.wuyinkeji.com/api/async/image_gpt"
 DETAIL_URL = "https://api.wuyinkeji.com/api/async/detail"
-DEFAULT_MODEL = "gpt-image-2"
+DEFAULT_MODEL = "GPT-Image-2"
 
 
 def http_json(

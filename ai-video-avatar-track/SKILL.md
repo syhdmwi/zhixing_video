@@ -13,7 +13,7 @@ description: 当用户要单独制作数字人生成结果时使用这个 skill�
 
 - `即梦 OmniHuman 1.5`
 - `蝉镜数字人`
-- `Digital_Humans（速创API）`
+- `速创 Digital_Humans`
 
 ## Inputs
 

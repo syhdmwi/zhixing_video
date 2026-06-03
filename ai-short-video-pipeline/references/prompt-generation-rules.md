@@ -8,11 +8,6 @@
 2. **三层分工**：剧本解析、空间锁定卡、风格基因各管什么，不重叠、不遗漏
 3. **风格基因转写方法**：如何把已锁定的 6 组风格基因写进 prompt
 
-### 核心认知（2026-05-06） #type/discovery #decision/提示词模板
-
-**同一套提示词用在不同模型（GPT-Image-2、Seedream-5.0-lite），效果大差不差。**
-想要好的风格图片，关键不是换模型，而是提示词的书写质量。提示词框架模板需要持续优化——这是产出质量的核心杠杆。
-
 ### 当前生效说明
 
 用户侧当前默认看到的预设入口，以 [style-presets.md](../../ai-video-image-prompts/references/style-presets.md) 为准。
@@ -378,9 +373,7 @@ Futuristic tech company HQ interior, dark glass walls, grid floor with glowing n
 
 
 
-### 附加规则：构图多样性强制约束（2026-05-08）
-
-**问题：** 连续多镜使用同一套句式（如「人在左指向右面板」），导致画面雷同。
+### 附加规则：构图多样性强制约束
 
 **规则：写一批提示词前，必须先规划镜头类型分布，写完必须自检。**
 
@@ -456,18 +449,6 @@ Futuristic tech company HQ interior, dark glass walls, grid floor with glowing n
 - **需要重做的**：风格基因参数（从 `style-presets.md` 选另一个预设，或重新定义）
 - **不需要重做的**：剧本解析（文案变了才重做）、空间锁定卡（场景变了才重做）、硬结构（永远不变）
 - **可能需要微调的**：负面约束（某些风格有特殊禁止项）
-
-### 昨天的问题复盘
-
-昨天 RALV 项目 16 个镜头的失败模式：
-
-| 问题 | 根因 | 本次规范修复 |
-|------|------|------------|
-| 风格太二次元 | 写了"anime style"但没有硬约束"不要 oversized eyes" | §3 赛博朋克负面约束第一条 |
-| 画面太密集 | 没限制元素数量 | §3 负面约束"no more than 3-4 main elements" |
-| AI 角色太像真人 | 没约束角色风格方向 | §3 负面约束"AI characters should be iconic/symbolic" |
-| 文字全是英文 | 没指定语言方向 | §3 负面约束"Chinese first, English secondary" |
-| 空间一致性漂移 | 空间锁定卡没有真正继承到 prompt | §1 硬结构 [空间锚点] 第一个字段，不可跳过 |
 
 ## 5. 文件关系
 

@@ -106,7 +106,7 @@
 
 ## Phase 4 — 视频提示词
 
-### T4.1 新建 MODELS.md（模型 SSOT）
+### [x] T4.1 新建 MODELS.md（模型 SSOT）
 - **新建**根目录 `MODELS.md`，含三张表：生图模型、图生视频模型、数字人/语音模型。每行：规范名 / 用户可见(是·否) / 用途 / 对应脚本 / 别名收敛。
 - **基线事实**（以现状为准，Codex 核对脚本后填写）：
   - 生图：`GPT-Image-2`(用户可见)、`nanobanana-2`(用户可见)、`nanobanana-pro`(实现层)、`seedream-5.0`(实现层，脚本 seedream5_batch.py)。
@@ -114,15 +114,20 @@
   - 数字人/语音：即梦 OmniHuman 1.5、蝉镜数字人、速创 Digital_Humans / 速创 TTS / 速创语音克隆。
 - **验收**：MODELS.md 覆盖所有出现过的模型名并给出规范写法。
 
-### T4.2 全仓库模型名规范化
+### [x] T4.2 全仓库模型名规范化
 - **改动点**：按 MODELS.md 规范写法统一所有 .md 与脚本常量；消除 `Seedream-5.0-lite`/`Seedream 4.6` 等孤立写法（除非确为不同模型——若是，必须进 MODELS.md 表）。
 - **验收**：`grep -rhoE` 模型名集合 = MODELS.md 规范集合，无孤立写法。
 
-### T4.3 dev 笔记迁出 operational reference
+### [x] T4.3 dev 笔记迁出 operational reference
 - **新建** `CHANGELOG.md`，迁入：`prompt-generation-rules.md` 的「核心认知(2026-05-06)」「昨天 RALV 项目复盘」表、「构图多样性强制约束(2026-05-08)」的问题背景叙述（**保留规则本体，移走 dev 叙事与日期复盘**）。
 - **验收**：reference 文件只剩当前生效规则；被移走内容在 CHANGELOG 可追溯。
 
 > `[REVIEW Phase 4]` Claude 检查：模型名唯一规范、提示词规则与 SSOT 对齐、reference 无 dev log。
+>
+> **Claude review 结论（2026-06-03）：全部通过，已打本地 commit 存档点。**
+> - T4.1：MODELS.md 三张表覆盖全部模型名与别名收敛(含 veo 历史 provider)。
+> - T4.2：正文零孤立写法(Seedream-5.0-lite/4.6 仅留在 MODELS 别名列与 CHANGELOG)；脚本将规范显示名与真实 API ID 正确分离(seedream/grok)，gpt_image2 仅改元数据标签不影响调用(payload 无 model 字段)；3 脚本 py_compile 通过。
+> - T4.3：CHANGELOG 迁入 2026-05-06 核心认知 / 2026-05-08 构图多样性背景 / RALV 复盘；规则本体(硬结构/三层分工/构图多样性约束)原样保留。
 
 ---
 
