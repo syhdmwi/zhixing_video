@@ -324,11 +324,11 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 1. `ai-video-shot-planner`
    负责文案时长估算、镜头数估算、分镜拆分、数字人与 B-roll 的镜头分配。
 2. `ai-video-image-prompts`
-   负责基于用户参考图和统一风格生成生图提示词,适配 `nanobanana-2`、`nanobanana-pro`、`seedream-5.0`。
+   负责把文案或镜头表转换成可执行的生图提示词,适配 `nanobanana-2`、`nanobanana-pro`、`seedream-5.0`,并维持主体一致性和风格一致性。
 3. `ai-video-prompt-to-images`
    负责在用户确认提示词后,把提示词按顺序转成可执行的生图队列,进入实际生图阶段,并在生成成功后默认直接展示图片给用户确认。
 4. `ai-video-series-archive`
-   负责把用户已经满意的主讲人、风格、提示词规则和用户选择的正式图样例保存成可复用模板,或者在新文案中先读取指定模板继续生成。重复主体默认随新文案重新识别,不写入通用模板。
+   负责把用户已经满意的主讲人形象、主讲人三视图、画面风格、提示词规则、默认模型和负面约束保存成可复用模板,或者在新文案中套用指定模板。重复主体默认不保存,除非用户明确指定为长期固定角色。
 5. `ai-video-keyframe-edit`
    负责把已确认的静帧图片通过剪辑方式做成"关键帧轻运镜"的画面轨,默认优先使用 `FFmpeg`。
 6. `ai-video-motion-prompts`
@@ -340,9 +340,9 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 9. `ai-video-voice-clone`
    负责在用户只有文案、但想用自己的参考音频去读这段文案时,先克隆声音并生成可用于数字人的音频文件。
 10. `ai-video-avatar-track`
-   负责为 `即梦 OmniHuman 1.5`、`蝉镜数字人` 或速创 `Digital_Humans` 执行数字人生成阶段。
+   负责为 `即梦 OmniHuman 1.5`、`蝉镜数字人` 或速创 `Digital_Humans` 执行数字人生成阶段,包括素材校验、真实提交、轮询查询和结果展示。
 11. `ai-video-edit-assembly`
-   负责把"数字人视频轨"和"画面视频轨"合流成最终剪辑方案。
+   负责把"数字人视频轨"和"画面视频轨"合流成完整短视频,覆盖转场、字幕、音乐、封面和平台导出建议。
 
 如果用户只要求其中一段工作,不要调用整套流程。
 
@@ -908,7 +908,7 @@ description: 当用户想把一段文案或口播稿制作成完整的 AI 短视
 当前这套 skill 套件默认围绕以下工具链编排:
 
 - 生图:`nanobanana-2`、`nanobanana-pro`、`seedream-5.0`
-- 图生视频:`doubao-seedance-1.0-pro-fast`
+- 图生视频:`grok` 当前启用；`doubao-seedance-1.0-pro-fast` 暂时停用
 - 数字人:`即梦 OmniHuman 1.5`、`蝉镜数字人`
 - 速创数字人:`Digital_Humans`
 - 发布平台:抖音、视频号、小红书

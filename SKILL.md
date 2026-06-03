@@ -68,16 +68,16 @@ description: 知行视频主入口 skill。对外只暴露这一个入口，负�
 执行时优先这样分派：
 
 - 文案理解、状态机、主流程判断 -> `ai-short-video-pipeline/MODULE.md`
-- 分镜结构、信息单元、镜头功能 -> `ai-video-shot-planner/MODULE.md`
-- 图片提示词、风格预设、三视图 -> `ai-video-image-prompts/MODULE.md`
-- 正式生图执行 -> `ai-video-prompt-to-images/MODULE.md`
-- 图生视频动作方案 -> `ai-video-motion-prompts/MODULE.md`
-- 视频真实提交 -> `ai-video-generate-videos/MODULE.md`
-- 图转镜头移动视频 -> `ai-video-keyframe-edit/MODULE.md`
-- TTS / 语音克隆 -> `ai-video-voice-tts/MODULE.md`、`ai-video-voice-clone/MODULE.md`
-- 数字人 -> `ai-video-avatar-track/MODULE.md`
-- 模板保存与样例归档 -> `ai-video-series-archive/MODULE.md`
-- 最终整合 -> `ai-video-edit-assembly/MODULE.md`
+- 文案时长估算、分镜拆分、数字人与 B-roll 分配 -> `ai-video-shot-planner/MODULE.md`
+- 图片提示词、风格预设、主体一致性、三视图 -> `ai-video-image-prompts/MODULE.md`
+- 提示词确认后的正式生图执行 -> `ai-video-prompt-to-images/MODULE.md`
+- 已确认静帧的图生视频动作方案 -> `ai-video-motion-prompts/MODULE.md`
+- 已确认静帧和动作方案的视频真实提交（grok 当前启用，seedance 暂停） -> `ai-video-generate-videos/MODULE.md`
+- 静帧图片的 FFmpeg 关键帧轻运镜 -> `ai-video-keyframe-edit/MODULE.md`
+- 文案转音频 / 参考音频克隆 -> `ai-video-voice-tts/MODULE.md`、`ai-video-voice-clone/MODULE.md`
+- 数字人生成提交、轮询和结果展示 -> `ai-video-avatar-track/MODULE.md`
+- 可复用模板保存与新文案套用 -> `ai-video-series-archive/MODULE.md`
+- 数字人视频轨和画面视频轨的最终整合 -> `ai-video-edit-assembly/MODULE.md`
 
 ## Critical Constraints
 

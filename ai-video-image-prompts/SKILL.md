@@ -62,7 +62,6 @@ description: 当用户要把一段文案直接转换成一组可执行的生图�
 如果用户希望把这套方法沉淀成“真正可迁移”的模板，优先参考：
 
 - [references/reusable-template-system.md](./references/reusable-template-system.md)
-- [references/cyberpunk-template-01.md](./references/cyberpunk-template-01.md)
 - [references/gpt-image2-prompt-template-01.md](./references/gpt-image2-prompt-template-01.md)
 - [references/nanobanana-prompt-template-01.md](./references/nanobanana-prompt-template-01.md)
 - [references/subject-consistency-template-01.md](./references/subject-consistency-template-01.md)

@@ -43,7 +43,7 @@
 
 ## Phase 2 — 技能结构
 
-### T2.1 MODULE.md 瘦身为薄索引（12 模块）
+### [x] T2.1 MODULE.md 瘦身为薄索引（12 模块）
 - **目标**：消除 MODULE.md 与 SKILL.md 的整文件重复（当前 11/12 模块字节相同）。
 - **改动点**：每个 `ai-*/MODULE.md` 改写为薄索引，模板：
   ```markdown
@@ -59,16 +59,22 @@
 - **保留**：根 SKILL.md 的 `Internal Modules` 链接仍指向 MODULE.md（现在是索引，链接有效）。
 - **验收**：`diff MODULE.md SKILL.md` 不再相同；MODULE.md 均 < 40 行；无信息丢失（SKILL.md 仍是完整规则）。
 
-### T2.2 修复悬空引用 cyberpunk-template-01.md
+### [x] T2.2 修复悬空引用 cyberpunk-template-01.md
 - **现状**：`ai-video-image-prompts/MODULE.md` 与 `SKILL.md` 引用了不存在的 `references/cyberpunk-template-01.md`。
 - **处理**：删除这两处引用，改为指向已存在的 `references/reusable-template-system.md`。
 - **验收**：`grep -r cyberpunk-template-01` 无结果；无悬空 markdown 链接。
 
-### T2.3 校正根 SKILL.md 委派表
+### [x] T2.3 校正根 SKILL.md 委派表
 - **改动点**：root `SKILL.md` 的 `Delegation Rule` 与 pipeline `SKILL.md` 的 `Skill Map`，逐条核对模块名、职责与各模块 SKILL.md frontmatter 一致（注意 seedance 已停用、grok 为当前视频 provider 等现状）。
 - **验收**：委派表 11/12 模块名称与职责与实际 SKILL.md 一致，无失效项。
 
 > `[REVIEW Phase 2]` Codex 停。Claude 检查：无重复整文件、无悬空链接、委派表与实际一致。
+>
+> **Claude review 结论（2026-06-03）：全部通过，已打本地 commit 存档点。**
+> - T2.1：12 个 MODULE.md 全部瘦身到 15–28 行、与 SKILL.md 不再相同（净删 3305 行）；SKILL.md 行数基本不变，规则完整保留；薄索引模板（角色/指向/references/上下游）齐全。
+> - T2.2：`cyberpunk-template-01` 全仓库零引用，改指向 `reusable-template-system.md`。
+> - 全仓库 markdown 相对链接断链检查：0 断链；根 SKILL.md 的 12 条 Internal Modules 链接全部有效。
+> - T2.3：根委派表 + pipeline Skill Map 与各模块实际职责一致，grok 启用 / seedance 停用状态已标注。
 
 ---
 
