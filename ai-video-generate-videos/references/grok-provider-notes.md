@@ -37,8 +37,8 @@ Grok 默认提示词建议：
 - 如当前 provider 或具体镜头对英文更稳定，可同时提供英文等价版
 - 对“人物不要乱动”要写成强约束，而不是只写“不变形”
 - 推荐结构：
-  - `Slow camera pan left. The subject remains perfectly still. Do not animate walking, body movement, hand movement, or pose change. Keep the character design, face, clothes, and background consistent. Only move the camera.`
-- 如果用户要更详细的测试版提示词，可以明确写：
+  - `The subject makes one small active motion, such as a subtle nod, a small emphasizing hand gesture, a slight reach, or a gentle head turn, with natural breathing. The camera slowly pushes in or pulls back. Keep the character design, face, clothes, style, and background consistent. No walking, no large pose change, no extra characters, no subject drift.`
+- 仅当某镜头确实必须保持静止或用户要求关键帧轻运镜时，才使用完全冻结版提示词，例如：
   - `The character remains completely fixed like a still illustration. Lock body position, hand position, head angle, facial expression, and the relative position between the main subjects. No walking, no stepping, no swaying, no hand motion, no blinking, no mouth motion, no pose change. The camera slowly pulls back with a very slight sideways drift. Only the camera moves. Do not animate the character. Keep the face, hair, outfit, key subject details, and background fully consistent.`
 
 当前已保存固定模板：

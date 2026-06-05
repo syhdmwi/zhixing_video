@@ -46,6 +46,7 @@ description: 当用户已经有静帧图片，接下来要为图生视频生成�
 - 先判断 `motion_type`，再判断 `motion_intensity`
 - 不要求夸张形变、瞬间换装或不现实的多段动作
 - 人物镜头尽量避免大幅转头、夸张嘴型、复杂肢体重构
+- 人物镜头默认给一个小幅主动动作，不要默认冻结人物
 - 纯场景镜头也应保持小幅、可控运动
 - 正式全量生成前，默认优先先做 5 到 10 张测试批次
 
@@ -119,7 +120,8 @@ description: 当用户已经有静帧图片，接下来要为图生视频生成�
 - 先做 `5` 到 `10` 张测试批次
 - 单镜头 `4` 到 `5` 秒
 - `low` 动态优先
-- 人物镜头保守优先
+- 人物镜头从 [motion-template-library.md](../ai-video-generate-videos/references/motion-template-library.md) 的「人物小幅动作动词库」选 1 个主动作 + 呼吸感
+- 人物外观稳定优先，但不要把人物写成完全不动
 
 ### 3. Assign One Motion Type To Each Image
 
@@ -137,9 +139,9 @@ description: 当用户已经有静帧图片，接下来要为图生视频生成�
 
 默认动作提示词应当尽量短，直接可执行，例如：
 
-- The host makes a slight natural head movement and subtle breathing motion, with a very small hand gesture near the body. The camera gently pushes in. Keep the face, hairstyle, outfit, body proportions, and background composition unchanged.
-- The robot makes a slight head turn and a small arm movement as if explaining something. The camera gently pushes in. Keep the robot design, proportions, materials, background structure, and original art style unchanged.
-- The person shows subtle breathing, a slight downward or upward head movement, and a very small eye-line change. The camera slowly pushes in. Keep the face, hairstyle, outfit, body proportions, and original art style unchanged.
+- The host makes one small active motion, such as a subtle nod or a small emphasizing hand gesture, with natural breathing. The camera gently pushes in. Keep the face, hairstyle, outfit, body proportions, and background composition unchanged.
+- The host reaches slightly toward the interface, with tiny finger motion and natural breathing. The camera gently pushes in. Keep the face, hairstyle, outfit, UI layout, and original art style unchanged.
+- The person shows a small emotional action, such as a slight downward head movement or a firm eye-line change, with subtle breathing. The camera slowly pushes in. Keep the face, hairstyle, outfit, body proportions, and original art style unchanged.
 
 如果用户要“关键帧感”，默认提示词应改成更收紧的版本，例如：
 

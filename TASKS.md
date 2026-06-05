@@ -375,6 +375,52 @@
 
 ---
 
+## Round 7 — 让人物动作更生动（向用户验证版看齐）
+
+> 背景：用户实测发现 skill 生成的图生视频提示词"人物动作不丰富"——人物镜头普遍是「保持[静帧姿势] + 只有呼吸/颤动」，把人物冻死。
+> 根因：`grok-video-template-00.md` 的默认模板（套用00）写死 `No hand motion, no head turn, no mouth movement, no pose change`，是"冻结"哲学；用户验证版恰恰相反，给人物一个小幅主动动作（点头/抬手强调/伸手互动），既安全又生动。
+> 目标：把默认从"防脸崩→干脆别动"改成"给一个安全的小动作"，向用户验证版看齐。**仍保留稳定约束（脸/发型/服装/风格不变），但删除"完全静止/一动不动/no pose change"这类冻人物措辞（仅关键帧模式保留）。**
+
+### [x] R7.1 规则 SSOT：人物镜头默认"小幅主动动作"
+- 落点 `ai-video-generate-videos/references/image-to-video-prompt-rules.md`（图生视频规则 SSOT）：
+  - 新增总则：**人物镜头（host_primary / host_with_visual / 讲述型 / 展示型 / 情绪型）默认给人物一个小幅自然主动动作**（点头、抬手强调、转头、伸手与界面互动、微笑+肩膀放松、头部轻微下沉等），而不是保持静帧姿势不动。即使静帧是夸张定格姿势，也要在其上叠加一个小动作或自然过渡，不要只写"保持/一动不动"。
+  - "完全静止 / 一动不动 / no pose change / frozen" 仅用于用户明确要求「关键帧轻运镜」的镜头。
+  - 修订 §3 各 motion_type 的"默认动作"措辞，使讲述/展示/情绪型都以一个主动小动作起头。
+- **验收**：规则中明确"人物镜头默认主动小动作"；冻结措辞被限定在关键帧场景。
+
+### [x] R7.2 新增「人物小幅动作动词库」
+- 落点 `ai-video-generate-videos/references/motion-template-library.md`（模板 SSOT）新增章节「人物小幅动作动词库」，从用户验证版提炼，至少含：
+  - 轻微点头 / 点头幅度稍明显、抬手强调、转头、伸手与界面互动、手指轻微动效、微笑看镜头、自然站姿+胳膊自然下垂+肩膀放松、头部轻微下沉（情绪）、眼神变化（坚定/严肃/惊喜/忧虑）、肩膀细微呼吸感。
+- 使用规则：每个人物镜头**从库里选 1 个主动作 + 呼吸感**作为句子主语，避免默认写"保持原姿势"。
+- **验收**：动词库章节存在；标注"人物镜头优先从此库选主动作"。
+
+### [x] R7.3 道具/场景微动降权
+- 在 `image-to-video-prompt-rules.md` 补一条：人物镜头里**人物动作是句子主语与重点**；道具/界面/场景微动（面板辉光、纤维颤动、问号旋转等）最多作一句背景点缀，不得占主要篇幅、不得把人物写成被动静止。只有纯场景镜头（scene_only / 场景型）才以环境微动为主。
+- **验收**：规则明确人物镜头以人物动作为主、道具微动为辅。
+
+### [x] R7.4 修 grok 模板与 notes 的"冻结"默认
+- `grok-video-template-00.md`：
+  - `grok视频模版套用00` 默认提示词改为**人物镜头版**：含一个小幅主动动作（如 `subtle nod / small emphasizing hand gesture / slight reach / gentle head turn` + breathing），相机缓慢推近或后拉，保留 `Preserve {consistency_points}, keep face/outfit/style/composition consistent, no walking, no large pose change, no extra characters`——但**删除** `no hand motion / no head turn / no mouth movement / no pose change / remain completely still`。
+  - 明确：`套用01`（关键帧轻运镜）仍保留完全冻结版，仅用于用户要"像关键帧一样基本静止"时。
+  - 在 00 注明"人物镜头用此主动小动作版；纯静帧/关键帧需求才用 01"。
+- `grok-provider-notes.md`：把"默认套用00"的推荐结构示例改为含小幅主动动作版；原"remains perfectly still / 完全冻结"强约束版降级为"仅当某镜头确实必须保持静止时使用"的备选。
+- **验收**：grok 默认模板（套用00）不再含 `no hand motion / no head turn / no pose change`；含一个主动小动作；冻结版仅限关键帧/必要静止镜头。
+
+### [x] R7.5 motion-prompts SKILL 默认对齐
+- `ai-video-motion-prompts/SKILL.md`：`Default Workflow` 的"Build Motion Prompts From Templates"示例与 `Default Motion Types`，确保人物镜头默认=主动小动作；`Keyframe-Light Fallback` / `Default Stability Preset` 的"完全静止"措辞仅作用于关键帧模式，不作为人物镜头通用默认。
+- **验收**：SKILL 人物默认与 R7.1 一致；关键帧冻结仅限显式关键帧请求。
+
+> `[REVIEW Round 7]` Codex 停。Claude 检查：规则与 grok 模板默认改为人物主动小动作、冻结措辞仅限关键帧、动词库存在、道具降权规则在、稳定约束（脸/服装/风格不变）仍保留、无断链。
+>
+> **Claude review 结论（2026-06-04）：全部通过，已打本地 commit 存档点。**
+> - R7.4：grok 套用00 默认改为'one small active motion(nod/gesture/reach/head turn)+breathing'，冻结措辞(no hand motion/no head turn/no pose change/completely still)全部删除；套用01 关键帧版保留冻结；稳定约束保留。
+> - R7.1：image-to-video-prompt-rules 立总则'人物镜头默认主动小动作，夸张定格姿势也叠加安全小动作'；讲述/展示/情绪型默认动作均改为主动。
+> - R7.2：motion-template-library §9 人物小幅动作动词库落地，映射表接入。
+> - R7.3：道具/界面微动降权，人物动作为句子主语。
+> - R7.5：motion-prompts SKILL '默认不冻结人物'，关键帧冻结仅限显式关键帧请求；脸/发型/服装/风格不变全保留；无断链。
+
+---
+
 ## 执行须知（给 Codex）
 1. 一次只推进一个 Phase，做完停下，输出"改了哪些文件 + 如何自检"的简报。
 2. 任何与 OPTIMIZATION_PLAN §2 原则冲突的地方，停下提问，不要自行决定破坏对外行为。
