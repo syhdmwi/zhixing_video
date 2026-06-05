@@ -8,7 +8,7 @@
 
 - `grok` provider
 - 单张静帧图生视频
-- 人物或主要角色需要尽量保持静止
+- 人物或主要角色需要稳定外观，同时做一个小幅主动动作
 - 希望镜头以较稳的方式做“逐渐后拉 / 轻微横移 / 轻微推近”
 - 当前镜头里存在一个或多个需要保持一致的高频主体
 
@@ -30,7 +30,7 @@
 默认提示词：
 
 ```text
-{main_subject} and {recurring_subject_2} remain completely still like a frozen illustration in {scene_summary}. No walking, no body motion, no hand motion, no head turn, no blinking, no mouth movement, and no pose change. The camera slowly pulls back with a very slight sideways drift or a gentle push-in. Keep the main subject, recurring subjects, and the composition stable. Preserve {consistency_points} and background consistency. Avoid character animation and avoid subject drift.
+{main_subject} makes one small active motion in {scene_summary}, such as a subtle nod, a small emphasizing hand gesture, a slight reach, or a gentle head turn, with natural breathing. The camera slowly pushes in or pulls back with a very slight sideways drift. Preserve {consistency_points}; keep face, hairstyle, outfit, body proportions, original style, and composition consistent. No walking, no large pose change, no extra characters, no subject drift, no background drift.
 ```
 
 套用规则：
@@ -38,7 +38,8 @@
 - 用户选择 `grok` 后，应先询问是否要使用 `grok视频模版套用00`
 - 如果用户同意，优先用这条模板作为基础提示词
 - 再按当前镜头内容替换主体、场景和关键一致性描述
-- 保留“主体固定不动 + 人物安全镜头运动 + 保持构图稳定”的结构
+- 保留“一个小幅主动动作 + 呼吸感 + 人物安全镜头运动 + 外观和构图稳定”的结构
+- 人物镜头默认使用套用00 的主动小动作版；纯静帧或关键帧需求才使用套用01
 - 人物镜头默认只用后拉、轻微横移或轻微推近，不使用上移
 - 上移仅用于纯场景竖向空间镜头，例如高楼、台阶、门或竖向空间；人物镜头不用
 - 如果当前镜头不是人物图，而是纯场景图，只沿用“镜头运动 + 构图稳定 + 避免漂移”的结构，不强行保留人物约束句
@@ -56,6 +57,7 @@
 - 用户希望视频像关键帧一样只做轻微运镜
 - 人物、环境、道具都应基本静止
 - 不希望出现角色表演感
+- 仅当用户明确要求“像关键帧一样基本静止”或某镜头确实必须冻结时使用
 
 变量槽位：
 
