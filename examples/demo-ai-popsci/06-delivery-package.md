@@ -26,6 +26,7 @@ SSOT 引用：
 | 主体与三视图 | [03-subjects-and-three-views.md](./03-subjects-and-three-views.md) | 已完成 |
 | 图片提示词 | [04-image-prompts.md](./04-image-prompts.md) | 已完成 |
 | 图生视频提示词 | [05-image-to-video-prompts.md](./05-image-to-video-prompts.md) | 已完成 |
+| 剪映手动交付包 | [jianying-handoff/](./jianying-handoff/) | 已完成 |
 | 状态快照 | [project-state.json](./project-state.json) | 已完成 |
 
 ## 交付内容
@@ -34,6 +35,7 @@ SSOT 引用：
 - 7 条图生视频提示词，使用相同 shot_id。
 - 图片和视频均为占位，不依赖真实 API。
 - 主讲人、风格、模型、provider 均引用 SSOT。
+- 剪映交付包采用手动导入路线 B，包含 `timeline.csv`、`subtitles.srt`、`delivery-manifest.json`。
 
 ## 质量自检
 

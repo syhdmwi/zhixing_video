@@ -1,0 +1,37 @@
+{
+  "project_id": "jianying-handoff-example",
+  "field_notes": {
+    "shot_id": "镜头唯一 ID，建议与分镜表一致。",
+    "time_range": "推荐格式 MM:SS-MM:SS；也可改用 start + duration。",
+    "start": "可选，秒数或 HH:MM:SS,mmm；time_range 存在时优先使用 time_range。",
+    "duration": "可选，秒数或时间码；没有 time_range 时必填。",
+    "narration": "字幕文本。",
+    "video_file": "对应画面或数字人视频文件名。",
+    "audio_file": "对应音频文件名，可为空。",
+    "track": "avatar 或 broll。",
+    "transition": "转场标记，供手动导入时参考。",
+    "bgm_note": "BGM 或音效标记，供手动导入时参考。"
+  },
+  "shots": [
+    {
+      "shot_id": "shot_01",
+      "time_range": "00:00-00:05",
+      "narration": "开场提出一个反常识问题。",
+      "video_file": "shot_01.mp4",
+      "audio_file": "shot_01.wav",
+      "track": "avatar",
+      "transition": "cut",
+      "bgm_note": "轻节奏科技感 BGM 起"
+    },
+    {
+      "shot_id": "shot_02",
+      "time_range": "00:05-00:11",
+      "narration": "用一个具体类比解释核心观点。",
+      "video_file": "shot_02.mp4",
+      "audio_file": "",
+      "track": "broll",
+      "transition": "soft dissolve",
+      "bgm_note": "BGM 保持，音量低于口播"
+    }
+  ]
+}

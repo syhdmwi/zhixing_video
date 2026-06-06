@@ -36,3 +36,13 @@ description: 当用户已经分别生成了数字人视频轨和画面视频轨�
 - BGM/SFX 建议
 - 封面与 CTA 建议
 - 平台导出建议
+
+### 剪映交付包（手动导入）
+
+如用户需要在剪映国内版继续二次创作，额外输出一份手动导入交付包：
+
+- 规范命名素材：按 `shot_id` 对齐视频、音频、数字人和 B-roll 素材。
+- 时间线清单：`timeline.csv`，列出每个镜头的起止时间、轨道、素材文件、转场和 BGM 标记。
+- 字幕文件：标准 `subtitles.srt`，用于剪映导入字幕。
+- 交付清单：`delivery-manifest.json`，记录项目、镜头、轨道和交付文件。
+- 导入指引：参考 [references/jianying-handoff-guide.md](references/jianying-handoff-guide.md)，只采用手动导入路线。

@@ -421,6 +421,45 @@
 
 ---
 
+## Round 8 — 剪映二次创作交付包（路线 B：手动导入）
+
+> 目标：成片阶段额外产出一个**可移植交付包**，让用户拿到规范素材 + 时间线清单 + SRT 字幕 + 剪映导入指引，在**剪映国内版（Windows/Mac）**里手动导入做二次创作。
+> 范围：只做**路线 B（手动导入，文件与系统无关）**。路线 A（自动生成 draft_content.json 草稿）本轮**不做**，留作后续。
+> 不依赖真实 API；脚本只做本地文件生成（清单/字幕），不写入剪映草稿目录。
+
+### [x] R8.1 扩展 edit-assembly 输出规范 + 导入指引
+- `ai-video-edit-assembly/SKILL.md` 的 `## Output` 增加「剪映交付包（手动导入）」一节，约定交付包包含：规范命名素材、时间线清单(CSV)、SRT 字幕、BGM/转场标记、剪映导入指引。
+- 新增 `ai-video-edit-assembly/references/jianying-handoff-guide.md`：剪映国内版导入 SOP，**分别覆盖 Windows 与 Mac**（新建草稿 → 批量导入素材 → 按时间线清单排轨（数字人轨/画面轨覆盖关系）→ 导入 SRT 字幕 → BGM/转场）。说明这是手动导入路线，跨版本稳。
+- **验收**：Output 有剪映交付包说明；指引含 Win + Mac 两套步骤；不编造剪映私有字段。
+
+### [x] R8.2 时间线 + SRT 生成脚本
+- 新增 `ai-video-edit-assembly/scripts/build_jianying_handoff.py`：
+  - 输入 JSON（shot 列表：`shot_id` / `start` 或 `time_range` / `duration` / `narration` / `video_file` / `audio_file` / `track`(avatar/broll) / `transition` / `bgm_note`）。
+  - 输出三件：`timeline.csv`（导入顺序 + 入点 + 时长 + 素材名 + 轨道 + 转场 + BGM 标记）、`subtitles.srt`（标准 SRT）、`delivery-manifest.json`（交付包文件清单）。
+  - 纯本地、标准库实现；`python3 -m py_compile` 通过；用示例输入能跑出三件产物。
+- 新增 `ai-video-edit-assembly/references/jianying-handoff-example.json` 示例输入 + 字段说明。
+- **验收**：脚本编译通过；示例输入跑通产出 3 件；不引入第三方依赖。
+
+### [x] R8.3 SRT 格式正确性
+- `subtitles.srt` 必须是标准格式：序号 / `HH:MM:SS,mmm --> HH:MM:SS,mmm` / 文本，三段式；字幕按各镜 `time_range` 切；中文文本取自 narration。
+- **验收**：生成的 `.srt` 能被标准 SRT 解析器读出正确条目数与时间码（脚本自检或单测）。
+
+### [x] R8.4 demo 配套样例
+- 在 `examples/demo-ai-popsci/` 新增 `jianying-handoff/` 子目录，用 demo 的 7 个镜头（`01-shot-plan.md` 的 time_range + narration）跑出示例 `timeline.csv` + `subtitles.srt` + `delivery-manifest.json`（素材用占位文件名 shot_01.mp4 等）。
+- `README` 或 demo 的 `06-delivery-package.md` 链接到该样例。
+- **验收**：样例三件齐全且彼此一致（shot_id/时间线贯通）；SRT 7 条与分镜时间线吻合；链接有效。
+
+> `[REVIEW Round 8]` Codex 停。Claude 检查：交付包规范 + Win/Mac 导入指引、脚本 py_compile 通过且示例跑通、SRT 标准可解析、demo 样例三件一致、无第三方依赖、无断链。仅路线 B，未触碰剪映草稿目录。
+>
+> **Claude review 结论（2026-06-06）：全部通过，已打本地 commit 存档点。**
+> - R8.1：edit-assembly Output 增剪映交付包说明；jianying-handoff-guide.md 覆盖 Windows+Mac 国内版导入 SOP。
+> - R8.2：build_jianying_handoff.py 仅标准库、py_compile 通过、示例输入实跑产出 timeline.csv/subtitles.srt/delivery-manifest.json。
+> - R8.3：SRT 标准格式，解析校验通过(示例2条/demo 7条)。
+> - R8.4：examples/demo-ai-popsci/jianying-handoff/ 三件齐全且 shot 数一致(7)。
+> - 仅路线 B：全程未写入剪映草稿目录；无第三方依赖；无断链。
+
+---
+
 ## 执行须知（给 Codex）
 1. 一次只推进一个 Phase，做完停下，输出"改了哪些文件 + 如何自检"的简报。
 2. 任何与 OPTIMIZATION_PLAN §2 原则冲突的地方，停下提问，不要自行决定破坏对外行为。
