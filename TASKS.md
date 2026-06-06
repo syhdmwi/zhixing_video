@@ -460,6 +460,70 @@
 
 ---
 
+## Round 9 — 停用数字人与语音克隆 + 视频后提示导出剪映工程
+
+> 两个改动：
+> 1. **停用并隐藏数字人 + 语音克隆**（数字人 = `ai-video-avatar-track`，语音克隆 = `ai-video-voice-clone`）。采用"禁用 + 用户侧隐藏，但**保留实现文件**"（与 seedance 停用同套路，可逆，不删文件）。
+> 2. 全部视频分镜生成后，**主动提示用户是否导出剪映工程文件做二次创作**（触发 Round 8 的路线 B 交付包）。
+> **TTS 保留可用**——TTS 产物仍可用于画面轨配音/字幕；把"语音→数字人""用我的声音读（语音克隆）"等衔接注明为已停用。
+> 范围原则：在**权威处 + 用户入口**禁用；零散一行提及只在会误导处轻注"（当前停用）"，不逐一追改无关文件。
+
+### [x] R9.1 avatar-track 与 voice-clone 模块加停用横幅
+- `ai-video-avatar-track/SKILL.md` 与 `MODULE.md` 顶部加：`⛔ 数字人功能当前停用，不对用户开放、不执行；实现保留供日后恢复`。
+- `ai-video-voice-clone/SKILL.md` 与 `MODULE.md` 顶部加：`⛔ 语音克隆功能当前停用，不对用户开放、不执行；实现保留供日后恢复`。
+- 其余内容保留。
+- **验收**：两个模块四个文件顶部均有停用横幅；实现细节未删。
+
+### [x] R9.2 pipeline 总控移除数字人入口与执行
+- `ai-short-video-pipeline/SKILL.md`：
+  - Beginner First / Wake Words 追问 / Intake 的"四类任务"删除「做数字人」，变为三类（从文案做图片 / 从图片做视频 / 从文案一路做到视频），编号重排。
+  - Skill Map 第 10 项 avatar-track 标「停用」；第 9 项 voice-clone 标「停用」。
+  - §9 Run Avatar Generation：标停用，**不再主动询问"是否制作数字人视频轨"**；改为不进入该阶段。其中"用户想用我的声音读 → voice-clone"分支也标停用（只保留 TTS 文案转音频路径）。
+  - Two-Track：数字人轨(Track A)停用，当前只走画面轨(Track B)；不要再把流程描述成必须双轨。
+  - Wake/Jump-In：用户说「做数字人」或「用我的声音读/语音克隆」时，固定回复"该功能当前暂未开放"，不进入该流程。
+- **验收**：总控不再向用户提供/主动发起数字人与语音克隆；短指令「做数字人」「语音克隆」被挡回并提示停用；TTS 仍可用。
+
+### [x] R9.3 根 SKILL + 用户文档移除数字人入口
+- 根 `SKILL.md`：四入口删数字人（重排为三）、Delegation Rule 数字人行标停用、First Reply Template 选项更新。
+- 用户侧文档移除/改注「做数字人」「用我的声音读 / 语音克隆」入口或小节，统一替换为"该功能当前暂未开放"：`README.md`、`3分钟快速开始.md`、`用户使用说明.md`、`跨工具使用说明.md`、`SOP-如何使用知行视频skill.md`、`ai-short-video-pipeline/references/user-guidance-templates.md`。
+- `MODELS.md` 数字人/语音表：`即梦 OmniHuman 1.5`、`蝉镜数字人`、`速创 Digital_Humans`、`速创语音克隆` 标「停用 / 用户可见=否」；**TTS 保留可用**。
+- `ai-video-voice-tts/SKILL.md`：把"衔接/喂给数字人"的话改注"数字人当前停用；音频可用于画面轨配音、字幕或剪映交付包"。
+- `ai-video-voice-clone/SKILL.md`：除顶部停用横幅外，正文不再宣称对用户提供克隆服务。
+- **验收**：用户侧任何入口/菜单都不再出现可用的数字人或语音克隆选项；TTS 仍可用且不再宣称对接数字人。
+
+### [x] R9.4 状态机：移除数字人阶段 + 新增剪映导出阶段
+- `ai-short-video-pipeline/references/workflow-state-machine.md`：
+  - Stage List 移除/停用 `digital_human_assets_ready`、`digital_human_generated`；删除相关 Allowed Transitions（`start -> digital_human_assets_ready` 等）与 `Before Digital Human Generation` gate（可保留一句"数字人阶段已停用"）。
+  - **新增阶段** `jianying_export_decision`，转移：`videos_generated -> jianying_export_decision -> completed`。
+  - 新增 gate/响应：进入 `videos_generated` 后，固定询问：`全部视频已生成。是否导出剪映工程文件做二次创作？1 导出 / 2 不导出`；`1`→产出剪映交付包后进 completed，`2`→直接 completed。
+  - Ambiguous Reply Rule 增补该阶段 1/2 含义；移除"做数字人"短指令条目或改为"已停用"。
+- `ai-short-video-pipeline/references/project-state-template.json`：移除/停用 digital_human 字段，阶段集合与新状态机一致（含 jianying_export_decision）。
+- **验收**：状态机无活跃数字人阶段；videos_generated 后进入剪映导出询问再到 completed；模板 JSON 合法且阶段一致。
+
+### [x] R9.5 接通"视频后→剪映导出"动作
+- `ai-short-video-pipeline/SKILL.md`：视频生成完成后，新增"询问是否导出剪映工程"步骤；用户选导出 → 委派 `ai-video-edit-assembly` 用 `scripts/build_jianying_handoff.py` 产出路线 B 交付包（timeline.csv / subtitles.srt / delivery-manifest.json）。
+- `ai-video-edit-assembly/SKILL.md`：注明本模块在 `jianying_export_decision` 阶段被触发，产出手动导入交付包。
+- demo `examples/demo-ai-popsci/project-state.json`：末态阶段与新状态机一致（completed，且无数字人字段）。
+- **验收**：从"视频生成完成"到"剪映交付包"链路在文档中闭合；demo 状态快照与新状态机一致。
+
+### [x] R9.6 脚本层硬挡（双保险）
+- 给两个停用功能的脚本加"一进入口就拒绝执行"的硬挡，防止绕过文档层被直接运行/误扣费：
+  - `ai-video-avatar-track/scripts/digital_humans_batch.py`
+  - `ai-video-voice-clone/scripts/wuyinkeji_voice_clone.py`
+- 实现：在 `main()` 入口处（或 `__main__` 一进入）立即打印 `⛔ <功能名>当前已停用` 到 stderr 并 `sys.exit(1)`，在真正发起任何网络请求/读取 key 之前返回。
+- 加注释说明"恢复方式：删除本段停用闸"。其余逻辑保留不动，便于日后恢复。
+- **验收**：两脚本直接运行立即退出(exit code 1)、不发请求；`python3 -m py_compile` 通过；停用闸有恢复注释。
+
+> `[REVIEW Round 9]` Codex 停。Claude 检查：用户侧无可用数字人/语音克隆入口、总控/状态机不进入数字人、avatar-track 与 voice-clone 文件保留但标停用、TTS 仍可用、videos_generated 后有剪映导出询问且接通路线 B、状态机/模板/demo 阶段一致、JSON 合法、无断链。
+>
+> **Claude review 结论（2026-06-06）：R9.1–R9.5 全部通过；R9.6（脚本硬挡）已完成：两脚本入口即退出(exit1)、不发请求、带恢复注释、py_compile 通过。**
+> - 停用横幅在 avatar-track + voice-clone 四文件；实现文件均保留。
+> - 用户入口收敛为 3 个；对数字人/语音克隆短指令固定挡回；MODELS 表四项停用、TTS 保留可用且未被误禁。
+> - 状态机移除数字人、新增 jianying_export_decision + 导出 gate(1/2)；project-state 模板与 demo 阶段一致、JSON 合法、无 digital_human 残留。
+> - 全仓库无断链。
+
+---
+
 ## 执行须知（给 Codex）
 1. 一次只推进一个 Phase，做完停下，输出"改了哪些文件 + 如何自检"的简报。
 2. 任何与 OPTIMIZATION_PLAN §2 原则冲突的地方，停下提问，不要自行决定破坏对外行为。

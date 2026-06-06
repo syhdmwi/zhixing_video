@@ -16,8 +16,7 @@
     "template_save_decision": true,
     "video_mode_selected": true,
     "videos_generated": true,
-    "digital_human_assets_ready": false,
-    "digital_human_generated": false
+    "jianying_export_decision": true
   },
   "selections": {
     "style_mode": "preset",
@@ -88,11 +87,8 @@
       "[占位：shot_06 视频]",
       "[占位：shot_07 视频]"
     ],
-    "digital_human": {
-      "audio_url": "",
-      "person_video_url": "",
-      "result_url": ""
-    }
+    "tts_audio_urls": [],
+    "jianying_handoff_dir": "jianying-handoff/"
   },
   "next_allowed_actions": [],
   "last_user_reply_meaning": "demo static workflow completed without API calls",

@@ -6,7 +6,7 @@
     "start": "可选，秒数或 HH:MM:SS,mmm；time_range 存在时优先使用 time_range。",
     "duration": "可选，秒数或时间码；没有 time_range 时必填。",
     "narration": "字幕文本。",
-    "video_file": "对应画面或数字人视频文件名。",
+    "video_file": "对应画面或主讲人口播占位视频文件名。",
     "audio_file": "对应音频文件名，可为空。",
     "track": "avatar 或 broll。",
     "transition": "转场标记，供手动导入时参考。",

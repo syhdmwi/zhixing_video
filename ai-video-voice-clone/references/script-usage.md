@@ -1,5 +1,7 @@
 # Script Usage
 
+> ⛔ 语音克隆功能当前停用，不对用户开放、不执行；本文件仅作为实现留档。
+
 脚本路径：
 
 - `scripts/wuyinkeji_voice_clone.py`
@@ -48,7 +50,7 @@ python3 scripts/wuyinkeji_voice_clone.py \
 
 - 本地真实音频文件
 - 元数据 JSON
-- 如果配置了 TOS，则额外输出可直接给数字人使用的公网音频直链
+- 如果配置了 TOS，则额外输出公网音频直链；当前不接入任何活跃用户流程
 
 其中元数据至少包含：
 
@@ -59,4 +61,4 @@ python3 scripts/wuyinkeji_voice_clone.py \
 
 ## Important Note
 
-当前接入的是速创 `语音克隆（同步）` 接口，不是平台预设音色 TTS 接口。
+当前接入的是速创 `语音克隆（同步）` 接口，不是平台预设音色 TTS 接口。该能力当前停用；用户需要普通配音时改用 `ai-video-voice-tts`。

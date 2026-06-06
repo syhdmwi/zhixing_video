@@ -16,8 +16,7 @@
     "template_save_decision": false,
     "video_mode_selected": false,
     "videos_generated": false,
-    "digital_human_assets_ready": false,
-    "digital_human_generated": false
+    "jianying_export_decision": false
   },
   "selections": {
     "style_mode": "",
@@ -38,11 +37,8 @@
     "image_urls": [],
     "approved_image_ids": [],
     "video_urls": [],
-    "digital_human": {
-      "audio_url": "",
-      "person_video_url": "",
-      "result_url": ""
-    }
+    "tts_audio_urls": [],
+    "jianying_handoff_dir": ""
   },
   "next_allowed_actions": [],
   "last_user_reply_meaning": "",

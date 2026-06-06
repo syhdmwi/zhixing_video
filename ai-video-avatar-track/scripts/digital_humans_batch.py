@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import sys
 import time
 import urllib.error
 import urllib.parse
@@ -259,6 +260,10 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main() -> int:
+    # 停用闸；恢复方式：删除本段停用闸。
+    print("⛔ 数字人功能当前已停用", file=sys.stderr)
+    sys.exit(1)
+
     parser = build_parser()
     args = parser.parse_args()
     queue = load_queue(Path(args.queue_file))

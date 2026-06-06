@@ -152,7 +152,7 @@ Starting from the approved still frame, describe subject motion, camera motion, 
 
 至少说明：
 
-- 数字人在哪些镜头出镜
+- 主讲人或核心主体在哪些镜头出现
 - 哪些口播片段适合被 B-roll 覆盖
 - 哪些句子必须保留口型同步主画面
 

@@ -144,6 +144,10 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main() -> int:
+    # 停用闸；恢复方式：删除本段停用闸。
+    print("⛔ 语音克隆功能当前已停用", file=sys.stderr)
+    sys.exit(1)
+
     args = build_parser().parse_args()
     api_key = os.environ.get("VOICE_CLONE_API_KEY") or os.environ.get("WUYINKEJI_API_KEY")
     if not api_key:
