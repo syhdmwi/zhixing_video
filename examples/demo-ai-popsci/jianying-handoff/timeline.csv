@@ -1,0 +1,8 @@
+﻿order,shot_id,start_time,end_time,duration_seconds,track,video_file,audio_file,narration,transition,bgm_note
+1,shot_01,"00:00:00,000","00:00:05,000",5.000,avatar,shot_01.mp4,shot_01.wav,你有没有发现，AI 现在不只是会聊天,cut,开场轻节奏科技感 BGM 起
+2,shot_02,"00:00:05,000","00:00:11,000",6.000,avatar,shot_02.mp4,shot_02.wav,它正在变成一个会干活的同事,cut,BGM 保持，口播优先
+3,shot_03,"00:00:11,000","00:00:18,000",7.000,broll,shot_03.mp4,,过去我们打开十几个软件...手动汇总,soft dissolve,叠加轻微界面操作音效
+4,shot_04,"00:00:18,000","00:00:25,000",7.000,broll,shot_04.mp4,,智能体可以理解目标，自己拆步骤,cut,BGM 稍增强，突出解释段
+5,shot_05,"00:00:25,000","00:00:32,000",7.000,broll,shot_05.mp4,,调用工具、检查结果，还能把重复动作先跑一遍,match cut,可加节点连线提示音
+6,shot_06,"00:00:32,000","00:00:39,000",7.000,broll,shot_06.mp4,,遥控器只能按键，实习生会问清楚任务再交付,split-screen cut,对比段保持节奏，不盖过口播
+7,shot_07,"00:00:39,000","00:00:45,000",6.000,broll,shot_07.mp4,,别只问它答案，试着给它一个小目标,cut,CTA 前 1 秒收束，留出口播尾音

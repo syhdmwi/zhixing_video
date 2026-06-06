@@ -1,0 +1,75 @@
+{
+  "project_id": "demo-ai-popsci",
+  "shots": [
+    {
+      "shot_id": "shot_01",
+      "time_range": "00:00-00:05",
+      "narration": "你有没有发现，AI 现在不只是会聊天",
+      "video_file": "shot_01.mp4",
+      "audio_file": "shot_01.wav",
+      "track": "avatar",
+      "transition": "cut",
+      "bgm_note": "开场轻节奏科技感 BGM 起"
+    },
+    {
+      "shot_id": "shot_02",
+      "time_range": "00:05-00:11",
+      "narration": "它正在变成一个会干活的同事",
+      "video_file": "shot_02.mp4",
+      "audio_file": "shot_02.wav",
+      "track": "avatar",
+      "transition": "cut",
+      "bgm_note": "BGM 保持，口播优先"
+    },
+    {
+      "shot_id": "shot_03",
+      "time_range": "00:11-00:18",
+      "narration": "过去我们打开十几个软件...手动汇总",
+      "video_file": "shot_03.mp4",
+      "audio_file": "",
+      "track": "broll",
+      "transition": "soft dissolve",
+      "bgm_note": "叠加轻微界面操作音效"
+    },
+    {
+      "shot_id": "shot_04",
+      "time_range": "00:18-00:25",
+      "narration": "智能体可以理解目标，自己拆步骤",
+      "video_file": "shot_04.mp4",
+      "audio_file": "",
+      "track": "broll",
+      "transition": "cut",
+      "bgm_note": "BGM 稍增强，突出解释段"
+    },
+    {
+      "shot_id": "shot_05",
+      "time_range": "00:25-00:32",
+      "narration": "调用工具、检查结果，还能把重复动作先跑一遍",
+      "video_file": "shot_05.mp4",
+      "audio_file": "",
+      "track": "broll",
+      "transition": "match cut",
+      "bgm_note": "可加节点连线提示音"
+    },
+    {
+      "shot_id": "shot_06",
+      "time_range": "00:32-00:39",
+      "narration": "遥控器只能按键，实习生会问清楚任务再交付",
+      "video_file": "shot_06.mp4",
+      "audio_file": "",
+      "track": "broll",
+      "transition": "split-screen cut",
+      "bgm_note": "对比段保持节奏，不盖过口播"
+    },
+    {
+      "shot_id": "shot_07",
+      "time_range": "00:39-00:45",
+      "narration": "别只问它答案，试着给它一个小目标",
+      "video_file": "shot_07.mp4",
+      "audio_file": "",
+      "track": "broll",
+      "transition": "cut",
+      "bgm_note": "CTA 前 1 秒收束，留出口播尾音"
+    }
+  ]
+}
