@@ -4,7 +4,7 @@
 
 ## 角色
 
-当用户只有文案、还没有成品音频，但想先把文案转成可用于数字人的音频时使用，当前适配速创API异步语音合成接口。
+当用户只有文案、还没有成品音频，但想先把文案转成配音音频时使用，当前适配速创API异步语音合成接口；音频可用于画面轨配音、字幕或剪映交付包。
 
 ## 关键 references
 
@@ -13,4 +13,4 @@
 
 ## 上下游
 
-上游：`ai-short-video-pipeline` 或用户文案 / 下游：`ai-video-avatar-track`、`ai-video-edit-assembly`。
+上游：`ai-short-video-pipeline` 或用户文案 / 下游：`ai-video-edit-assembly`。

@@ -1,6 +1,6 @@
 ---
 name: zhixing_video
-description: 知行视频主入口 skill。对外只暴露这一个入口，负责把用户从文案带到分镜、图片、视频、语音、数字人和模板复用。内部仍保留模块化规则与脚本，但用户不需要理解内部模块名。
+description: 知行视频主入口 skill。对外只暴露这一个入口，负责把用户从文案带到分镜、图片、视频、TTS 配音、剪映交付包和模板复用。内部仍保留模块化规则与脚本，但用户不需要理解内部模块名。
 ---
 
 # Zhixing Video
@@ -22,12 +22,17 @@ description: 知行视频主入口 skill。对外只暴露这一个入口，负�
 
 对用户只暴露一套主流程，不暴露内部模块名，不要求用户自己判断该读哪个模块。
 
-优先按用户任务理解为这四类：
+优先按用户任务理解为这三类：
 
 1. 从文案开始做图片
 2. 从图片继续做视频
-3. 做数字人
-4. 从文案一路做到视频
+3. 从文案一路做到视频
+
+如果用户说“做数字人”“用我的声音读”“语音克隆”或“音色克隆”，固定回复：
+
+```text
+该功能当前暂未开放。
+```
 
 如果用户是第一次使用，或表达里有：
 
@@ -42,7 +47,7 @@ description: 知行视频主入口 skill。对外只暴露这一个入口，负�
 
 主流程阶段顺序以 [ai-short-video-pipeline/references/workflow-state-machine.md](./ai-short-video-pipeline/references/workflow-state-machine.md) 的 `Stage List` 与 `Allowed Transitions` 为唯一权威；根入口只负责用用户能理解的话转述当前阶段，不维护第二套步骤表。
 
-用户侧叙述时，仍按同一条状态机推进：接收文案或现有素材，确认风格、图片比例和生图模型，完成主体、三视图、提示词、生图、审图、视频生成、数字人或模板保存等阶段。任何阶段跳入都先回到状态机检查前置条件。
+用户侧叙述时，仍按同一条状态机推进：接收文案或现有素材，确认风格、图片比例和生图模型，完成主体、三视图、提示词、生图、审图、视频生成、剪映导出决策或模板保存等阶段。任何阶段跳入都先回到状态机检查前置条件。
 
 ## Internal Modules
 
@@ -68,16 +73,17 @@ description: 知行视频主入口 skill。对外只暴露这一个入口，负�
 执行时优先这样分派：
 
 - 文案理解、状态机、主流程判断 -> `ai-short-video-pipeline/MODULE.md`
-- 文案时长估算、分镜拆分、数字人与 B-roll 分配 -> `ai-video-shot-planner/MODULE.md`
+- 文案时长估算、分镜拆分、视觉承载分配 -> `ai-video-shot-planner/MODULE.md`
 - 图片提示词、风格预设、主体一致性、三视图 -> `ai-video-image-prompts/MODULE.md`
 - 提示词确认后的正式生图执行 -> `ai-video-prompt-to-images/MODULE.md`
 - 已确认静帧的图生视频动作方案 -> `ai-video-motion-prompts/MODULE.md`
 - 已确认静帧和动作方案的视频真实提交（grok 默认启用，omni 可显式选择，seedance 暂停） -> `ai-video-generate-videos/MODULE.md`
 - 静帧图片的 FFmpeg 关键帧轻运镜 -> `ai-video-keyframe-edit/MODULE.md`
-- 文案转音频 / 参考音频克隆 -> `ai-video-voice-tts/MODULE.md`、`ai-video-voice-clone/MODULE.md`
-- 数字人生成提交、轮询和结果展示 -> `ai-video-avatar-track/MODULE.md`
+- 文案转 TTS 配音 -> `ai-video-voice-tts/MODULE.md`
+- 参考音频克隆 -> `ai-video-voice-clone/MODULE.md`（停用，不对用户开放）
+- 数字人生成提交、轮询和结果展示 -> `ai-video-avatar-track/MODULE.md`（停用，不对用户开放）
 - 可复用模板保存与新文案套用 -> `ai-video-series-archive/MODULE.md`
-- 数字人视频轨和画面视频轨的最终整合 -> `ai-video-edit-assembly/MODULE.md`
+- 画面视频轨、字幕、TTS 配音和剪映手动交付包整合 -> `ai-video-edit-assembly/MODULE.md`
 
 ## Critical Constraints
 
@@ -92,7 +98,7 @@ description: 知行视频主入口 skill。对外只暴露这一个入口，负�
 第一次被用户唤醒时，优先用这种表达：
 
 ```text
-可以。你把文案、图片、音频或人物视频发我，我按知行视频skill的主流程带你往下走。
+可以。你把文案、图片或已生成的视频素材发我，我按知行视频skill的主流程带你往下走。
 ```
 
 如果用户只说唤醒词，没有素材，优先问：
@@ -101,6 +107,5 @@ description: 知行视频主入口 skill。对外只暴露这一个入口，负�
 你想用知行视频skill做哪一步？
 1. 从文案开始做图片
 2. 从图片继续做视频
-3. 做数字人
-4. 从文案一路跑完整流程
+3. 从文案一路跑完整流程
 ```

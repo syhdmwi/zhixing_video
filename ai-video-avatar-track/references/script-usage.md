@@ -1,5 +1,7 @@
 # Script Usage
 
+> ⛔ 数字人功能当前停用，不对用户开放、不执行；本文件仅作为实现留档。
+
 脚本路径：
 
 - `scripts/digital_humans_batch.py`
@@ -16,21 +18,21 @@
 
 - [avatar-queue-example.json](./avatar-queue-example.json)
 
-当前接口要求：
+当前接口留档要求：
 
 - `audio_url` 必须是公网可访问的音频链接
 - `video_url` 必须是公网可访问的正面人物视频链接
 - 文档说明里写明 `videoUrl` 时长不得低于 10 秒
 
-如果用户上传的是本地文件：
+如日后恢复且用户上传的是本地文件：
 
 - 已配置 TOS 时，先用总控脚本 `../ai-short-video-pipeline/scripts/upload_to_tos.py` 自动上传音频和视频
 - 上传完成后，把得到的公网直链填入队列里的 `audio_url` 和 `video_url`
 - 未配置 TOS 时，才提示用户补充 TOS 配置或提供公网 URL
 
-用户侧不要要求手动处理对象存储。默认提示应是：
+当前不进入数字人阶段。用户请求数字人时固定回复：
 
-- `请上传音频和正面人物视频，我会自动转存并提交数字人生成。`
+- `该功能当前暂未开放。`
 
 ## Example
 
@@ -62,8 +64,4 @@ python3 scripts/digital_humans_batch.py \
 - `message`
 - `updated_at`
 
-默认 review 流程：
-
-- 视频任务全部完成后，先展示数字人视频
-- 再让用户确认是否满意
-- 如果用户还没制作数字人，则先询问是否需要制作数字人；需要的话，再让用户提供音频和人物视频链接
+恢复前不得使用旧 review 流程。当前视频任务完成后应进入 `jianying_export_decision`。

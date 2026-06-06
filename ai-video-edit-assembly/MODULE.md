@@ -4,12 +4,13 @@
 
 ## 角色
 
-当用户已经分别生成数字人视频轨和画面视频轨，接下来要剪成一条完整短视频时使用，负责转场、覆盖关系、字幕、音乐、封面和平台导出建议。
+当用户已经生成画面视频轨、字幕或配音素材，接下来要整理成最终交付包时使用，负责转场、覆盖关系、字幕、音乐、封面、平台导出建议和剪映手动交付包。
 
 ## 关键 references
 
-- 暂无独立 references；完整规则见 [SKILL.md](./SKILL.md)。
+- [references/jianying-handoff-guide.md](./references/jianying-handoff-guide.md) — 剪映国内版手动导入 SOP
+- [references/jianying-handoff-example.json](./references/jianying-handoff-example.json) — 剪映交付包输入示例
 
 ## 上下游
 
-上游：`ai-video-generate-videos`、`ai-video-keyframe-edit`、`ai-video-avatar-track` / 下游：最终交付包。
+上游：`ai-video-generate-videos`、`ai-video-keyframe-edit`、`jianying_export_decision` / 下游：最终交付包。

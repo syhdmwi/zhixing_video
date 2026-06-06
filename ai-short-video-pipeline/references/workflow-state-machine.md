@@ -27,9 +27,8 @@
 12. `template_save_decision`
 13. `video_mode_selected`
 14. `videos_generated`
-15. `digital_human_assets_ready`
-16. `digital_human_generated`
-17. `completed`
+15. `jianying_export_decision`
+16. `completed`
 
 ## Allowed Transitions
 
@@ -48,11 +47,8 @@ images_approved -> template_save_decision
 images_approved -> video_mode_selected
 template_save_decision -> video_mode_selected
 video_mode_selected -> videos_generated
-videos_generated -> completed
-
-start -> digital_human_assets_ready
-digital_human_assets_ready -> digital_human_generated
-digital_human_generated -> completed
+videos_generated -> jianying_export_decision
+jianying_export_decision -> completed
 ```
 
 ## Required Gates
@@ -61,14 +57,14 @@ digital_human_generated -> completed
 
 Required:
 
-- 文案已收到，或用户明确从已有图片/数字人素材开始
+- 文案已收到，或用户明确从已有图片素材开始
 
 If missing:
 
 ```text
 现在还不能选择风格。
 缺少：文案。
-请先发送文案，或说明你要从已有图片/数字人素材开始。
+请先发送文案，或说明你要从已有图片素材开始。
 ```
 
 ### Before Subject Confirmation
@@ -149,17 +145,25 @@ If missing:
 
 ### Before Digital Human Generation
 
+数字人阶段当前停用，不是活跃流程阶段。用户请求数字人时固定回复：
+
+```text
+该功能当前暂未开放。
+```
+
+### Before Jianying Export
+
 Required:
 
-- 音频
-- 正面人物视频
+- 视频已生成
+- 每个镜头有 `shot_id`、`time_range`、`narration` 或可映射字段
 
 If missing:
 
 ```text
-现在还不能制作数字人。
-缺少：音频或正面人物视频。
-请上传音频和正面人物视频。
+现在还不能导出剪映交付包。
+缺少：已生成的视频或完整镜头时间线。
+请先完成视频生成，或补齐镜头时间线。
 ```
 
 ### Before Template Save
@@ -212,6 +216,7 @@ Examples:
 - 在三视图确认阶段，`2` = 主体无需修改
 - 在图片确认阶段，`2` = 进入视频生成
 - 在视频阶段，`2` = 图生视频模式
+- 在剪映导出决策阶段，`1` = 导出剪映手动交付包，`2` = 暂不导出并完成流程
 - 在模板保存样例图阶段，`2` = 不保存样例图
 
 如果当前阶段不明确，不要猜，先恢复状态：
@@ -229,8 +234,16 @@ Examples:
 - `全部生图`
 - `保存模板`
 - `做数字人`
+- `语音克隆`
+- `用我的声音读`
 
 先检查状态。
+
+如果用户请求 `做数字人`、`语音克隆` 或 `用我的声音读`，固定回复：
+
+```text
+该功能当前暂未开放。
+```
 
 如果前置条件满足，继续执行。
 

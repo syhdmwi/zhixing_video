@@ -5,7 +5,7 @@
 - 图片
 - 视频
 - 配音
-- 数字人
+- 剪映手动交付包
 - 可复用模板
 
 它对外是一个主 skill：`zhixing_video`。也可以迁移到 OpenClaw、Trae、Claude Code 等支持项目规则、上下文文档或自定义工作流的工具里使用。
@@ -18,7 +18,6 @@
 
 - `这是我的文案，先带我走图片流程。`
 - `这些图片已经确认，帮我进入视频生成。`
-- `我要做数字人，我上传音频和人物视频给你。`
 - `这是文案，帮我从图片一路做到视频。`
 
 如果你不知道该从哪里开始，最稳的第一句话是：
@@ -76,7 +75,7 @@
 
 如果模型接口需要公网图片、音频、视频链接，而你上传的是本地文件，系统会优先自动转存后再提交。
 
-## 四个常用入口
+## 三个常用入口
 
 ### 1. 我只想做图片
 
@@ -94,15 +93,7 @@
 这些图片已经确认，帮我进入视频生成。
 ```
 
-### 3. 我想做数字人
-
-直接说：
-
-```text
-我要做数字人，我上传音频和人物视频给你。
-```
-
-### 4. 我想跑完整流程
+### 3. 我想跑完整流程
 
 直接说：
 
@@ -117,7 +108,6 @@
 - 一段文案
 - 一批图片
 - 一段音频
-- 一段人物视频
 
 如果你有这些材料，效果会更稳：
 
@@ -138,8 +128,7 @@
 - 图生视频
 - 图转镜头移动视频
 - 文案转音频
-- 语音克隆
-- 数字人生成
+- 剪映手动交付包
 - 主讲人、风格和提示词规则保存为模板
 - 新文案套用已有模板
 - 最终剪辑整合规划
@@ -161,8 +150,10 @@
   - `图转镜头移动视频模式`
   - `图生视频模式`
 - 视频阶段默认只交付单镜头视频，不自动拼总片
+- 视频生成完成后会询问是否导出剪映手动交付包
 - 模板默认保存主讲人、风格和提示词规则；重复主体默认随新文案重新识别
 - 正式图样例只有用户选择编号后才保存进模板
+- 数字人和语音克隆当前暂未开放；TTS 文案转音频保留可用
 
 ## Internal Workflow Modules
 
@@ -177,8 +168,8 @@
 - `ai-video-generate-videos`
 - `ai-video-keyframe-edit`
 - `ai-video-voice-tts`
-- `ai-video-voice-clone`
-- `ai-video-avatar-track`
+- `ai-video-voice-clone`（停用，保留实现）
+- `ai-video-avatar-track`（停用，保留实现）
 - `ai-video-edit-assembly`
 
 ## 高级配置
@@ -192,10 +183,8 @@
 - `GPT_IMAGE2_API_KEY`
 - `NANOBANANA_API_KEY`
 - `YIJIA_API_KEY`
-- `DIGITAL_HUMANS_API_KEY`
 - `WUYINKEJI_API_KEY`
 - `AUDIO_TTS_API_KEY`
-- `VOICE_CLONE_API_KEY`
 - `TOS_ACCESS_KEY_ID`
 - `TOS_SECRET_ACCESS_KEY`
 - `TOS_BUCKET`
@@ -205,11 +194,8 @@
 
 - 本分享包不包含任何真实 API key
 - 本分享包不包含本地测试结果和临时文件
-- 数字人生成阶段要求：
-  - 音频必须是公网可访问直链
-  - 人物视频必须是公网可访问直链
-  - 人物视频需为正面素材，且时长不低于 10 秒
-- 语音克隆和 TTS 如需直接衔接数字人，建议同时配置 TOS 上传参数
+- 数字人和语音克隆当前暂未开放，相关实现文件保留但不作为用户入口。
+- TTS 保留可用，生成音频可用于画面轨配音、字幕或剪映交付包。
 
 ## Suggested Install Method
 
@@ -262,8 +248,8 @@ echo $CODEX_HOME
 - `ai-video-generate-videos`
 - `ai-video-keyframe-edit`
 - `ai-video-voice-tts`
-- `ai-video-voice-clone`
-- `ai-video-avatar-track`
+- `ai-video-voice-clone`（停用，保留实现）
+- `ai-video-avatar-track`（停用，保留实现）
 - `ai-video-edit-assembly`
 
 ### 4. 配置环境变量
@@ -277,8 +263,6 @@ export GPT_IMAGE2_API_KEY="your_gpt_image2_key"
 export NANOBANANA_API_KEY="your_nanobanana_key"
 export YIJIA_API_KEY="your_grok_or_yijia_key"
 export AUDIO_TTS_API_KEY="your_tts_key"
-export VOICE_CLONE_API_KEY="your_voice_clone_key"
-export DIGITAL_HUMANS_API_KEY="your_digital_humans_key"
 export TOS_ACCESS_KEY_ID="your_tos_ak"
 export TOS_SECRET_ACCESS_KEY="your_tos_sk"
 export TOS_BUCKET="your_bucket"
@@ -353,18 +337,17 @@ export TOS_REGION="cn-beijing"
 - 默认只交付单镜头视频
 - 不会自动拼接成总片，除非你明确要求
 
-### 测试 5：语音与数字人
+### 测试 5：TTS 与剪映交付包
 
 目标：
 
 - 验证 `TTS`
-- 验证 `语音克隆`
-- 验证 `数字人`
+- 验证剪映手动交付包三件套
 
 前提：
 
-- 已配置对应 API key
-- 数字人需要音频直链和正面人物视频直链
+- 如需真实 TTS，已配置对应 API key
+- 视频镜头已有 `shot_id`、时间线和口播文本
 
 ## Recommended First Full Demo
 
@@ -373,7 +356,7 @@ export TOS_REGION="cn-beijing"
 1. 用 `ai-short-video-pipeline` 从短文案开始走完整图片流程
 2. 只生成一批小规模图片
 3. 进入 `图转镜头移动视频模式` 或 `图生视频模式`
-4. 再单独测试 `TTS / 语音克隆 / 数字人`
+4. 再单独测试 `TTS / 剪映手动交付包`
 5. 每一段都确认没问题后，再跑更长文案
 
 ## Troubleshooting
@@ -392,13 +375,13 @@ export TOS_REGION="cn-beijing"
   - 相邻镜头方向不同
 - 若还需调整，优先调单镜头，不建议一次改整批
 
-### 数字人报“获取时长失败”
+### 剪映交付包导入后时间线不一致
 
-- 通常是素材链接不是直链
-- 检查链接返回的是否真的是 `audio/*` 或 `video/*`
-- 不要用分享页代替文件直链
+- 先检查 `timeline.csv` 的 `shot_id`、起止时间和素材文件名是否与实际文件一致
+- 再检查剪映导入后是否按 `order` 从小到大排轨
+- 字幕错位时优先检查 `subtitles.srt` 时间码
 
-### 语音克隆或 TTS 结果不能直接喂数字人
+### TTS 结果如何用于交付包
 
-- 需要先把音频转成可访问的公网直链
-- 推荐配置 TOS 上传参数，让流程自动完成这一步
+- TTS 音频可作为配音素材导入剪映
+- 如果需要在外部工具引用，可配置 TOS 上传参数输出公网直链

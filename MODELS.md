@@ -26,8 +26,8 @@
 
 | 规范名 | 用户可见 | 用途 | 对应脚本 | 别名收敛 |
 | --- | --- | --- | --- | --- |
-| `即梦 OmniHuman 1.5` | 是 | 数字人生成 provider | 暂无本地提交脚本 | `OmniHuman 1.5` |
-| `蝉镜数字人` | 是 | 数字人生成 provider | 暂无本地提交脚本 | 无 |
-| `速创 Digital_Humans` | 是 | 速创数字人异步生成接口 | `ai-video-avatar-track/scripts/digital_humans_batch.py` | `Digital_Humans`、`DIGITAL_HUMANS`、`digital_humans` |
-| `速创 TTS` | 是 | 速创异步语音合成，用于文案转数字人音频 | `ai-video-voice-tts/scripts/wuyinkeji_audio_tts.py` | `TTS`、`tts`、`语音合成` |
-| `速创语音克隆` | 是 | 速创同步语音克隆，用参考音频生成朗读音频 | `ai-video-voice-clone/scripts/wuyinkeji_voice_clone.py` | `语音克隆`、`音色克隆` |
+| `即梦 OmniHuman 1.5` | 否 | 停用：数字人生成 provider，当前不对用户开放 | 暂无本地提交脚本 | `OmniHuman 1.5`、`OmniHuman` |
+| `蝉镜数字人` | 否 | 停用：数字人生成 provider，当前不对用户开放 | 暂无本地提交脚本 | `蝉镜` |
+| `速创 Digital_Humans` | 否 | 停用：速创数字人异步生成接口，脚本保留供日后恢复 | `ai-video-avatar-track/scripts/digital_humans_batch.py` | `Digital_Humans`、`DIGITAL_HUMANS`、`digital_humans` |
+| `速创 TTS` | 是 | 速创异步语音合成，用于画面轨配音、字幕或剪映交付包 | `ai-video-voice-tts/scripts/wuyinkeji_audio_tts.py` | `TTS`、`tts`、`语音合成` |
+| `速创语音克隆` | 否 | 停用：速创同步语音克隆，当前不对用户开放 | `ai-video-voice-clone/scripts/wuyinkeji_voice_clone.py` | `语音克隆`、`音色克隆`、`用我的声音读` |
