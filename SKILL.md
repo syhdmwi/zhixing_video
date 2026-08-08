@@ -47,7 +47,7 @@ description: 知行视频主入口 skill。对外只暴露这一个入口，负�
 
 主流程阶段顺序以 [ai-short-video-pipeline/references/workflow-state-machine.md](./ai-short-video-pipeline/references/workflow-state-machine.md) 的 `Stage List` 与 `Allowed Transitions` 为唯一权威；根入口只负责用用户能理解的话转述当前阶段，不维护第二套步骤表。
 
-用户侧叙述时，仍按同一条状态机推进：接收文案或现有素材，确认风格、图片比例和生图模型，完成主体、三视图、提示词、生图、审图、视频生成、剪映导出决策或模板保存等阶段。任何阶段跳入都先回到状态机检查前置条件。
+用户侧叙述时，仍按同一条状态机推进：接收文案或现有素材，确认风格和图片比例并自动锁定默认生图模型，完成主体、三视图、提示词、生图、审图、视频生成、剪映导出决策或模板保存等阶段。任何阶段跳入都先回到状态机检查前置条件。
 
 ## Internal Modules
 

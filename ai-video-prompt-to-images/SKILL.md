@@ -1,6 +1,6 @@
 ---
 name: ai-video-prompt-to-images
-description: 当用户已经确认了一批图片提示词，接下来要正式进入生图阶段时使用这个 skill。它适用于 nanobanana-2、nanobanana-pro、seedream-5.0，并负责保持提示词顺序、比例、主体一致性与场景/人物分配。这里的主体既包括人，也包括重复出现的动物、吉祥物、IP 形象、产品和关键物件；本 skill 不在未经要求的情况下重写提示词内容。
+description: 当用户已经确认了一批图片提示词，接下来要通过一加 Image-2 接口正式进入生图阶段时使用这个 skill。它当前只执行规范名 GPT-Image-2（API model=image2），并负责保持提示词顺序、比例、主体一致性与场景/人物分配。这里的主体既包括人，也包括重复出现的动物、吉祥物、IP 形象、产品和关键物件；本 skill 不在未经要求的情况下重写提示词内容。
 ---
 
 # AI Video Prompt To Images
@@ -18,12 +18,12 @@ description: 当用户已经确认了一批图片提示词，接下来要正式�
 
 - 用户已经确认提示词没问题
 - 用户要开始正式生图
-- 用户使用 `nanobanana-2`、`nanobanana-pro`、`seedream-5.0`
+- 用户使用当前唯一启用的 `GPT-Image-2`
 
 ## Required Inputs
 
 - 已确认的提示词批次
-- 生图模型
+- 生图模型（固定为 `GPT-Image-2`）
 - 比例
 - 输出张数
 - 参考图或角色锚点（如果有）
@@ -44,22 +44,17 @@ description: 当用户已经确认了一批图片提示词，接下来要正式�
 - 只有 TOS 配置缺失时，才提示用户提供公网可访问参考图链接
 - 如果上游已经生成主体预览图和三视图参考图，正式生图应优先使用它们作为参考锚点
 - 如果当前环境无法直接调用生图工具，就输出一份可执行的生图队列表
-- 如果平台任务长时间停留在非终态，不要直接当失败丢掉，应单独标记为平台卡住
-- 平台卡住的任务应保留全部历史 `task_id`
-- 平台卡住后默认允许自动重提一次
+- 一加 Image-2 是同步接口；请求失败时保留每次尝试的错误和响应 ID
+- 同步请求失败后默认允许自动重试一次
 - 如果主体预览阶段连续重提后仍不理想，再回到上游询问用户是否提供参考图
 - 生图成功后，默认直接把图片展示给用户看，不只给链接
 - 展示图片后，再让用户确认哪些镜头可以保留、哪些镜头需要回炉
-- 所有轮询中的进度汇报，默认遵循总控里的统一规则：[references/polling-progress-rules.md](../ai-short-video-pipeline/references/polling-progress-rules.md)
 
 ## Unified External Image Execution
 
 本 skill 在正式生图阶段,默认统一使用外部批处理脚本 / API。
 
-默认策略:
-
-1. 任意环境 + `GPT-Image-2` -> 使用外部批处理脚本 / API
-2. 任意环境 + `nanobanana-2` -> 使用外部批处理脚本 / API
+默认策略：任意环境都使用 `scripts/gpt_image2_batch.py`，通过一加 `POST /v1/chat/completions` 执行 `model=image2`。`nanobanana-2` 已停用，不得提交到速创接口。
 
 用户明确指定执行方式时,以用户指定为准;但默认正式生图不要再走 `Codex` 内建生图。
 
@@ -83,7 +78,7 @@ description: 当用户已经确认了一批图片提示词，接下来要正式�
 
 至少确认：
 
-- 用哪个模型
+- 模型固定为 `GPT-Image-2`（一加 API ID `image2`）
 - 用哪个比例
 - 一共多少张
 - 是否有人物参考图
@@ -121,7 +116,7 @@ description: 当用户已经确认了一批图片提示词，接下来要正式�
 
 当前子 skill 已提供真实 API 脚本层：
 
-- `scripts/nanobanana2_batch.py`
+- `scripts/gpt_image2_batch.py`
 
 输入格式示例见：
 
@@ -135,7 +130,7 @@ description: 当用户已经确认了一批图片提示词，接下来要正式�
 - 人物镜头是否延续同一角色
 - 重复出现的动物、吉祥物、产品、关键物件是否延续同一主体
 - 风格是否统一
-- 是否存在平台长时间卡住但未被识别的任务
+- 是否存在同步请求失败但未被记录或重试的镜头
 
 ### 6. Show The Rendered Images By Default
 

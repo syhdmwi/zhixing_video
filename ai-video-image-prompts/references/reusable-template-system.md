@@ -57,10 +57,9 @@
 
 - [subject-consistency-template-01.md](./subject-consistency-template-01.md)
 
-如果要按模型拆分提示词写法，当前可直接复用：
+当前正式生图可直接复用：
 
 - [gpt-image2-prompt-template-01.md](./gpt-image2-prompt-template-01.md)
-- [nanobanana-prompt-template-01.md](./nanobanana-prompt-template-01.md)
 
 ### 3. Execution Queue Template
 

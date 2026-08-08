@@ -6,10 +6,12 @@
 
 | 规范名 | 用户可见 | 用途 | 对应脚本 | 别名收敛 |
 | --- | --- | --- | --- | --- |
-| `GPT-Image-2` | 是 | 默认用户可选生图模型，适合自然叙事和强参考人物镜头 | `ai-video-prompt-to-images/scripts/gpt_image2_batch.py` | `gpt-image-2`、OpenAI 图像模型 |
-| `nanobanana-2` | 是 | 默认用户可选生图模型，适合结构化、模块化批量生图 | `ai-video-prompt-to-images/scripts/nanobanana2_batch.py` | `NanoBanana2`、`image_nanoBanana2` |
+| `GPT-Image-2` | 是 | 当前唯一启用的生图模型，通过一加 Image-2 接口执行 | `ai-video-prompt-to-images/scripts/gpt_image2_batch.py` | API ID `image2`；`Image-2`、`image-2`、`gpt-image-2` |
+| `nanobanana-2` | 否 | 停用：速创 NanoBanana2 生图链路不再执行，脚本仅保留供日后恢复 | `ai-video-prompt-to-images/scripts/nanobanana2_batch.py` | `NanoBanana2`、`image_nanoBanana2` |
 | `nanobanana-pro` | 否 | 实现层生图能力，保留为高级/兼容选项 | 暂无独立脚本；沿用 nanobanana 提示词规则 | 无 |
 | `seedream-5.0` | 否 | 实现层生图能力，火山方舟 Seedream 5 系列 | `ai-video-prompt-to-images/scripts/seedream5_batch.py` | `Seedream-5.0-lite`、`seedream-5.0-lite`、`Seedream 4.6`、`doubao-seedream-5-0-260128` |
+
+当前用户侧生图只使用 `GPT-Image-2`：`POST https://api.yijiarj.cn/v1/chat/completions`，API model 为 `image2`，鉴权为 `Authorization: Bearer ${YIJIA_API_KEY}`。不再使用速创 `image_gpt` 或 `image_nanoBanana2` 接口。
 
 ## 图生视频模型
 

@@ -1,6 +1,6 @@
 ---
 name: ai-video-image-prompts
-description: 当用户要把一段文案直接转换成一组可执行的生图提示词时使用这个 skill。它适用于 nanobanana-2、nanobanana-pro、seedream-5.0，并强调维持主体一致性和风格一致性。这里的主体不仅包括人，也包括重复出现的动物、吉祥物、IP 形象、产品、道具或关键物件，同时支持“文案 -> 30 个图片提示词”这类批量生成工作流。
+description: 当用户要把一段文案直接转换成一组可由一加 Image-2 执行的生图提示词时使用这个 skill。它当前只面向规范名 GPT-Image-2（API model=image2），并强调维持主体一致性和风格一致性。这里的主体不仅包括人，也包括重复出现的动物、吉祥物、IP 形象、产品、道具或关键物件，同时支持“文案转 30 个图片提示词”这类批量生成工作流。
 ---
 
 # AI Video Image Prompts
@@ -27,30 +27,11 @@ description: 当用户要把一段文案直接转换成一组可执行的生图�
 
 ## Supported Workflow
 
-优先适配以下模型名：
-
-- `nanobanana-2`
-- `nanobanana-pro`
-- `seedream-5.0`
-
-如果明确使用：
-
-- `GPT-Image-2`
-
-则提示词写法优先参考：
+当前唯一启用的生图模型为 `GPT-Image-2`，执行层映射到一加 API 的 `model=image2`。提示词写法优先参考：
 
 - [references/gpt-image2-prompt-template-01.md](./references/gpt-image2-prompt-template-01.md)
 
-如果明确使用：
-
-- `nanobanana-2`
-- `nanobanana-pro`
-
-则提示词写法优先参考：
-
-- [references/nanobanana-prompt-template-01.md](./references/nanobanana-prompt-template-01.md)
-
-如果用户没有指定模型，就输出模型无关的结构化提示词。
+如果用户没有指定模型，直接使用 `GPT-Image-2`，不再追问模型。`nanobanana-2` 已停用；用户指定它时，说明该链路暂未开放并改用 `GPT-Image-2`。
 
 这个 skill 支持两种入口：
 
@@ -63,7 +44,6 @@ description: 当用户要把一段文案直接转换成一组可执行的生图�
 
 - [references/reusable-template-system.md](./references/reusable-template-system.md)
 - [references/gpt-image2-prompt-template-01.md](./references/gpt-image2-prompt-template-01.md)
-- [references/nanobanana-prompt-template-01.md](./references/nanobanana-prompt-template-01.md)
 - [references/subject-consistency-template-01.md](./references/subject-consistency-template-01.md)
 - [references/execution-queue-template.json](./references/execution-queue-template.json)
 
@@ -166,7 +146,7 @@ description: 当用户要把一段文案直接转换成一组可执行的生图�
 ```text
 当前进度：
 1. 已收到文案
-2. 现在先确定风格、比例和生图模型
+2. 现在先确定风格和比例，生图模型已默认锁定
 3. 下一步会识别重复主体
 
 先选风格方式：
@@ -178,17 +158,17 @@ description: 当用户要把一段文案直接转换成一组可执行的生图�
 0 自主设定风格
 ```
 
-如果是新手用户，不要默认要求一次输入 `1+1+1`。
+如果是新手用户，不要默认要求一次输入 `1+1`。
 
 如果用户已经熟悉流程，仍允许压缩输入，例如：
 
 ```text
-1+1+1
+1+1
 ```
 
 如果用户输入 `1`、`2`、`3`、`4` 或 `5`，从 [references/style-presets.md](./references/style-presets.md) 加载对应预设的完整风格上下文。
 
-对熟练用户，风格模版、图片比例和生图模型可以放在同一轮确认；对新手用户，优先拆成逐步确认。
+对熟练用户，风格模版和图片比例可以放在同一轮确认；对新手用户，优先拆成逐步确认。生图模型始终自动锁定为 `GPT-Image-2`。
 
 如果用户没有明确选择图片比例，默认按 `16:9` 处理，不要因为缺这一个字段就停住整条图片流程。
 
@@ -210,28 +190,12 @@ description: 当用户要把一段文案直接转换成一组可执行的生图�
 不选默认 16:9
 
 生图模型：
-1 GPT-Image-2
-2 nanobanana-2
+GPT-Image-2（一加 Image-2，默认且唯一启用）
 ```
 
 除非用户已经明确给出完整参数,否则不要省略这个固定选项块。
 
-生图模型默认使用数字选择方式确认：
-
-- 使用 `GPT-Image-2` 请输入 `1`
-- 使用 `nanobanana-2` 请输入 `2`
-
-如果用户明确选择：
-
-- `GPT-Image-2`
-
-后续提示词优先按 [references/gpt-image2-prompt-template-01.md](./references/gpt-image2-prompt-template-01.md) 的写法生成。
-
-如果用户明确选择：
-
-- `nanobanana-2`
-
-后续提示词优先按 [references/nanobanana-prompt-template-01.md](./references/nanobanana-prompt-template-01.md) 的写法生成。
+生图模型固定为 `GPT-Image-2`，不再展示模型编号选择。后续提示词按 [references/gpt-image2-prompt-template-01.md](./references/gpt-image2-prompt-template-01.md) 的写法生成。
 
 输出语言默认按 `中文` 处理。
 
@@ -253,7 +217,7 @@ description: 当用户要把一段文案直接转换成一组可执行的生图�
 
 你可以直接描述这次想要的图片风格；
 如果有风格参考图，也可以上传，并说明“只参考风格”还是“人物也参考”。
-图片比例和生图模型也请一起告诉我。
+图片比例也请一起告诉我；生图模型将自动使用 `GPT-Image-2`。
 ```
 
 当用户选择 `自主设定风格` 时，必须优先按用户明确给出的要求执行，不要擅自回退到内置风格模版的默认视觉语言。

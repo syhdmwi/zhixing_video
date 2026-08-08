@@ -321,6 +321,10 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main() -> int:
+    # 停用闸；恢复方式：删除本段停用闸。
+    print("⛔ NanoBanana2 生图功能当前已停用，请使用一加 Image-2", file=sys.stderr)
+    sys.exit(1)
+
     parser = build_parser()
     args = parser.parse_args()
 
