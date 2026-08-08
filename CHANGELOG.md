@@ -2,6 +2,10 @@
 
 本文件收纳从 operational references 中迁出的历史复盘、discovery 和日期性开发笔记。当前生效规则仍以各模块 `SKILL.md` 和 `references/` 中的规则文件为准。
 
+## 2026-08-08 生图 provider 收敛
+
+正式生图从速创 `image_gpt` 切换到一加 Image-2：规范名仍为 `GPT-Image-2`，执行层使用 `POST /v1/chat/completions`、`model=image2` 和 `YIJIA_API_KEY`。速创 NanoBanana2 同步停用，用户侧只保留一个生图入口。
+
 ## 2026-05-08 构图多样性问题背景
 
 连续多镜使用同一套句式（如「人在左指向右面板」），导致画面雷同。后续规则保留在 `ai-short-video-pipeline/references/prompt-generation-rules.md` 的“构图多样性强制约束”中。

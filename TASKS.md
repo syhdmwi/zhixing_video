@@ -3,6 +3,7 @@
 > 配套 [OPTIMIZATION_PLAN.md](./OPTIMIZATION_PLAN.md)。Codex 按 Phase 顺序执行，每个 Phase 做完**停下汇报**等 Claude review。
 > 约束：严格遵守 OPTIMIZATION_PLAN §2 架构原则。改动前先读相关文件，不要凭记忆改。
 > 标记：`[ ]` 待办 / `[~]` 进行中 / `[x]` review 通过。
+> 当前状态说明（2026-08-08）：下方任务卡保留各轮执行时的历史口径；当前用户侧生图已收敛为一加 `GPT-Image-2` 单一链路，API model 为 `image2`，速创 `nanobanana-2` 已停用。现状以 [MODELS.md](./MODELS.md) 为准。
 
 ---
 

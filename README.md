@@ -56,7 +56,7 @@
 正常情况下，系统会按下面的顺序带你走：
 
 1. 收文案
-2. 选风格、比例和生图模型
+2. 选风格和比例，自动使用 `GPT-Image-2`
 3. 自动识别重复主体
 4. 确认主体参考图或三视图
 5. 先给你看正式提示词
@@ -135,13 +135,10 @@
 
 ## 当前流程特点
 
-- 风格、比例、生图模型会一起确认
-- 生图模型支持：
-  - `GPT-Image-2`
-  - `nanobanana-2`
-- 图片提示词会按模型自动切换不同模板：
-  - `GPT-Image-2` 更自然、叙事化
-  - `nanobanana-2` 更结构化、模块化
+- 风格、比例会先确认；生图模型固定为 `GPT-Image-2`
+- 正式生图统一通过一加 Image-2 接口执行，API model 为 `image2`
+- `nanobanana-2` 已停用，不再作为用户选项或执行链路
+- 图片提示词统一使用 `GPT-Image-2` 模板
 - 自主设定风格时：
   - 如果用户给风格参考图，会先分析画风再生成
   - 如果用户说“只参考风格，不参考人物”，就不会继承图里人物设定
@@ -180,8 +177,6 @@
 
 按需配置，不是每个 skill 都必须全配：
 
-- `GPT_IMAGE2_API_KEY`
-- `NANOBANANA_API_KEY`
 - `YIJIA_API_KEY`
 - `WUYINKEJI_API_KEY`
 - `AUDIO_TTS_API_KEY`
@@ -259,9 +254,7 @@ echo $CODEX_HOME
 示例：
 
 ```bash
-export GPT_IMAGE2_API_KEY="your_gpt_image2_key"
-export NANOBANANA_API_KEY="your_nanobanana_key"
-export YIJIA_API_KEY="your_grok_or_yijia_key"
+export YIJIA_API_KEY="your_yijia_key"
 export AUDIO_TTS_API_KEY="your_tts_key"
 export TOS_ACCESS_KEY_ID="your_tos_ak"
 export TOS_SECRET_ACCESS_KEY="your_tos_sk"
@@ -284,7 +277,7 @@ export TOS_REGION="cn-beijing"
 目标：
 
 - 验证文案能否正常拆成图片提示词
-- 验证风格、比例、生图模型三合一选择是否正常
+- 验证风格、比例选择与默认 `GPT-Image-2` 是否正常贯通
 
 示例提问：
 
@@ -308,7 +301,7 @@ export TOS_REGION="cn-beijing"
 
 目标：
 
-- 验证 `GPT-Image-2` 或 `nanobanana-2` 生图链路
+- 验证一加 `GPT-Image-2` 生图链路
 
 建议：
 
@@ -361,11 +354,11 @@ export TOS_REGION="cn-beijing"
 
 ## Troubleshooting
 
-### 生图一直 pending 或超时
+### 生图请求失败或没有返回图片
 
-- 先确认选择的是哪一个生图模型
-- 对人物强参考镜头，优先尝试 `GPT-Image-2`
-- 对更结构化的场景镜头，可尝试 `nanobanana-2`
+- 确认已配置 `YIJIA_API_KEY`
+- 确认请求模型为规范名 `GPT-Image-2`，执行层 API model 为 `image2`
+- 确认参考图是接口可访问的公网 URL
 
 ### 图转镜头移动视频不够稳
 

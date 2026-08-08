@@ -1,5 +1,7 @@
 # Nanobanana Prompt Template 01
 
+> ⛔ `nanobanana-2` 当前已停用。本文件仅保留为历史提示词参考，不得用于当前正式生图执行；当前统一使用 `GPT-Image-2`。
+
 这个模板用于 `nanobanana-2`、`Imagen` 一类更偏结构化执行的图像模型，核心目标是：
 
 - 让主体、环境、风格之间的层级更清楚

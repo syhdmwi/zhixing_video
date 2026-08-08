@@ -72,15 +72,15 @@ If missing:
 Required:
 
 - 文案已收到
-- 风格/比例/生图模型已确认
+- 风格/比例已确认，生图模型已自动锁定为 `GPT-Image-2`
 - 重复主体清单已生成
 
 If missing:
 
 ```text
 现在还不能确认主体。
-缺少：风格、比例或生图模型。
-请先完成风格和模型选择。
+缺少：风格或比例。
+请先完成风格和比例选择；生图模型会自动使用 `GPT-Image-2`。
 ```
 
 ### Before Three-View Generation

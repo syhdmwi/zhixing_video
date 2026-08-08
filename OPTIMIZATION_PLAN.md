@@ -4,6 +4,7 @@
 > 具体可执行任务见 [TASKS.md](./TASKS.md)，由 Codex 按任务卡执行。
 > 协作模式：Claude 定架构 + 事后 review；Codex 读仓库 + 本方案直接执行。
 > 创建日期：2026-06-03
+> 当前状态说明（2026-08-08）：本总纲保留第一轮优化时的历史判断；当前用户侧生图已收敛为一加 `GPT-Image-2` 单一链路，API model 为 `image2`，速创 `nanobanana-2` 已停用。现状以 [MODELS.md](./MODELS.md) 为准。
 
 ---
 

@@ -1,6 +1,6 @@
 # GPT-Image-2 Prompt Template 01
 
-这个模板用于 `GPT-Image-2`、OpenAI 图像模型，核心目标是：
+这个模板用于 `GPT-Image-2`（当前通过一加 API `model=image2` 执行），核心目标是：
 
 - 用更自然的语言描述画面
 - 优先保证叙事感和镜头感

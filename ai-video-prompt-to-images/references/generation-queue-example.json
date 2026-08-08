@@ -3,6 +3,8 @@
     "shot_id": "shot_01",
     "visual_carrier": "scene_only",
     "frame_type": "scene",
+    "model": "GPT-Image-2",
+    "aspect_ratio": "16:9",
     "image_prompt": "16:9, anime-inspired soft tech scene, red cartoon lobster mascot floating in a pastel digital background, clean composition",
     "consistency_note": "Use the approved lobster preview as the recurring subject anchor."
   },
@@ -10,6 +12,8 @@
     "shot_id": "shot_02",
     "visual_carrier": "host_with_visual",
     "frame_type": "character",
+    "model": "GPT-Image-2",
+    "aspect_ratio": "16:9",
     "image_prompt": "16:9, same approved young woman with long slightly wavy dark-brown hair, off-white floral dress, standing beside the same approved red cartoon lobster mascot, soft anime aesthetic",
     "reference_urls": [
       "https://example.com/approved-character-front.png",

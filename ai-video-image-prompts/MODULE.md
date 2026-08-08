@@ -11,7 +11,6 @@
 - [references/style-presets.md](./references/style-presets.md) — 风格预设 SSOT
 - [references/reusable-template-system.md](./references/reusable-template-system.md) — 可复用模板系统
 - [references/gpt-image2-prompt-template-01.md](./references/gpt-image2-prompt-template-01.md) — GPT-Image-2 提示词模板
-- [references/nanobanana-prompt-template-01.md](./references/nanobanana-prompt-template-01.md) — nanobanana 提示词模板
 - [references/subject-consistency-rules.md](./references/subject-consistency-rules.md) — 主体一致性规则
 - [references/subject-consistency-template-01.md](./references/subject-consistency-template-01.md) — 主体一致性模板
 - [references/subject-preview-workflow.md](./references/subject-preview-workflow.md) — 主体预览流程
